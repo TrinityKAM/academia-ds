@@ -291,6 +291,11 @@
         <div class="nav-item" onclick="showView('evaluaciones')">📝 Evaluaciones <span class="badge-new">NUEVO</span></div>
         <div class="nav-item" onclick="showView('progreso')">📈 Mi progreso <span class="badge-new">NUEVO</span></div>
         <div class="nav-item" onclick="showView('avance-area')">📊 Avance por área <span class="badge-new">NUEVO</span></div>
+        <div class="nav-item" onclick="toggleMenu('bar')">☕ Tipos de Barista (SCA) <span class="chev">▾</span></div>
+        <div class="subsubmenu open" id="menu-bar">
+          <div class="nav-item" onclick="showView('barista-foundation')">Barista SCA Foundation</div>
+          <div class="nav-item" onclick="showView('barista-avanzado')">Barista SCA Avanzado</div>
+        </div>
         <div class="nav-item" onclick="showView('certificaciones')">🏅 Certificaciones <span class="badge-new">NUEVO</span></div>
         <div class="nav-item" onclick="showView('valores')">📜 Cultura Don Salazar <span class="badge-new">NUEVO</span></div>
         <div class="nav-item" onclick="showView('admin')">⚙️ Panel Cultura (admin) <span class="badge-new">NUEVO</span></div>
@@ -315,7 +320,7 @@
       <div class="grid4">
         <div class="stat-tile"><div class="num">11</div><div class="lbl">Videos activos</div></div>
         <div class="stat-tile"><div class="num">3</div><div class="lbl">Cursos en Capacitaciones</div></div>
-        <div class="stat-tile"><div class="num">0</div><div class="lbl">Evaluaciones creadas</div></div>
+        <div class="stat-tile"><div class="num">4</div><div class="lbl">Evaluaciones creadas</div></div>
         <div class="stat-tile"><div class="num">0%</div><div class="lbl">Adopción del equipo</div></div>
       </div>
     </div>
@@ -341,8 +346,8 @@
         <div class="card">
           <h3>🧑‍🍳 Ruta Barista</h3>
           <p class="desc">6 módulos · Fichas + Videos + 3 evaluaciones</p>
-          <div class="progress-row"><div class="bar-bg"><div class="bar-fill" style="width:40%"></div></div><span class="pct">40%</span></div>
-          <button class="btn small">Continuar ruta</button>
+          <div class="progress-row"><div class="bar-bg"><div class="bar-fill" style="width:0%"></div></div><span class="pct">—</span></div>
+          <button class="btn small outline">Empezar ruta</button>
         </div>
         <div class="card">
           <h3>🏬 Ruta Tienda</h3>
@@ -357,7 +362,7 @@
           <button class="btn small outline">Empezar ruta</button>
         </div>
       </div>
-      <div class="callout">Cada ruta agrupa fichas técnicas + videos ya existentes, y cierra con una evaluación por módulo. Al completar todos los módulos se emite una certificación (ver pestaña Certificaciones).</div>
+      <div class="callout">Cada ruta agrupa fichas técnicas + videos ya existentes, y cierra con una evaluación por módulo. Al completar todos los módulos se emite una certificación (ver pestaña Certificaciones). Aún no hay colaboradores inscritos, por eso el avance de las 3 rutas está en "—".</div>
     </div>
 
     <!-- EVALUACIONES -->
@@ -386,8 +391,8 @@
           <div class="item-body">
             <div class="item-title">Examen: Club Don Salazar</div>
             <div class="item-meta">8 preguntas · Mínimo 70%</div>
-            <span class="status-tag status-aprobado">Aprobado · 90%</span><br>
-            <button class="btn small outline" style="margin-top:10px;">Ver resultado</button>
+            <span class="status-tag status-pendiente">Pendiente</span><br>
+            <button class="btn small gold" style="margin-top:10px;" onclick="showView('quiz-demo')">Comenzar</button>
           </div>
         </div>
         <div class="item-card">
@@ -395,8 +400,8 @@
           <div class="item-body">
             <div class="item-title">Examen: QR por sección</div>
             <div class="item-meta">6 preguntas · Mínimo 70%</div>
-            <span class="status-tag status-reprobado">Reprobado · 50%</span><br>
-            <button class="btn small" style="margin-top:10px;">Reintentar</button>
+            <span class="status-tag status-pendiente">Pendiente</span><br>
+            <button class="btn small gold" style="margin-top:10px;" onclick="showView('quiz-demo')">Comenzar</button>
           </div>
         </div>
         <div class="item-card">
@@ -405,11 +410,11 @@
             <div class="item-title">Examen: Limpieza de equipos</div>
             <div class="item-meta">12 preguntas · Mínimo 80%</div>
             <span class="status-tag status-pendiente">Pendiente</span><br>
-            <button class="btn small gold" style="margin-top:10px;">Comenzar</button>
+            <button class="btn small gold" style="margin-top:10px;" onclick="showView('quiz-demo')">Comenzar</button>
           </div>
         </div>
       </div>
-      <div class="callout">Formatos de pregunta sugeridos: opción múltiple, verdadero/falso y "video + pregunta" (se detiene el video en un punto clave). Cada examen tiene puntaje mínimo, límite de reintentos y tiempo opcional.</div>
+      <div class="callout">Formatos de pregunta sugeridos: opción múltiple, verdadero/falso y "video + pregunta" (se detiene el video en un punto clave). Cada examen tiene puntaje mínimo, límite de reintentos y tiempo opcional. Los 4 exámenes están "Pendiente" porque todavía nadie los ha rendido de verdad.</div>
     </div>
 
     <!-- QUIZ DEMO -->
@@ -455,18 +460,19 @@
     <div class="view" id="view-progreso">
       <div class="topbar"><div><h2>Mi progreso</h2><div class="subtitle">Vista individual del colaborador</div></div></div>
       <div class="grid4" style="margin-bottom:20px;">
-        <div class="stat-tile"><div class="num">62%</div><div class="lbl">Avance general</div></div>
-        <div class="stat-tile"><div class="num">3</div><div class="lbl">Exámenes aprobados</div></div>
-        <div class="stat-tile"><div class="num">2</div><div class="lbl">Insignias ganadas</div></div>
-        <div class="stat-tile"><div class="num">#4</div><div class="lbl">Ranking en tienda Jockey</div></div>
+        <div class="stat-tile"><div class="num">—</div><div class="lbl">Avance general</div></div>
+        <div class="stat-tile"><div class="num">—</div><div class="lbl">Exámenes aprobados</div></div>
+        <div class="stat-tile"><div class="num">—</div><div class="lbl">Insignias ganadas</div></div>
+        <div class="stat-tile"><div class="num">—</div><div class="lbl">Ranking en tienda</div></div>
       </div>
       <div class="card">
         <h3>Avance por ruta</h3>
         <div style="margin-top:12px;">
-          <div class="progress-row"><div class="label">Ruta Barista</div><div class="bar-bg"><div class="bar-fill" style="width:40%"></div></div><span class="pct">40%</span></div>
-          <div class="progress-row"><div class="label">Ruta Tienda</div><div class="bar-bg"><div class="bar-fill" style="width:75%"></div></div><span class="pct">75%</span></div>
-          <div class="progress-row"><div class="label">Ruta Embajador de Marca</div><div class="bar-bg"><div class="bar-fill" style="width:20%"></div></div><span class="pct">20%</span></div>
+          <div class="progress-row"><div class="label">Ruta Barista</div><div class="bar-bg"><div class="bar-fill" style="width:0%"></div></div><span class="pct">—</span></div>
+          <div class="progress-row"><div class="label">Ruta Tienda</div><div class="bar-bg"><div class="bar-fill" style="width:0%"></div></div><span class="pct">—</span></div>
+          <div class="progress-row"><div class="label">Ruta Embajador de Marca</div><div class="bar-bg"><div class="bar-fill" style="width:0%"></div></div><span class="pct">—</span></div>
         </div>
+        <p class="desc" style="margin-top:10px;">Sin datos aún — nadie ha completado contenido registrado en Academia todavía.</p>
       </div>
     </div>
 
@@ -477,27 +483,51 @@
       <div class="grid2" style="margin-bottom:20px;">
         <div class="card">
           <h3>☕ Baristas</h3>
-          <div class="progress-row"><div class="bar-bg"><div class="bar-fill" style="width:55%"></div></div><span class="pct">55%</span></div>
-          <p class="desc">Basado en los exámenes: Ceremonia del Café, Club Don Salazar y Limpieza de equipos.</p>
+          <div class="progress-row"><div class="bar-bg"><div class="bar-fill" style="width:0%"></div></div><span class="pct">—</span></div>
+          <p class="desc">Se calcularía con los exámenes: Ceremonia del Café, Club Don Salazar y Limpieza de equipos.</p>
         </div>
         <div class="card">
           <h3>🤝 ATC (Atención al Cliente)</h3>
-          <div class="progress-row"><div class="bar-bg"><div class="bar-fill" style="width:30%"></div></div><span class="pct">30%</span></div>
-          <p class="desc">Basado en los exámenes: QR por sección y protocolo de atención en tienda.</p>
+          <div class="progress-row"><div class="bar-bg"><div class="bar-fill" style="width:0%"></div></div><span class="pct">—</span></div>
+          <p class="desc">Se calcularía con el examen: QR por sección.</p>
         </div>
       </div>
 
       <div class="card">
         <h3>Detalle por colaborador y área</h3>
-        <table class="admin-table">
-          <tr><th>Colaborador</th><th>Área</th><th>Avance</th><th>Estado</th></tr>
-          <tr><td>J. Ramírez</td><td>☕ Baristas</td><td>40%</td><td><span class="dot amber"></span>En progreso</td></tr>
-          <tr><td>M. Torres</td><td>🤝 ATC</td><td>90%</td><td><span class="dot green"></span>Al día</td></tr>
-          <tr><td>L. Quispe</td><td>☕ Baristas</td><td>25%</td><td><span class="dot red"></span>Necesita refuerzo</td></tr>
-          <tr><td>M. Torres</td><td>☕ Baristas</td><td>70%</td><td><span class="dot amber"></span>En progreso</td></tr>
-        </table>
+        <p class="desc">Aún no hay colaboradores registrados rindiendo exámenes en Academia.</p>
       </div>
-      <div class="callout">Datos de ejemplo. Al conectar Academia_DS_BaseDatos_v1.xlsx, el avance por área se calcula automáticamente según los exámenes que le corresponden a cada rol (hoja Rutas_Capacitacion + Resultados).</div>
+      <div class="callout">Sin datos reales todavía. Al conectar Academia_DS_BaseDatos_v1.xlsx con colaboradores y resultados reales, el avance por área se calcularía automáticamente según los exámenes que le corresponden a cada rol (hoja Rutas_Capacitacion + Resultados).</div>
+    </div>
+
+    <!-- BARISTA SCA FOUNDATION -->
+    <div class="view" id="view-barista-foundation">
+      <div class="topbar"><div><h2>Barista SCA Foundation</h2><div class="subtitle">Nivel base de la certificación Barista Skills de la Specialty Coffee Association</div></div></div>
+      <div class="card">
+        <h3>Qué cubre este nivel</h3>
+        <p class="desc">Basado en el temario público de SCA Barista Skills Foundation: fundamentos del espresso, uso y mantenimiento básico de la máquina, molienda y dosificación, texturizado básico de leche, higiene y seguridad, y servicio al cliente en barra.</p>
+      </div>
+      <div class="grid3" style="margin-bottom:20px;">
+        <div class="stat-tile"><div class="num">—</div><div class="lbl">Colaboradores en este nivel</div></div>
+        <div class="stat-tile"><div class="num">—</div><div class="lbl">Aprobados</div></div>
+        <div class="stat-tile"><div class="num">—</div><div class="lbl">En progreso</div></div>
+      </div>
+      <div class="callout">Sin datos todavía — aquí se listaría cada colaborador cursando este nivel una vez que se registren en Academia.</div>
+    </div>
+
+    <!-- BARISTA SCA AVANZADO -->
+    <div class="view" id="view-barista-avanzado">
+      <div class="topbar"><div><h2>Barista SCA Avanzado</h2><div class="subtitle">Agrupa los niveles Intermediate y Professional de la certificación Barista Skills SCA</div></div></div>
+      <div class="card">
+        <h3>Qué cubre este nivel</h3>
+        <p class="desc">Basado en el temario público de SCA Barista Skills Intermediate/Professional: calibración avanzada de molienda, extracción y control sensorial, arte latte, manejo de barra bajo presión y con múltiples pedidos, y mentoría a baristas en formación.</p>
+      </div>
+      <div class="grid3" style="margin-bottom:20px;">
+        <div class="stat-tile"><div class="num">—</div><div class="lbl">Colaboradores en este nivel</div></div>
+        <div class="stat-tile"><div class="num">—</div><div class="lbl">Aprobados</div></div>
+        <div class="stat-tile"><div class="num">—</div><div class="lbl">En progreso</div></div>
+      </div>
+      <div class="callout">Sin datos todavía — requiere haber completado el nivel Foundation antes de avanzar aquí.</div>
     </div>
 
     <!-- CERTIFICACIONES -->
@@ -506,11 +536,12 @@
       <div class="card">
         <h3>Mis insignias</h3>
         <div class="badge-grid" style="margin-top:12px;">
-          <div class="badge-item"><div class="b-icon">☕</div><div class="b-label">Barista DS</div></div>
-          <div class="badge-item"><div class="b-icon">📜</div><div class="b-label">Club Don Salazar</div></div>
+          <div class="badge-item locked"><div class="b-icon">☕</div><div class="b-label">Barista DS</div></div>
+          <div class="badge-item locked"><div class="b-icon">📜</div><div class="b-label">Club Don Salazar</div></div>
           <div class="badge-item locked"><div class="b-icon">🌱</div><div class="b-label">Embajador de Origen</div></div>
           <div class="badge-item locked"><div class="b-icon">🏆</div><div class="b-label">Barista Senior</div></div>
         </div>
+        <p class="desc" style="margin-top:10px;">Ninguna insignia se ha ganado todavía — se desbloquean automáticamente al aprobar todos los exámenes de una ruta.</p>
       </div>
       <div class="callout">Al aprobar todos los exámenes de una ruta se genera automáticamente un certificado descargable en PDF con el nombre del colaborador, la sede y la fecha.</div>
     </div>
@@ -552,10 +583,8 @@
         <h3>Resultados por colaborador</h3>
         <table class="admin-table">
           <tr><th>Colaborador</th><th>Sede</th><th>Ruta</th><th>Avance</th><th>Último examen</th><th>Estado</th></tr>
-          <tr><td>J. Ramírez</td><td>Jockey</td><td>Barista</td><td>40%</td><td>Ceremonia del Café</td><td><span class="dot amber"></span>En progreso</td></tr>
-          <tr><td>M. Torres</td><td>Jockey</td><td>Tienda</td><td>90%</td><td>Club Don Salazar</td><td><span class="dot green"></span>Al día</td></tr>
-          <tr><td>L. Quispe</td><td>Larcomar</td><td>Barista</td><td>25%</td><td>QR por sección</td><td><span class="dot red"></span>Necesita refuerzo</td></tr>
         </table>
+        <p class="desc" style="margin-top:10px;">Aún no hay colaboradores registrados ni exámenes rendidos.</p>
       </div>
       <div class="callout">Este panel permite al equipo de Cultura subir nuevos videos/fichas, crear exámenes, definir puntajes mínimos y detectar colaboradores o tiendas que necesitan refuerzo.</div>
     </div>
