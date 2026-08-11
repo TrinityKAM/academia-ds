@@ -290,6 +290,7 @@
         <div class="nav-item" onclick="showView('capacitaciones')">🎓 Capacitaciones</div>
         <div class="nav-item" onclick="showView('evaluaciones')">📝 Evaluaciones <span class="badge-new">NUEVO</span></div>
         <div class="nav-item" onclick="showView('progreso')">📈 Mi progreso <span class="badge-new">NUEVO</span></div>
+        <div class="nav-item" onclick="showView('avance-area')">📊 Avance por área <span class="badge-new">NUEVO</span></div>
         <div class="nav-item" onclick="showView('certificaciones')">🏅 Certificaciones <span class="badge-new">NUEVO</span></div>
         <div class="nav-item" onclick="showView('valores')">📜 Cultura Don Salazar <span class="badge-new">NUEVO</span></div>
         <div class="nav-item" onclick="showView('admin')">⚙️ Panel Cultura (admin) <span class="badge-new">NUEVO</span></div>
@@ -467,15 +468,36 @@
           <div class="progress-row"><div class="label">Ruta Embajador de Marca</div><div class="bar-bg"><div class="bar-fill" style="width:20%"></div></div><span class="pct">20%</span></div>
         </div>
       </div>
+    </div>
 
-      <div class="card">
-        <h3>Avance por área</h3>
-        <p class="desc">Progreso específico en las evaluaciones de cada área.</p>
-        <div style="margin-top:12px;">
-          <div class="progress-row"><div class="label">☕ Baristas</div><div class="bar-bg"><div class="bar-fill" style="width:55%"></div></div><span class="pct">55%</span></div>
-          <div class="progress-row"><div class="label">🤝 ATC (Atención al Cliente)</div><div class="bar-bg"><div class="bar-fill" style="width:30%"></div></div><span class="pct">30%</span></div>
+    <!-- AVANCE POR ÁREA (apartado propio) -->
+    <div class="view" id="view-avance-area">
+      <div class="topbar"><div><h2>Avance por área</h2><div class="subtitle">Progreso del equipo en las evaluaciones de cada área</div></div></div>
+
+      <div class="grid2" style="margin-bottom:20px;">
+        <div class="card">
+          <h3>☕ Baristas</h3>
+          <div class="progress-row"><div class="bar-bg"><div class="bar-fill" style="width:55%"></div></div><span class="pct">55%</span></div>
+          <p class="desc">Basado en los exámenes: Ceremonia del Café, Club Don Salazar y Limpieza de equipos.</p>
+        </div>
+        <div class="card">
+          <h3>🤝 ATC (Atención al Cliente)</h3>
+          <div class="progress-row"><div class="bar-bg"><div class="bar-fill" style="width:30%"></div></div><span class="pct">30%</span></div>
+          <p class="desc">Basado en los exámenes: QR por sección y protocolo de atención en tienda.</p>
         </div>
       </div>
+
+      <div class="card">
+        <h3>Detalle por colaborador y área</h3>
+        <table class="admin-table">
+          <tr><th>Colaborador</th><th>Área</th><th>Avance</th><th>Estado</th></tr>
+          <tr><td>J. Ramírez</td><td>☕ Baristas</td><td>40%</td><td><span class="dot amber"></span>En progreso</td></tr>
+          <tr><td>M. Torres</td><td>🤝 ATC</td><td>90%</td><td><span class="dot green"></span>Al día</td></tr>
+          <tr><td>L. Quispe</td><td>☕ Baristas</td><td>25%</td><td><span class="dot red"></span>Necesita refuerzo</td></tr>
+          <tr><td>M. Torres</td><td>☕ Baristas</td><td>70%</td><td><span class="dot amber"></span>En progreso</td></tr>
+        </table>
+      </div>
+      <div class="callout">Datos de ejemplo. Al conectar Academia_DS_BaseDatos_v1.xlsx, el avance por área se calcula automáticamente según los exámenes que le corresponden a cada rol (hoja Rutas_Capacitacion + Resultados).</div>
     </div>
 
     <!-- CERTIFICACIONES -->
