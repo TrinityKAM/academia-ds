@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Finca Villa Rica — Don Salazar Coffee</title>
+<style>
+  :root{
+    --brown-950:#241209;
+    --brown-900:#2b1810;
+    --brown-800:#3b2418;
+    --brown-700:#4d3020;
+    --gold-500:#c9a45c;
+    --gold-300:#e8c98a;
+    --cream-100:#f7f1e6;
+    --cream-200:#f0e6d2;
+    --cream-50:#fbf8f2;
+    --ink-900:#2b1810;
+    --ink-600:#6b5744;
+    --green-600:#3d7a4f;
+    --red-600:#b1473f;
+    --amber-600:#b5872f;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    font-family:'Georgia','Segoe UI',serif;
+    background:var(--cream-100);
+    color:var(--ink-900);
+  }
+  .proto-banner{
+    background:var(--brown-950); color:var(--gold-300); text-align:center;
+    font-size:12.5px; padding:7px 10px; letter-spacing:.3px;
+  }
+  .proto-banner b{ color:#fff; }
+
+  header.hero{
+    background:
+      radial-gradient(circle at 80% 10%, rgba(201,164,92,.18), transparent 45%),
+      linear-gradient(160deg, var(--brown-950), var(--brown-800));
+    color:#fff; padding:70px 32px 60px 32px; text-align:center;
+  }
+  header.hero .mark{
+    width:56px;height:56px;border-radius:50%;background:rgba(255,255,255,.1);
+    color:var(--gold-300); display:flex; align-items:center; justify-content:center;
+    font-size:24px; font-weight:700; margin:0 auto 16px auto; border:1px solid rgba(255,255,255,.25);
+  }
+  header.hero h1{ margin:0; font-size:34px; }
+  header.hero p{ margin:10px auto 0 auto; max-width:560px; font-style:italic; color:var(--gold-300); font-size:15px; }
+  nav.topnav{
+    display:flex; justify-content:center; gap:26px; margin-top:28px; flex-wrap:wrap;
+  }
+  nav.topnav a{
+    color:#f0e6d2; font-size:13px; text-decoration:none; cursor:pointer; letter-spacing:.3px;
+    border-bottom:1px solid transparent; padding-bottom:3px;
+  }
+  nav.topnav a:hover{ border-color:var(--gold-500); }
+
+  .wrap{ max-width:980px; margin:0 auto; padding:0 32px; }
+  section{ padding:54px 0; }
+  section h2{ font-size:24px; margin:0 0 6px 0; }
+  section .subtitle{ color:var(--ink-600); font-style:italic; font-size:13.5px; margin-bottom:26px; }
+
+  .card{ background:#fff; border:1px solid #e8ddc9; border-radius:12px; padding:22px 24px; margin-bottom:18px; }
+  .card p{ font-size:14px; line-height:1.75; margin:0; }
+  .desc{ color:var(--ink-600); font-size:12.5px; }
+
+  .chain{ display:grid; grid-template-columns:repeat(4,1fr); gap:14px; }
+  .chain-step{
+    background:var(--cream-50); border:1px solid #e8ddc9; border-radius:12px; padding:20px 16px; text-align:center;
+  }
+  .chain-step .icon{ font-size:28px; margin-bottom:8px; }
+  .chain-step h4{ margin:0 0 4px 0; font-size:14.5px; }
+  .chain-step .meta{ font-size:11.5px; color:var(--ink-600); }
+  .chain-arrow{ display:flex; align-items:center; justify-content:center; color:var(--gold-500); font-size:20px; }
+
+  .video-row{
+    display:flex; align-items:center; gap:12px; padding:11px 12px; border-radius:8px;
+    border:1px solid #e8ddc9; margin-bottom:8px; background:#fff;
+  }
+  .video-row .check{
+    width:22px; height:22px; border-radius:50%; border:2px solid #ccc; flex-shrink:0;
+    display:flex; align-items:center; justify-content:center; font-size:12px; color:#fff;
+  }
+  .video-row.watched .check{ background:var(--green-600); border-color:var(--green-600); }
+  .video-row .title{ font-weight:700; font-size:13.5px; flex:1; }
+  .video-row .dur{ font-size:11.5px; color:var(--ink-600); }
+
+  table{ width:100%; border-collapse:collapse; font-size:13px; }
+  th{ text-align:left; padding:9px 10px; color:var(--ink-600); font-size:11.5px; text-transform:uppercase; letter-spacing:.3px; border-bottom:1px solid #e8ddc9; }
+  td{ padding:11px 10px; border-bottom:1px solid #f0e6d2; }
+  .pending-badge{ display:inline-block; background:var(--cream-200); color:var(--amber-600); font-size:11px; font-weight:700; padding:3px 10px; border-radius:10px; }
+
+  footer{ text-align:center; padding:30px; color:var(--ink-600); font-size:12px; }
+</style>
+</head>
+<body>
+
+<div class="proto-banner">🔧 <b>Prototipo interactivo</b> — página independiente de Academia DS, dedicada solo a Finca Villa Rica. Contenido de ejemplo.</div>
+
+<header class="hero">
+  <div class="mark">DS</div>
+  <h1>Finca Villa Rica</h1>
+  <p>Tres generaciones de origen — el punto de partida de "Café con Sabor a Perú"</p>
+  <nav class="topnav">
+    <a onclick="document.getElementById('historia').scrollIntoView({behavior:'smooth'})">Nuestra historia</a>
+    <a onclick="document.getElementById('cadena').scrollIntoView({behavior:'smooth'})">Cadena de valor</a>
+    <a onclick="document.getElementById('cosecha').scrollIntoView({behavior:'smooth'})">Datos de cosecha</a>
+    <a onclick="document.getElementById('videos').scrollIntoView({behavior:'smooth'})">Videos y recursos</a>
+  </nav>
+</header>
+
+<div class="wrap">
+
+  <section id="historia">
+    <h2>Tres generaciones de café peruano de especialidad</h2>
+    <div class="subtitle">El legado familiar detrás de Don Salazar Coffee</div>
+    <div class="card">
+      <p>Don Salazar Coffee nace en la Finca Villa Rica, hoy en su tercera generación, bajo el legado de Arturo Marín Salazar. Desde el origen en Villa Rica, cada lote se transforma en la Tostaduría propia y llega a nuestras tiendas y a la Comunidad DS, con el estándar de un referente del café peruano de especialidad.</p>
+    </div>
+  </section>
+
+  <section id="cadena">
+    <h2>Nuestra cadena de valor</h2>
+    <div class="subtitle">De la Finca a la taza</div>
+    <div class="chain">
+      <div class="chain-step"><div class="icon">🌱</div><h4>Finca Villa Rica</h4><div class="meta">3ra generación · Origen</div></div>
+      <div class="chain-step"><div class="icon">🔥</div><h4>Tostaduría</h4><div class="meta">Perfil de tueste propio</div></div>
+      <div class="chain-step"><div class="icon">☕</div><h4>Tiendas</h4><div class="meta">Experiencia Don Salazar</div></div>
+      <div class="chain-step"><div class="icon">🤝</div><h4>Comunidad DS</h4><div class="meta">Baristas y equipo</div></div>
+    </div>
+  </section>
+
+  <section id="cosecha">
+    <h2>Datos de cosecha</h2>
+    <div class="subtitle">Conectado con DS_Finca_Sistema.xlsx (SharePoint) · hoja "1. Cosecha"</div>
+    <div class="card">
+      <p style="margin-bottom:14px;">Estructura y filas tal como están hoy en la hoja <b>1. Cosecha</b> del sistema de la Finca. Las filas están marcadas como plantilla/ejemplo en el propio archivo — en cuanto Ronaldo registre cosechas reales día a día, esta tabla reflejará esos datos.</p>
+      <table>
+        <tr><th>Fecha</th><th>Cosechero</th><th>Parcela</th><th>Variedad</th><th>Proceso</th><th>Kg cerezo</th><th>Precio/kg (S/)</th><th>Pago (S/)</th><th>Lote</th></tr>
+        <tr><td>20/05/2026</td><td>Verónica</td><td>Alicorp</td><td>Blend</td><td>Lavado</td><td>358,35</td><td>0,80</td><td>286,68</td><td>L-2026-001</td></tr>
+        <tr><td>23/05/2026</td><td>Jack</td><td>Alicorp</td><td>Blend</td><td>Lavado</td><td>162,55</td><td>0,80</td><td>130,04</td><td>L-2026-001</td></tr>
+        <tr><td>24/05/2026</td><td>Silverio</td><td>Alicorp</td><td>Blend</td><td>Lavado</td><td>469,80</td><td>0,80</td><td>375,84</td><td>L-2026-001</td></tr>
+        <tr><td>24/05/2026</td><td>Silverio</td><td>Alicorp</td><td>Blend</td><td>Lavado</td><td>469,80</td><td>0,80</td><td>375,84</td><td>L-2026-002</td></tr>
+      </table>
+      <div class="desc" style="margin-top:12px;">El sistema también incluye hojas de Lotes, Fermentación, Transformaciones, Gastos, Ventas, Compras y Rentabilidad — estas últimas configuradas en el propio archivo como tableros de solo lectura para Arturo Marín Salazar y Jhampier Escalante, por lo que no se muestran aquí.</div>
+    </div>
+  </section>
+
+  <section id="videos">
+    <h2>Videos y recursos de la Finca</h2>
+    <div class="subtitle">Contenido de SharePoint · Control Dogo / Cultura Don Salazar / Videos</div>
+    <div class="card">
+      <div class="video-row watched"><div class="check">✓</div><div class="title">Recorrido por la Finca Villa Rica</div><div class="dur">7:20</div></div>
+      <div class="video-row"><div class="check"></div><div class="title">De la cereza al grano: proceso en origen</div><div class="dur">9:05</div></div>
+    </div>
+  </section>
+
+</div>
+
+<footer>Don Salazar Coffee · Finca Villa Rica — página independiente de Academia DS</footer>
+
+</body>
+</html>

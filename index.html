@@ -2,7 +2,8 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
-<title>Academia DS</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Academia DS — Prototipo de plataforma</title>
 <style>
   :root{
     --brown-950:#241209;
@@ -27,622 +28,795 @@
     background:var(--cream-100);
     color:var(--ink-900);
   }
-  .app{
-    display:flex;
-    min-height:100vh;
-  }
-  /* Sidebar */
-  .sidebar{
-    width:250px;
-    background:var(--brown-900);
-    color:var(--cream-100);
-    padding:22px 0;
-    flex-shrink:0;
-  }
-  .sidebar .brand{
-    padding:0 20px 18px 20px;
-    border-bottom:1px solid rgba(255,255,255,.08);
-    margin-bottom:10px;
-  }
-  .sidebar .brand h1{
-    font-size:20px;
-    margin:0;
-    font-weight:700;
+  .proto-banner{
+    background:var(--brown-950);
+    color:var(--gold-300);
+    text-align:center;
+    font-size:12.5px;
+    padding:7px 10px;
     letter-spacing:.3px;
   }
-  .sidebar .brand p{
-    margin:4px 0 0 0;
-    font-size:11.5px;
-    color:var(--gold-300);
-    font-style:italic;
-  }
-  .nav-item{
+  .proto-banner b{ color:#fff; }
+
+  .screen{ display:none; min-height:calc(100vh - 32px); }
+  .screen.active{ display:block; }
+
+  /* ---------- LOGIN ---------- */
+  .login-wrap{
+    min-height:calc(100vh - 32px);
     display:flex;
     align-items:center;
-    gap:10px;
-    padding:11px 20px;
-    font-size:14px;
-    cursor:pointer;
-    color:#e9ddcc;
-    user-select:none;
+    justify-content:center;
+    background:
+      radial-gradient(circle at 20% 20%, rgba(201,164,92,.15), transparent 40%),
+      linear-gradient(160deg, var(--brown-950), var(--brown-800));
   }
-  .nav-item:hover{ background:rgba(255,255,255,.05); }
-  .nav-item.active{ background:rgba(255,255,255,.07); color:#fff; }
-  .nav-item .chev{ margin-left:auto; font-size:11px; opacity:.6; }
-  .submenu{ display:none; }
-  .submenu.open{ display:block; }
-  .submenu .nav-item{ padding-left:38px; font-size:13px; }
-  .subsubmenu{ display:none; }
-  .subsubmenu.open{ display:block; }
-  .subsubmenu .nav-item{ padding-left:52px; font-size:12.5px; }
-  .badge-new{
-    background:var(--gold-500);
-    color:var(--brown-950);
-    font-size:9px;
-    font-weight:700;
-    padding:1px 6px;
-    border-radius:10px;
-    margin-left:6px;
-    letter-spacing:.3px;
-  }
-
-  /* Main */
-  .main{ flex:1; padding:28px 34px; }
-  .topbar{
-    display:flex;
-    justify-content:space-between;
-    align-items:flex-start;
-    margin-bottom:22px;
-  }
-  .topbar h2{ margin:0; font-size:26px; }
-  .topbar .subtitle{ color:var(--ink-600); font-style:italic; font-size:14px; margin-top:3px;}
-  .pill-note{
-    background:var(--cream-200);
-    border:1px dashed var(--gold-500);
-    color:var(--brown-800);
-    font-size:12px;
-    padding:8px 14px;
-    border-radius:8px;
-    max-width:320px;
-  }
-
-  .view{ display:none; }
-  .view.active{ display:block; }
-
-  .card{
-    background:#fff;
-    border:1px solid #e8ddc9;
-    border-radius:12px;
-    padding:20px 22px;
-    margin-bottom:20px;
-  }
-  .card h3{ margin:0 0 3px 0; font-size:18px; }
-  .card .desc{ color:var(--ink-600); font-size:13px; margin:0 0 14px 0; }
-
-  .grid4{ display:grid; grid-template-columns:repeat(4,1fr); gap:14px; }
-  .grid3{ display:grid; grid-template-columns:repeat(3,1fr); gap:14px; }
-  .grid2{ display:grid; grid-template-columns:repeat(2,1fr); gap:14px; }
-
-  .tile{
-    border:1px solid #e8ddc9;
-    border-radius:10px;
-    padding:16px;
-    text-align:center;
-    cursor:pointer;
+  .login-card{
     background:var(--cream-50);
+    width:380px;
+    max-width:92vw;
+    border-radius:14px;
+    padding:34px 32px 28px 32px;
+    box-shadow:0 20px 50px rgba(0,0,0,.35);
   }
-  .tile.active-tile{ border-color:var(--gold-500); background:#fdf6e6; }
-  .tile .icon{ font-size:26px; margin-bottom:8px; }
-  .tile .label{ font-weight:700; font-size:14px; }
-  .tile .count{ font-size:11.5px; color:var(--ink-600); margin-top:2px;}
-
-  .filter-row{ display:flex; gap:8px; margin-bottom:14px; flex-wrap:wrap; }
-  .chip{
-    background:var(--cream-200);
-    padding:6px 14px;
-    border-radius:16px;
-    font-size:12.5px;
-    cursor:pointer;
-    color:var(--brown-800);
+  .login-card .brand{ text-align:center; margin-bottom:22px; }
+  .login-card .brand .mark{
+    width:52px;height:52px;border-radius:50%;
+    background:var(--brown-900);color:var(--gold-300);
+    display:flex;align-items:center;justify-content:center;
+    font-size:22px;font-weight:700;margin:0 auto 10px auto;
   }
-  .chip.active{ background:var(--brown-900); color:#fff; }
-
-  /* video/exam cards */
-  .item-card{
-    border:1px solid #e8ddc9;
-    border-radius:10px;
-    overflow:hidden;
-    background:#fff;
+  .login-card .brand h1{ margin:0; font-size:20px; color:var(--brown-900); }
+  .login-card .brand p{ margin:3px 0 0 0; font-size:12px; color:var(--ink-600); font-style:italic; }
+  .field{ margin-bottom:14px; }
+  .field label{ display:block; font-size:12px; color:var(--ink-600); margin-bottom:5px; }
+  .field input{
+    width:100%; padding:10px 12px; border-radius:8px; border:1px solid #ddccae;
+    font-size:14px; font-family:inherit; background:#fff;
   }
-  .item-thumb{
-    height:90px;
-    background:linear-gradient(135deg,var(--brown-800),var(--brown-950));
-    display:flex; align-items:center; justify-content:center;
-    color:var(--gold-300); font-size:26px;
-  }
-  .item-body{ padding:12px 14px; }
-  .item-title{ font-weight:700; font-size:13.5px; margin-bottom:3px; }
-  .item-meta{ font-size:11px; color:var(--ink-600); }
-  .status-tag{
-    display:inline-block;
-    margin-top:8px;
-    font-size:10.5px;
-    font-weight:700;
-    padding:2px 9px;
-    border-radius:10px;
-  }
-  .status-aprobado{ background:#e2f0e5; color:var(--green-600); }
-  .status-pendiente{ background:#f5ecd8; color:var(--amber-600); }
-  .status-reprobado{ background:#f6e3e1; color:var(--red-600); }
-
   .btn{
-    display:inline-block;
-    background:var(--brown-900);
-    color:#fff;
-    border:none;
-    padding:9px 18px;
-    border-radius:7px;
-    font-size:13px;
-    cursor:pointer;
-    font-family:inherit;
+    display:inline-block; width:100%; text-align:center;
+    background:var(--brown-900); color:#fff; border:none; border-radius:8px;
+    padding:11px 14px; font-size:14px; font-weight:700; cursor:pointer;
+    letter-spacing:.2px;
   }
   .btn:hover{ background:var(--brown-800); }
-  .btn.outline{
-    background:transparent;
-    border:1px solid var(--brown-900);
-    color:var(--brown-900);
+  .btn.gold{ background:var(--gold-500); color:var(--brown-950); }
+  .btn.gold:hover{ background:var(--gold-300); }
+  .btn.outline{ background:transparent; color:var(--brown-900); border:1px solid var(--brown-900); }
+  .btn.small{ width:auto; padding:7px 12px; font-size:12.5px; }
+  .demo-hint{
+    margin-top:16px; background:var(--cream-200); border:1px dashed var(--gold-500);
+    border-radius:8px; padding:9px 12px; font-size:11.5px; color:var(--brown-800);
   }
-  .btn.gold{ background:var(--gold-500); color:var(--brown-950); font-weight:700; }
-  .btn.small{ padding:6px 12px; font-size:12px; }
-  .btn:disabled{ opacity:.5; cursor:not-allowed; }
-
-  /* progreso */
-  .progress-row{ display:flex; align-items:center; gap:12px; margin-bottom:14px; }
-  .progress-row .label{ width:190px; font-size:13px; }
-  .bar-bg{ flex:1; height:10px; background:var(--cream-200); border-radius:6px; overflow:hidden; }
-  .bar-fill{ height:100%; background:var(--gold-500); }
-  .progress-row .pct{ width:40px; text-align:right; font-size:12.5px; color:var(--ink-600); }
-
-  .stat-tile{
-    text-align:center;
-    padding:18px;
-    border-radius:10px;
-    background:var(--cream-50);
-    border:1px solid #e8ddc9;
+  .switch-mode{ text-align:center; margin-top:16px; font-size:12.5px; }
+  .switch-mode a{ color:var(--brown-800); cursor:pointer; text-decoration:underline; }
+  .admin-tag{
+    display:inline-block; background:var(--brown-950); color:var(--gold-300);
+    font-size:10.5px; padding:2px 8px; border-radius:10px; margin-bottom:8px; letter-spacing:.3px;
   }
-  .stat-tile .num{ font-size:28px; font-weight:700; color:var(--brown-900); }
-  .stat-tile .lbl{ font-size:12px; color:var(--ink-600); margin-top:3px; }
 
-  .badge-grid{ display:flex; gap:14px; flex-wrap:wrap; }
-  .badge-item{
-    width:110px;
-    text-align:center;
-    padding:14px 8px;
-    border-radius:10px;
-    background:var(--cream-50);
-    border:1px solid #e8ddc9;
+  /* ---------- APP SHELL ---------- */
+  .app{ display:flex; min-height:calc(100vh - 32px); }
+  .sidebar{
+    width:245px; background:var(--brown-900); color:var(--cream-100);
+    padding:20px 0; flex-shrink:0; display:flex; flex-direction:column;
   }
-  .badge-item.locked{ opacity:.35; }
-  .badge-item .b-icon{ font-size:30px; }
-  .badge-item .b-label{ font-size:11px; margin-top:6px; font-weight:700; }
-
-  /* quiz */
-  .quiz-box{ max-width:560px; }
-  .question{ display:none; }
-  .question.active{ display:block; }
-  .q-text{ font-weight:700; margin-bottom:14px; font-size:15px; }
-  .option{
-    border:1px solid #e8ddc9;
-    border-radius:8px;
-    padding:11px 14px;
-    margin-bottom:9px;
-    cursor:pointer;
-    font-size:13.5px;
+  .sidebar .brand{ padding:0 20px 16px 20px; border-bottom:1px solid rgba(255,255,255,.08); margin-bottom:8px; }
+  .sidebar .brand h1{ font-size:19px; margin:0; font-weight:700; }
+  .sidebar .brand p{ margin:3px 0 0 0; font-size:11px; color:var(--gold-300); font-style:italic; }
+  .nav-item{
+    display:flex; align-items:center; gap:9px; padding:10px 20px; font-size:13.5px;
+    cursor:pointer; color:#e9ddcc; user-select:none;
   }
-  .option:hover{ border-color:var(--gold-500); }
-  .option.selected{ border-color:var(--gold-500); background:#fdf6e6; }
-  .option.correct{ border-color:var(--green-600); background:#e2f0e5; }
-  .option.incorrect{ border-color:var(--red-600); background:#f6e3e1; }
-  .quiz-progress{ font-size:12px; color:var(--ink-600); margin-bottom:10px; }
-  .quiz-result{ display:none; text-align:center; padding:20px 0; }
-  .quiz-result .big-score{ font-size:44px; font-weight:700; color:var(--gold-500); }
+  .nav-item:hover{ background:rgba(255,255,255,.05); }
+  .nav-item.active{ background:rgba(255,255,255,.08); color:#fff; border-right:3px solid var(--gold-500); }
+  .nav-item .chev{ margin-left:auto; font-size:10px; opacity:.6; }
+  .nav-item .lvl-tag{ margin-left:auto; font-size:9.5px; background:rgba(255,255,255,.12); padding:1px 7px; border-radius:8px; }
+  .submenu{ display:none; }
+  .submenu.open{ display:block; }
+  .submenu .nav-item{ padding-left:34px; font-size:13px; }
+  .subsubmenu{ display:none; }
+  .subsubmenu.open{ display:block; }
+  .subsubmenu .nav-item{ padding-left:48px; font-size:12.5px; }
+  .sidebar-foot{ margin-top:auto; padding:14px 20px 0 20px; border-top:1px solid rgba(255,255,255,.08); }
+  .sidebar-foot .who{ font-size:12.5px; color:#e9ddcc; margin-bottom:8px; }
+  .sidebar-foot .who b{ color:#fff; display:block; font-size:13.5px; }
 
-  table.admin-table{ width:100%; border-collapse:collapse; font-size:13px; }
-  table.admin-table th{ text-align:left; padding:8px 10px; border-bottom:2px solid var(--cream-200); color:var(--ink-600); font-size:11.5px; text-transform:uppercase; letter-spacing:.4px; }
-  table.admin-table td{ padding:9px 10px; border-bottom:1px solid var(--cream-200); }
-  .dot{ width:9px; height:9px; border-radius:50%; display:inline-block; margin-right:6px; }
-  .dot.green{ background:var(--green-600); }
-  .dot.amber{ background:var(--amber-600); }
-  .dot.red{ background:var(--red-600); }
+  .main{ flex:1; padding:26px 32px; overflow-y:auto; }
+  .topbar{ display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:20px; }
+  .topbar h2{ margin:0; font-size:24px; }
+  .topbar .subtitle{ color:var(--ink-600); font-style:italic; font-size:13.5px; margin-top:3px; }
 
-  .callout{
-    background:var(--cream-50);
-    border-left:4px solid var(--gold-500);
-    padding:12px 16px;
-    font-size:13px;
-    color:var(--brown-800);
-    border-radius:0 8px 8px 0;
-    margin-bottom:16px;
+  .card{ background:#fff; border:1px solid #e8ddc9; border-radius:12px; padding:18px 20px; margin-bottom:18px; }
+  .card h3{ margin:0 0 3px 0; font-size:17px; }
+  .card .desc{ color:var(--ink-600); font-size:12.5px; margin:0 0 12px 0; }
+
+  .progress-bar{ background:var(--cream-200); border-radius:20px; height:10px; overflow:hidden; }
+  .progress-bar > div{ background:linear-gradient(90deg,var(--gold-500),var(--amber-600)); height:100%; }
+
+  .grid3{ display:grid; grid-template-columns:repeat(3,1fr); gap:14px; }
+  .grid4{ display:grid; grid-template-columns:repeat(4,1fr); gap:14px; }
+
+  .course-tile{
+    border:1px solid #e8ddc9; border-radius:12px; padding:16px; background:var(--cream-50);
+    cursor:pointer; position:relative;
   }
+  .course-tile:hover{ border-color:var(--gold-500); }
+  .course-tile .status{
+    position:absolute; top:12px; right:12px; font-size:10.5px; font-weight:700;
+    padding:2px 9px; border-radius:10px;
+  }
+  .status.done{ background:#e3f0e6; color:var(--green-600); }
+  .status.progress{ background:#fdf1d8; color:var(--amber-600); }
+  .status.locked{ background:#f0e6d2; color:var(--ink-600); }
+  .course-tile .icon{ font-size:24px; margin-bottom:8px; }
+  .course-tile h4{ margin:0 0 4px 0; font-size:14.5px; }
+  .course-tile .meta{ font-size:11.5px; color:var(--ink-600); margin-bottom:10px; }
+
+  .video-row{
+    display:flex; align-items:center; gap:12px; padding:11px 12px; border-radius:8px;
+    border:1px solid #e8ddc9; margin-bottom:8px; cursor:pointer; background:#fff;
+  }
+  .video-row:hover{ border-color:var(--gold-500); }
+  .video-row.watched{ background:#f7fbf7; }
+  .video-row .check{
+    width:22px; height:22px; border-radius:50%; border:2px solid #ccc; flex-shrink:0;
+    display:flex; align-items:center; justify-content:center; font-size:12px; color:#fff;
+  }
+  .video-row.watched .check{ background:var(--green-600); border-color:var(--green-600); }
+  .video-row .title{ font-weight:700; font-size:13.5px; flex:1; }
+  .video-row .dur{ font-size:11.5px; color:var(--ink-600); }
+
+  .player-mock{
+    background:linear-gradient(160deg,var(--brown-900),var(--brown-700));
+    border-radius:12px; aspect-ratio:16/9; display:flex; flex-direction:column;
+    align-items:center; justify-content:center; color:#fff; margin-bottom:14px; position:relative;
+  }
+  .player-mock .play-btn{
+    width:58px;height:58px;border-radius:50%;background:rgba(255,255,255,.15);
+    display:flex;align-items:center;justify-content:center;font-size:22px;margin-bottom:10px;
+    border:1px solid rgba(255,255,255,.4);
+  }
+  .player-mock .src-tag{
+    position:absolute; bottom:12px; left:14px; font-size:10.5px; color:var(--gold-300);
+    background:rgba(0,0,0,.3); padding:3px 9px; border-radius:10px;
+  }
+
+  .quiz-q{ font-size:15px; font-weight:700; margin-bottom:14px; }
+  .quiz-opt{
+    display:block; padding:11px 14px; border:1px solid #e8ddc9; border-radius:8px;
+    margin-bottom:9px; cursor:pointer; font-size:13.5px;
+  }
+  .quiz-opt:hover{ border-color:var(--gold-500); }
+  .quiz-opt.selected{ border-color:var(--brown-900); background:var(--cream-200); font-weight:700; }
+  .quiz-progress{ font-size:12px; color:var(--ink-600); margin-bottom:14px; }
+
+  table{ width:100%; border-collapse:collapse; font-size:13px; }
+  th{ text-align:left; padding:9px 10px; color:var(--ink-600); font-size:11.5px; text-transform:uppercase; letter-spacing:.3px; border-bottom:1px solid #e8ddc9; }
+  td{ padding:11px 10px; border-bottom:1px solid #f0e6d2; }
+  tr:hover td{ background:var(--cream-50); }
+  .tag-pill{ font-size:10.5px; font-weight:700; padding:3px 9px; border-radius:10px; }
+  .tag-pill.green{ background:#e3f0e6; color:var(--green-600); }
+  .tag-pill.amber{ background:#fdf1d8; color:var(--amber-600); }
+  .tag-pill.red{ background:#fbe6e4; color:var(--red-600); }
+  .filter-row{ display:flex; gap:8px; margin-bottom:16px; flex-wrap:wrap; }
+  .chip{ background:var(--cream-200); padding:6px 14px; border-radius:16px; font-size:12px; cursor:pointer; color:var(--brown-800); }
+  .chip.active{ background:var(--brown-900); color:#fff; }
+
+  .back-link{ font-size:12.5px; color:var(--ink-600); cursor:pointer; margin-bottom:14px; display:inline-block; }
+  .back-link:hover{ color:var(--brown-900); }
+
+  .result-box{ text-align:center; padding:30px 20px; }
+  .result-box .score{ font-size:46px; font-weight:700; color:var(--brown-900); }
+  .result-box .label{ font-size:14px; color:var(--ink-600); margin-top:4px; }
+
+  .upload-box{
+    border:1.5px dashed var(--gold-500); border-radius:10px; padding:18px;
+    background:var(--cream-50); text-align:left; margin-top:16px;
+  }
+  .upload-box .up-title{ font-weight:700; font-size:13.5px; margin-bottom:3px; }
+  .upload-box .up-desc{ font-size:11.5px; color:var(--ink-600); margin-bottom:12px; }
+  .upload-box .up-row{ display:flex; align-items:center; gap:10px; }
+  .upload-box input[type=file]{ font-size:12px; flex:1; }
+  .file-chip{
+    display:inline-flex; align-items:center; gap:8px; background:var(--cream-200);
+    border-radius:8px; padding:7px 12px; font-size:12.5px; margin-top:8px;
+  }
+  .file-chip .x{ cursor:pointer; color:var(--red-600); font-weight:700; }
+  .doc-link{ color:var(--brown-800); text-decoration:underline; cursor:pointer; font-size:12.5px; }
+  .doc-pending{ color:var(--amber-600); font-size:12px; font-style:italic; }
 </style>
 </head>
 <body>
-<div class="app">
 
-  <!-- SIDEBAR -->
-  <div class="sidebar">
-    <div class="brand">
-      <h1>Don Salazar</h1>
-      <p>Café con Sabor a Perú</p>
+<div class="proto-banner">🔧 <b>Prototipo interactivo</b> — así quedaría la plataforma real. Los datos, videos y notas de esta pantalla son de ejemplo.</div>
+
+<!-- ============ LOGIN BARISTA ============ -->
+<div id="screen-login-barista" class="screen active">
+  <div class="login-wrap">
+    <div class="login-card">
+      <div class="brand">
+        <div class="mark">DS</div>
+        <h1>Academia DS</h1>
+        <p>Café con Sabor a Perú</p>
+      </div>
+      <div class="field">
+        <label>Correo electrónico</label>
+        <input type="text" placeholder="tunombre@donsalazar.com" id="baristaEmail">
+      </div>
+      <div class="field">
+        <label>Contraseña</label>
+        <input type="password" placeholder="••••••••" id="baristaPass">
+      </div>
+      <button class="btn" onclick="goTo('screen-barista-dashboard')">Ingresar</button>
+      <div class="demo-hint">Demo: cualquier correo/contraseña entra al panel del barista. Las cuentas reales las crea el equipo de Cultura, uno por colaborador.</div>
+      <div class="switch-mode">¿Eres del equipo de Cultura? <a onclick="goTo('screen-login-admin')">Acceso administrativo →</a></div>
     </div>
+  </div>
+</div>
 
-    <div class="nav-item" onclick="showView('resumen')" id="nav-resumen">🏠 Resumen del día</div>
+<!-- ============ LOGIN ADMIN ============ -->
+<div id="screen-login-admin" class="screen">
+  <div class="login-wrap">
+    <div class="login-card">
+      <div class="admin-tag">PANEL ADMINISTRATIVO</div>
+      <div class="brand" style="margin-top:0;">
+        <div class="mark">DS</div>
+        <h1>Academia DS · Cultura</h1>
+        <p>Seguimiento de baristas y contenidos</p>
+      </div>
+      <div class="field">
+        <label>Correo electrónico</label>
+        <input type="text" placeholder="admin@donsalazar.com" id="adminEmail">
+      </div>
+      <div class="field">
+        <label>Contraseña</label>
+        <input type="password" placeholder="••••••••" id="adminPass">
+      </div>
+      <button class="btn gold" onclick="goTo('screen-admin-dashboard')">Ingresar al panel</button>
+      <div class="demo-hint">Solo 5 correos autorizados (equipo Cultura) tendrán acceso a este panel.</div>
+      <div class="switch-mode"><a onclick="goTo('screen-login-barista')">← Volver al acceso de baristas</a></div>
+    </div>
+  </div>
+</div>
 
-    <div class="nav-item active" onclick="toggleMenu('cu')">☕ Cultura <span class="chev">▾</span></div>
-    <div class="submenu open" id="menu-cu">
-      <div class="nav-item" onclick="toggleMenu('ac')">🎓 Academia <span class="chev">▾</span></div>
-      <div class="subsubmenu open" id="menu-ac">
-        <div class="nav-item" onclick="showView('fichas')">📖 Fichas técnicas</div>
-        <div class="nav-item" onclick="showView('videos')">▶️ Videos</div>
-        <div class="nav-item" onclick="showView('capacitaciones')">🎓 Capacitaciones</div>
-        <div class="nav-item" onclick="showView('evaluaciones')">📝 Evaluaciones <span class="badge-new">NUEVO</span></div>
-        <div class="nav-item" onclick="showView('progreso')">📈 Mi progreso <span class="badge-new">NUEVO</span></div>
-        <div class="nav-item" onclick="showView('avance-area')">📊 Avance por área <span class="badge-new">NUEVO</span></div>
-        <div class="nav-item" onclick="toggleMenu('bar')">☕ Tipos de Barista (SCA) <span class="chev">▾</span></div>
-        <div class="subsubmenu open" id="menu-bar">
-          <div class="nav-item" onclick="showView('barista-foundation')">Barista SCA Foundation</div>
-          <div class="nav-item" onclick="showView('barista-avanzado')">Barista SCA Avanzado</div>
+<!-- ============ BARISTA: DASHBOARD ============ -->
+<div id="screen-barista-dashboard" class="screen">
+  <div class="app">
+    <div class="sidebar-slot" data-active="resumen"></div>
+    <div class="main">
+      <div class="topbar">
+        <div>
+          <h2>Hola, Renzo 👋</h2>
+          <div class="subtitle">Continúa tu formación en Academia DS</div>
         </div>
-        <div class="nav-item" onclick="showView('certificaciones')">🏅 Certificaciones <span class="badge-new">NUEVO</span></div>
-        <div class="nav-item" onclick="showView('valores')">📜 Cultura Don Salazar <span class="badge-new">NUEVO</span></div>
-        <div class="nav-item" onclick="showView('admin')">⚙️ Panel Cultura (admin) <span class="badge-new">NUEVO</span></div>
+      </div>
+
+      <div class="card">
+        <h3>Tu progreso general</h3>
+        <div class="desc">2 de 3 cursos asignados en curso</div>
+        <div class="progress-bar"><div style="width:58%"></div></div>
+        <div style="font-size:12px;color:var(--ink-600);margin-top:6px;">58% completado</div>
+      </div>
+
+      <div class="card">
+        <h3>Tus cursos</h3>
+        <div class="desc">Haz clic en un curso para ver sus videos y rendir la evaluación</div>
+        <div class="grid3">
+          <div class="course-tile" onclick="goTo('screen-course-detail')">
+            <div class="status progress">En curso</div>
+            <div class="icon">☕</div>
+            <h4>Barista SCA Foundation</h4>
+            <div class="meta">4 videos · 1 evaluación</div>
+            <div class="progress-bar"><div style="width:50%"></div></div>
+          </div>
+          <div class="course-tile">
+            <div class="status done">Completado</div>
+            <div class="icon">📖</div>
+            <h4>Cultura Don Salazar</h4>
+            <div class="meta">3 videos · 1 evaluación</div>
+            <div class="progress-bar"><div style="width:100%"></div></div>
+          </div>
+          <div class="course-tile">
+            <div class="status locked">Bloqueado</div>
+            <div class="icon">🎓</div>
+            <h4>Barista SCA Avanzado</h4>
+            <div class="meta">Disponible al terminar Foundation</div>
+            <div class="progress-bar"><div style="width:0%"></div></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <h3>Certificaciones obtenidas</h3>
+        <div class="desc">Se generan automáticamente al aprobar la evaluación de un curso. El documento subido queda visible para el equipo de Cultura.</div>
+        <table>
+          <tr><th>Certificación</th><th>Fecha</th><th>Nota</th><th>Estado</th><th>Documento</th></tr>
+          <tr><td>Cultura Don Salazar</td><td>03 ago 2026</td><td>93%</td><td><span class="tag-pill green">Aprobado</span></td><td><span class="doc-link">📄 certificado_cultura_ds.pdf</span></td></tr>
+        </table>
       </div>
     </div>
   </div>
+</div>
 
-  <!-- MAIN -->
-  <div class="main">
-
-    <!-- RESUMEN -->
-    <div class="view active" id="view-resumen">
+<!-- ============ BARISTA: DETALLE DE CURSO ============ -->
+<div id="screen-course-detail" class="screen">
+  <div class="app">
+    <div class="sidebar-slot" data-active="videos"></div>
+    <div class="main">
+      <span class="back-link" onclick="goTo('screen-barista-dashboard')">← Volver a Mi Academia</span>
       <div class="topbar">
-        <div>
-          <h2>Resumen del día</h2>
-          <div class="subtitle">Propuesta de contenido — Academia DS</div>
-        </div>
+        <div><h2>Barista SCA Foundation</h2><div class="subtitle">Fundamentos de espresso, leche y calidad de taza</div></div>
       </div>
-      <div class="callout">
-        Módulo <b>Academia</b> dentro de Control Dogo. Usa el menú "Cultura → Academia" a la izquierda: Fichas técnicas y Videos son tu contenido actual; Capacitaciones, Evaluaciones, Mi progreso, Certificaciones, Cultura Don Salazar y el Panel Cultura son nuevos. Los datos de contenido (videos, rutas, exámenes, preguntas) están estructurados en <b>Academia_DS_BaseDatos_v1.xlsx</b>. Las cifras de abajo son el contenido real ya cargado; las secciones sin información real todavía muestran "—" hasta conectar datos reales.
+
+      <div class="player-mock">
+        <div class="play-btn">▶</div>
+        <div>Reproduciendo: "Molienda y dosis correctas"</div>
+        <div class="src-tag">🔒 Video privado — Control Dogo / Videos (SharePoint)</div>
       </div>
-      <div class="grid4">
-        <div class="stat-tile"><div class="num">11</div><div class="lbl">Videos activos</div></div>
-        <div class="stat-tile"><div class="num">3</div><div class="lbl">Cursos en Capacitaciones</div></div>
-        <div class="stat-tile"><div class="num">4</div><div class="lbl">Evaluaciones creadas</div></div>
-        <div class="stat-tile"><div class="num">0%</div><div class="lbl">Adopción del equipo</div></div>
+
+      <div class="card">
+        <h3>Videos del curso</h3>
+        <div class="desc">Marca cada video como visto para desbloquear la evaluación final</div>
+        <div class="video-row watched"><div class="check">✓</div><div class="title">Introducción a SCA Foundation</div><div class="dur">6:40</div></div>
+        <div class="video-row watched"><div class="check">✓</div><div class="title">Molienda y dosis correctas</div><div class="dur">9:12</div></div>
+        <div class="video-row"><div class="check"></div><div class="title">Extracción y tiempos de espresso</div><div class="dur">11:05</div></div>
+        <div class="video-row"><div class="check"></div><div class="title">Texturizado de leche</div><div class="dur">8:47</div></div>
+      </div>
+
+      <div class="card" style="text-align:center;">
+        <h3 style="margin-bottom:10px;">Evaluación final</h3>
+        <div class="desc">Disponible al completar los 4 videos (2 de 4 vistos)</div>
+        <button class="btn gold" style="width:auto;padding:10px 26px;" onclick="goTo('screen-quiz')">Ver evaluación de ejemplo →</button>
       </div>
     </div>
+  </div>
+</div>
 
-    <!-- FICHAS (placeholder, existente) -->
-    <div class="view" id="view-fichas">
-      <div class="topbar"><div><h2>Fichas técnicas</h2><div class="subtitle">Recetario — ya existente en tu web</div></div></div>
-      <div class="card"><p class="desc">Aquí vive tu recetario actual. Sugerencia: vincular cada ficha técnica a su video de procedimiento y a un examen corto de verificación.</p></div>
+<!-- ============ BARISTA: EVALUACIÓN ============ -->
+<div id="screen-quiz" class="screen">
+  <div class="app">
+    <div class="sidebar-slot" data-active="evaluaciones"></div>
+    <div class="main" style="max-width:600px;">
+      <span class="back-link" onclick="goTo('screen-course-detail')">← Volver al curso</span>
+      <div class="card">
+        <div class="quiz-progress">Pregunta 1 de 4</div>
+        <div class="quiz-q">¿Cuál es el rango ideal de temperatura del agua para extraer espresso?</div>
+        <div class="quiz-opt" onclick="selectOpt(this)">88°C – 90°C</div>
+        <div class="quiz-opt selected" onclick="selectOpt(this)">92°C – 96°C</div>
+        <div class="quiz-opt" onclick="selectOpt(this)">98°C – 100°C</div>
+        <div class="quiz-opt" onclick="selectOpt(this)">80°C – 85°C</div>
+        <button class="btn" style="margin-top:10px;" onclick="goTo('screen-quiz-result')">Siguiente pregunta →</button>
+      </div>
     </div>
+  </div>
+</div>
 
-    <!-- VIDEOS (placeholder, existente) -->
-    <div class="view" id="view-videos">
-      <div class="topbar"><div><h2>Videos · procedimientos</h2><div class="subtitle">11 video(s) — ya existente en tu web</div></div></div>
-      <div class="card"><p class="desc">Tal cual está hoy en tu dashboard. La única mejora sugerida: un botón "Rendir examen" al final de cada video.</p></div>
-    </div>
+<!-- ============ BARISTA: RESULTADO ============ -->
+<div id="screen-quiz-result" class="screen">
+  <div class="app">
+    <div class="sidebar-slot" data-active="certificaciones"></div>
+    <div class="main" style="max-width:600px;">
+      <div class="card result-box">
+        <div style="font-size:13px;color:var(--ink-600);letter-spacing:.5px;">RESULTADO DE LA EVALUACIÓN</div>
+        <div class="score">91%</div>
+        <div class="label">¡Aprobado! Certificación de Barista SCA Foundation generada.</div>
 
-    <!-- CAPACITACIONES -->
-    <div class="view" id="view-capacitaciones">
-      <div class="topbar">
-        <div><h2>Capacitaciones</h2><div class="subtitle">Rutas de aprendizaje por rol — reemplaza el "próximamente"</div></div>
-      </div>
-      <div class="grid3">
-        <div class="card">
-          <h3>🧑‍🍳 Ruta Barista</h3>
-          <p class="desc">6 módulos · Fichas + Videos + 3 evaluaciones</p>
-          <div class="progress-row"><div class="bar-bg"><div class="bar-fill" style="width:0%"></div></div><span class="pct">—</span></div>
-          <button class="btn small outline">Empezar ruta</button>
-        </div>
-        <div class="card">
-          <h3>🏬 Ruta Tienda</h3>
-          <p class="desc">4 módulos · Protocolo de atención y ceremonia del café</p>
-          <div class="progress-row"><div class="bar-bg"><div class="bar-fill" style="width:0%"></div></div><span class="pct">0%</span></div>
-          <button class="btn small outline">Empezar ruta</button>
-        </div>
-        <div class="card">
-          <h3>⭐ Ruta Embajador de Marca</h3>
-          <p class="desc">5 módulos · Historia, Finca Villa Rica y storytelling de marca</p>
-          <div class="progress-row"><div class="bar-bg"><div class="bar-fill" style="width:0%"></div></div><span class="pct">0%</span></div>
-          <button class="btn small outline">Empezar ruta</button>
-        </div>
-      </div>
-      <div class="callout">Cada ruta agrupa fichas técnicas + videos ya existentes, y cierra con una evaluación por módulo. Al completar todos los módulos se emite una certificación (ver pestaña Certificaciones). Aún no hay colaboradores inscritos, por eso el avance de las 3 rutas está en "—".</div>
-    </div>
-
-    <!-- EVALUACIONES -->
-    <div class="view" id="view-evaluaciones">
-      <div class="topbar">
-        <div><h2>Evaluaciones</h2><div class="subtitle">Exámenes ligados a cada video / ficha técnica</div></div>
-      </div>
-      <div class="filter-row">
-        <div class="chip active">Todos</div>
-        <div class="chip">Pendientes</div>
-        <div class="chip">Aprobados</div>
-        <div class="chip">Por reforzar</div>
-      </div>
-      <div class="grid4" style="margin-bottom:24px;">
-        <div class="item-card">
-          <div class="item-thumb">📝</div>
-          <div class="item-body">
-            <div class="item-title">Examen: Ceremonia del Café</div>
-            <div class="item-meta">10 preguntas · Mínimo 80%</div>
-            <span class="status-tag status-pendiente">Pendiente</span><br>
-            <button class="btn small gold" style="margin-top:10px;" onclick="showView('quiz-demo')">Comenzar</button>
+        <div class="upload-box">
+          <div class="up-title">📄 Sube tu certificado</div>
+          <div class="up-desc">Adjunta el documento de tu certificación (PDF o imagen) para que quede registrado en tu perfil y visible para el equipo de Cultura.</div>
+          <div class="up-row">
+            <input type="file" id="certFile" onchange="mockUpload(this)">
           </div>
-        </div>
-        <div class="item-card">
-          <div class="item-thumb">📝</div>
-          <div class="item-body">
-            <div class="item-title">Examen: Club Don Salazar</div>
-            <div class="item-meta">8 preguntas · Mínimo 70%</div>
-            <span class="status-tag status-pendiente">Pendiente</span><br>
-            <button class="btn small gold" style="margin-top:10px;" onclick="showView('quiz-demo')">Comenzar</button>
-          </div>
-        </div>
-        <div class="item-card">
-          <div class="item-thumb">📝</div>
-          <div class="item-body">
-            <div class="item-title">Examen: QR por sección</div>
-            <div class="item-meta">6 preguntas · Mínimo 70%</div>
-            <span class="status-tag status-pendiente">Pendiente</span><br>
-            <button class="btn small gold" style="margin-top:10px;" onclick="showView('quiz-demo')">Comenzar</button>
-          </div>
-        </div>
-        <div class="item-card">
-          <div class="item-thumb">📝</div>
-          <div class="item-body">
-            <div class="item-title">Examen: Limpieza de equipos</div>
-            <div class="item-meta">12 preguntas · Mínimo 80%</div>
-            <span class="status-tag status-pendiente">Pendiente</span><br>
-            <button class="btn small gold" style="margin-top:10px;" onclick="showView('quiz-demo')">Comenzar</button>
-          </div>
-        </div>
-      </div>
-      <div class="callout">Formatos de pregunta sugeridos: opción múltiple, verdadero/falso y "video + pregunta" (se detiene el video en un punto clave). Cada examen tiene puntaje mínimo, límite de reintentos y tiempo opcional. Los 4 exámenes están "Pendiente" porque todavía nadie los ha rendido de verdad.</div>
-    </div>
-
-    <!-- QUIZ DEMO -->
-    <div class="view" id="view-quiz-demo">
-      <div class="topbar"><div><h2>Examen: Ceremonia del Café</h2><div class="subtitle">Vista de ejemplo — así se vería rindiendo un examen</div></div></div>
-      <div class="card quiz-box">
-        <div class="quiz-progress" id="quiz-progress">Pregunta 1 de 3</div>
-
-        <div class="question active" data-q="0">
-          <div class="q-text">¿Cuál es el primer paso correcto de la Ceremonia del Café Don Salazar?</div>
-          <div class="option" data-correct="false" onclick="selectOption(this)">Servir el café directamente al cliente</div>
-          <div class="option" data-correct="true" onclick="selectOption(this)">Presentar el origen: Finca Villa Rica</div>
-          <div class="option" data-correct="false" onclick="selectOption(this)">Preguntar el nombre del cliente</div>
+          <div id="certUploaded"></div>
         </div>
 
-        <div class="question" data-q="1">
-          <div class="q-text">¿Qué significa el tagline de la marca?</div>
-          <div class="option" data-correct="false" onclick="selectOption(this)">Café rápido y económico</div>
-          <div class="option" data-correct="true" onclick="selectOption(this)">"Café con Sabor a Perú"</div>
-          <div class="option" data-correct="false" onclick="selectOption(this)">Café solo para exportación</div>
-        </div>
-
-        <div class="question" data-q="2">
-          <div class="q-text">¿Quién fundó Don Salazar Coffee?</div>
-          <div class="option" data-correct="false" onclick="selectOption(this)">Un fondo de inversión extranjero</div>
-          <div class="option" data-correct="true" onclick="selectOption(this)">Arturo Marín Salazar</div>
-          <div class="option" data-correct="false" onclick="selectOption(this)">Una cadena internacional de café</div>
-        </div>
-
-        <div style="margin-top:16px; display:flex; gap:10px;">
-          <button class="btn" id="quiz-next" onclick="nextQuestion()">Siguiente</button>
-        </div>
-
-        <div class="quiz-result" id="quiz-result">
-          <div class="big-score" id="quiz-score">0%</div>
-          <p>¡Examen completado! Se emitiría un certificado automáticamente si se supera el mínimo.</p>
-          <button class="btn outline" onclick="showView('evaluaciones')">Volver a Evaluaciones</button>
-        </div>
+        <button class="btn gold" style="width:auto;padding:10px 26px;margin-top:16px;" onclick="goTo('screen-barista-dashboard')">Volver a Mi Academia</button>
       </div>
     </div>
+  </div>
+</div>
 
-    <!-- MI PROGRESO -->
-    <div class="view" id="view-progreso">
-      <div class="topbar"><div><h2>Mi progreso</h2><div class="subtitle">Vista individual del colaborador</div></div></div>
-      <div class="grid4" style="margin-bottom:20px;">
-        <div class="stat-tile"><div class="num">—</div><div class="lbl">Avance general</div></div>
-        <div class="stat-tile"><div class="num">—</div><div class="lbl">Exámenes aprobados</div></div>
-        <div class="stat-tile"><div class="num">—</div><div class="lbl">Insignias ganadas</div></div>
-        <div class="stat-tile"><div class="num">—</div><div class="lbl">Ranking en tienda</div></div>
-      </div>
+<!-- ============ BARISTA: FICHAS TÉCNICAS ============ -->
+<div id="screen-fichas" class="screen">
+  <div class="app">
+    <div class="sidebar-slot" data-active="fichas"></div>
+    <div class="main">
+      <div class="topbar"><div><h2>Fichas técnicas</h2><div class="subtitle">Documentos de referencia rápida por producto y proceso</div></div></div>
       <div class="card">
-        <h3>Avance por ruta</h3>
-        <div style="margin-top:12px;">
-          <div class="progress-row"><div class="label">Ruta Barista</div><div class="bar-bg"><div class="bar-fill" style="width:0%"></div></div><span class="pct">—</span></div>
-          <div class="progress-row"><div class="label">Ruta Tienda</div><div class="bar-bg"><div class="bar-fill" style="width:0%"></div></div><span class="pct">—</span></div>
-          <div class="progress-row"><div class="label">Ruta Embajador de Marca</div><div class="bar-bg"><div class="bar-fill" style="width:0%"></div></div><span class="pct">—</span></div>
-        </div>
-        <p class="desc" style="margin-top:10px;">Sin datos aún — nadie ha completado contenido registrado en Academia todavía.</p>
-      </div>
-    </div>
-
-    <!-- AVANCE POR ÁREA (apartado propio) -->
-    <div class="view" id="view-avance-area">
-      <div class="topbar"><div><h2>Avance por área</h2><div class="subtitle">Progreso del equipo en las evaluaciones de cada área</div></div></div>
-
-      <div class="grid2" style="margin-bottom:20px;">
-        <div class="card">
-          <h3>☕ Baristas</h3>
-          <div class="progress-row"><div class="bar-bg"><div class="bar-fill" style="width:0%"></div></div><span class="pct">—</span></div>
-          <p class="desc">Se calcularía con los exámenes: Ceremonia del Café, Club Don Salazar y Limpieza de equipos.</p>
-        </div>
-        <div class="card">
-          <h3>🤝 ATC (Atención al Cliente)</h3>
-          <div class="progress-row"><div class="bar-bg"><div class="bar-fill" style="width:0%"></div></div><span class="pct">—</span></div>
-          <p class="desc">Se calcularía con el examen: QR por sección.</p>
-        </div>
-      </div>
-
-      <div class="card">
-        <h3>Detalle por colaborador y área</h3>
-        <p class="desc">Aún no hay colaboradores registrados rindiendo exámenes en Academia.</p>
-      </div>
-      <div class="callout">Sin datos reales todavía. Al conectar Academia_DS_BaseDatos_v1.xlsx con colaboradores y resultados reales, el avance por área se calcularía automáticamente según los exámenes que le corresponden a cada rol (hoja Rutas_Capacitacion + Resultados).</div>
-    </div>
-
-    <!-- BARISTA SCA FOUNDATION -->
-    <div class="view" id="view-barista-foundation">
-      <div class="topbar"><div><h2>Barista SCA Foundation</h2><div class="subtitle">Nivel base de la certificación Barista Skills de la Specialty Coffee Association</div></div></div>
-      <div class="card">
-        <h3>Qué cubre este nivel</h3>
-        <p class="desc">Basado en el temario público de SCA Barista Skills Foundation: fundamentos del espresso, uso y mantenimiento básico de la máquina, molienda y dosificación, texturizado básico de leche, higiene y seguridad, y servicio al cliente en barra.</p>
-      </div>
-      <div class="grid3" style="margin-bottom:20px;">
-        <div class="stat-tile"><div class="num">—</div><div class="lbl">Colaboradores en este nivel</div></div>
-        <div class="stat-tile"><div class="num">—</div><div class="lbl">Aprobados</div></div>
-        <div class="stat-tile"><div class="num">—</div><div class="lbl">En progreso</div></div>
-      </div>
-      <div class="callout">Sin datos todavía — aquí se listaría cada colaborador cursando este nivel una vez que se registren en Academia.</div>
-    </div>
-
-    <!-- BARISTA SCA AVANZADO -->
-    <div class="view" id="view-barista-avanzado">
-      <div class="topbar"><div><h2>Barista SCA Avanzado</h2><div class="subtitle">Agrupa los niveles Intermediate y Professional de la certificación Barista Skills SCA</div></div></div>
-      <div class="card">
-        <h3>Qué cubre este nivel</h3>
-        <p class="desc">Basado en el temario público de SCA Barista Skills Intermediate/Professional: calibración avanzada de molienda, extracción y control sensorial, arte latte, manejo de barra bajo presión y con múltiples pedidos, y mentoría a baristas en formación.</p>
-      </div>
-      <div class="grid3" style="margin-bottom:20px;">
-        <div class="stat-tile"><div class="num">—</div><div class="lbl">Colaboradores en este nivel</div></div>
-        <div class="stat-tile"><div class="num">—</div><div class="lbl">Aprobados</div></div>
-        <div class="stat-tile"><div class="num">—</div><div class="lbl">En progreso</div></div>
-      </div>
-      <div class="callout">Sin datos todavía — requiere haber completado el nivel Foundation antes de avanzar aquí.</div>
-    </div>
-
-    <!-- CERTIFICACIONES -->
-    <div class="view" id="view-certificaciones">
-      <div class="topbar"><div><h2>Certificaciones</h2><div class="subtitle">Niveles e insignias de marca</div></div></div>
-      <div class="card">
-        <h3>Mis insignias</h3>
-        <div class="badge-grid" style="margin-top:12px;">
-          <div class="badge-item locked"><div class="b-icon">☕</div><div class="b-label">Barista DS</div></div>
-          <div class="badge-item locked"><div class="b-icon">📜</div><div class="b-label">Club Don Salazar</div></div>
-          <div class="badge-item locked"><div class="b-icon">🌱</div><div class="b-label">Embajador de Origen</div></div>
-          <div class="badge-item locked"><div class="b-icon">🏆</div><div class="b-label">Barista Senior</div></div>
-        </div>
-        <p class="desc" style="margin-top:10px;">Ninguna insignia se ha ganado todavía — se desbloquean automáticamente al aprobar todos los exámenes de una ruta.</p>
-      </div>
-      <div class="callout">Al aprobar todos los exámenes de una ruta se genera automáticamente un certificado descargable en PDF con el nombre del colaborador, la sede y la fecha.</div>
-    </div>
-
-    <!-- CULTURA DON SALAZAR -->
-    <div class="view" id="view-valores">
-      <div class="topbar"><div><h2>Cultura Don Salazar</h2><div class="subtitle">Origen, legado y storytelling de marca</div></div></div>
-      <div class="grid2">
-        <div class="card">
-          <h3>Nuestro origen</h3>
-          <p class="desc">Finca Villa Rica (3ra generación) → Tostaduría → Tiendas → Comunidad DS. Contenido breve sobre Arturo Marín Salazar y el legado familiar detrás de la marca.</p>
-        </div>
-        <div class="card">
-          <h3>Glosario del café de especialidad</h3>
-          <p class="desc">Términos clave que todo colaborador debería manejar: origen, tueste, perfil de taza, trazabilidad.</p>
-        </div>
-      </div>
-    </div>
-
-    <!-- ADMIN -->
-    <div class="view" id="view-admin">
-      <div class="topbar"><div><h2>Panel Cultura (admin)</h2><div class="subtitle">Solo visible para el equipo de Cultura</div></div></div>
-
-      <div class="card">
-        <h3>KPIs de Barista</h3>
-        <p class="desc">Mismos indicadores del bloque "BARI" en tu Supply — Dashboard (Jhampier). Hoy esa hoja todavía no tiene datos cargados para 2026, así que aquí se refleja tal cual: sin dato.</p>
-        <div class="grid3" style="margin-top:12px;">
-          <div class="stat-tile"><div class="num">—</div><div class="lbl">Capacitaciones/mes</div></div>
-          <div class="stat-tile"><div class="num">—</div><div class="lbl">Embajadores activos</div></div>
-          <div class="stat-tile"><div class="num">—</div><div class="lbl">Baristas certificados</div></div>
-          <div class="stat-tile"><div class="num">—</div><div class="lbl">Auditorías tiendas</div></div>
-          <div class="stat-tile"><div class="num">—</div><div class="lbl">Estándar bebidas</div></div>
-          <div class="stat-tile"><div class="num">—</div><div class="lbl">Satisfacción capacitación</div></div>
-        </div>
-        <p class="desc" style="margin-top:10px;">Estos 6 KPIs vienen directo de tu Supply — Dashboard (hoja de Jhampier). En cuanto él los llene ahí, se pueden reflejar aquí con datos reales — por ahora no se muestra ningún número inventado.</p>
-      </div>
-
-      <div class="card">
-        <h3>Resultados por colaborador</h3>
-        <table class="admin-table">
-          <tr><th>Colaborador</th><th>Sede</th><th>Ruta</th><th>Avance</th><th>Último examen</th><th>Estado</th></tr>
+        <h3>Fichas disponibles</h3>
+        <div class="desc">Provenientes de SharePoint · Control Dogo / Fichas técnicas</div>
+        <table id="fichasTable">
+          <tr><th>Ficha</th><th>Categoría</th><th>Actualizada</th><th></th></tr>
+          <tr><td>Espresso — parámetros base</td><td>Barra</td><td>28 jul 2026</td><td><span class="doc-link">📄 Ver PDF</span></td></tr>
+          <tr><td>Leche y texturizado</td><td>Barra</td><td>15 jul 2026</td><td><span class="doc-link">📄 Ver PDF</span></td></tr>
+          <tr><td>Perfil de tueste — Villa Rica</td><td>Origen</td><td>02 jul 2026</td><td><span class="doc-link">📄 Ver PDF</span></td></tr>
+          <tr><td>Protocolo de limpieza de máquina</td><td>Operación</td><td>20 jun 2026</td><td><span class="doc-link">📄 Ver PDF</span></td></tr>
         </table>
-        <p class="desc" style="margin-top:10px;">Aún no hay colaboradores registrados ni exámenes rendidos.</p>
       </div>
-      <div class="callout">Este panel permite al equipo de Cultura subir nuevos videos/fichas, crear exámenes, definir puntajes mínimos y detectar colaboradores o tiendas que necesitan refuerzo.</div>
+      <div class="card">
+        <div class="upload-box" style="margin-top:0;">
+          <div class="up-title">📎 Subir nueva ficha técnica</div>
+          <div class="up-desc">El equipo de Cultura puede subir aquí nuevas fichas (PDF o imagen) para que queden disponibles al instante para todos los baristas.</div>
+          <div class="up-row">
+            <input type="file" id="fichaFile" onchange="uploadFicha(this)">
+          </div>
+        </div>
+      </div>
     </div>
+  </div>
+</div>
 
+<!-- ============ BARISTA: CAPACITACIONES ============ -->
+<div id="screen-capacitaciones" class="screen">
+  <div class="app">
+    <div class="sidebar-slot" data-active="capacitaciones"></div>
+    <div class="main">
+      <div class="topbar"><div><h2>Capacitaciones</h2><div class="subtitle">Todos los programas de formación asignados a tu perfil</div></div></div>
+      <div class="card">
+        <div class="grid3">
+          <div class="course-tile" onclick="goTo('screen-barista-foundation')">
+            <div class="status progress">En curso</div>
+            <div class="icon">☕</div>
+            <h4>Barista SCA Foundation <span class="lvl-tag" style="background:var(--cream-200);color:var(--brown-800);">Junior</span></h4>
+            <div class="meta">4 videos · 1 evaluación</div>
+            <div class="progress-bar"><div style="width:50%"></div></div>
+          </div>
+          <div class="course-tile" onclick="goTo('screen-cultura-valores')">
+            <div class="status done">Completado</div>
+            <div class="icon">📖</div>
+            <h4>Cultura Don Salazar</h4>
+            <div class="meta">3 videos · 1 evaluación</div>
+            <div class="progress-bar"><div style="width:100%"></div></div>
+          </div>
+          <div class="course-tile" onclick="goTo('screen-barista-avanzado')">
+            <div class="status locked">Bloqueado</div>
+            <div class="icon">🎓</div>
+            <h4>Barista SCA Avanzado <span class="lvl-tag" style="background:var(--cream-200);color:var(--brown-800);">Senior</span></h4>
+            <div class="meta">Disponible al terminar Foundation</div>
+            <div class="progress-bar"><div style="width:0%"></div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ============ BARISTA: MI PROGRESO ============ -->
+<div id="screen-progreso" class="screen">
+  <div class="app">
+    <div class="sidebar-slot" data-active="progreso"></div>
+    <div class="main">
+      <div class="topbar"><div><h2>Mi progreso</h2><div class="subtitle">Tu avance detallado en Academia DS</div></div></div>
+      <div class="grid3" style="margin-bottom:18px;">
+        <div class="card" style="margin-bottom:0;text-align:center;"><div style="font-size:24px;font-weight:700;">58%</div><div class="desc" style="margin:0;">Progreso general</div></div>
+        <div class="card" style="margin-bottom:0;text-align:center;"><div style="font-size:24px;font-weight:700;">91%</div><div class="desc" style="margin:0;">Nota última evaluación</div></div>
+        <div class="card" style="margin-bottom:0;text-align:center;"><div style="font-size:24px;font-weight:700;">1</div><div class="desc" style="margin:0;">Certificación obtenida</div></div>
+      </div>
+      <div class="card">
+        <h3>Avance por curso</h3>
+        <div style="margin-bottom:14px;">
+          <div style="display:flex;justify-content:space-between;font-size:12.5px;margin-bottom:4px;"><span>Barista SCA Foundation</span><span>50%</span></div>
+          <div class="progress-bar"><div style="width:50%"></div></div>
+        </div>
+        <div style="margin-bottom:14px;">
+          <div style="display:flex;justify-content:space-between;font-size:12.5px;margin-bottom:4px;"><span>Cultura Don Salazar</span><span>100%</span></div>
+          <div class="progress-bar"><div style="width:100%"></div></div>
+        </div>
+        <div>
+          <div style="display:flex;justify-content:space-between;font-size:12.5px;margin-bottom:4px;"><span>Barista SCA Avanzado</span><span>0% · bloqueado</span></div>
+          <div class="progress-bar"><div style="width:0%"></div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ============ BARISTA: AVANCE POR ÁREA ============ -->
+<div id="screen-avance-area" class="screen">
+  <div class="app">
+    <div class="sidebar-slot" data-active="avance-area"></div>
+    <div class="main">
+      <div class="topbar"><div><h2>Avance por área</h2><div class="subtitle">Progreso promedio de Academia DS por tienda</div></div></div>
+      <div class="card">
+        <table>
+          <tr><th>Tienda</th><th>Baristas</th><th>Progreso promedio</th><th>Certificaciones</th></tr>
+          <tr><td>Miraflores</td><td>9</td><td>72%</td><td>6</td></tr>
+          <tr><td>San Isidro</td><td>8</td><td>81%</td><td>5</td></tr>
+          <tr><td>Barranco</td><td>7</td><td>68%</td><td>3</td></tr>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ============ BARISTA: SCA FOUNDATION (JUNIOR) ============ -->
+<div id="screen-barista-foundation" class="screen">
+  <div class="app">
+    <div class="sidebar-slot" data-active="barista-foundation"></div>
+    <div class="main">
+      <div class="topbar">
+        <div><h2>Barista SCA Foundation <span class="lvl-tag" style="background:var(--cream-200);color:var(--brown-800);">Nivel Junior</span></h2><div class="subtitle">Fundamentos de espresso, leche y calidad de taza</div></div>
+      </div>
+      <div class="card">
+        <h3>Contenido del programa</h3>
+        <div class="desc">4 videos · 1 evaluación final · certificación al aprobar</div>
+        <div class="progress-bar"><div style="width:50%"></div></div>
+        <div style="font-size:12px;color:var(--ink-600);margin-top:8px;">50% completado</div>
+        <button class="btn gold" style="width:auto;padding:10px 26px;margin-top:16px;" onclick="goTo('screen-course-detail')">Continuar viendo videos →</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ============ BARISTA: SCA AVANZADO (SENIOR) ============ -->
+<div id="screen-barista-avanzado" class="screen">
+  <div class="app">
+    <div class="sidebar-slot" data-active="barista-avanzado"></div>
+    <div class="main">
+      <div class="topbar">
+        <div><h2>Barista SCA Avanzado <span class="lvl-tag" style="background:var(--cream-200);color:var(--brown-800);">Nivel Senior</span></h2><div class="subtitle">Cata, extracción avanzada y latte art</div></div>
+      </div>
+      <div class="card" style="text-align:center;">
+        <div style="font-size:34px;">🔒</div>
+        <h3>Disponible al aprobar Barista SCA Foundation</h3>
+        <div class="desc">Este nivel se desbloquea automáticamente al completar el nivel Junior</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ============ BARISTA: BARISTA DS ============ -->
+<div id="screen-barista-ds" class="screen">
+  <div class="app">
+    <div class="sidebar-slot" data-active="barista-ds"></div>
+    <div class="main">
+      <div class="topbar"><div><h2>Barista DS <span class="lvl-tag" style="background:var(--cream-200);color:var(--brown-800);">Programa interno</span></h2><div class="subtitle">Reconocimiento propio de Don Salazar, sin depender del cupo SCA</div></div></div>
+      <div class="card">
+        <h3>¿Qué es Barista DS?</h3>
+        <div class="desc">No todos los baristas tienen ni tendrán acceso al programa SCA — Barista DS es la ruta interna para reconocer su desarrollo igual.</div>
+        <p style="font-size:13.5px;line-height:1.7;color:var(--ink-900);margin:0;">Se obtiene al completar ciertas capacitaciones internas y acumular horas de labor en barra, sin depender de la disponibilidad del programa SCA.</p>
+      </div>
+      <div class="card">
+        <h3>Tus requisitos</h3>
+        <div style="margin-bottom:14px;">
+          <div style="display:flex;justify-content:space-between;font-size:12.5px;margin-bottom:4px;"><span>Capacitaciones internas completadas</span><span>3 de 5</span></div>
+          <div class="progress-bar"><div style="width:60%"></div></div>
+        </div>
+        <div>
+          <div style="display:flex;justify-content:space-between;font-size:12.5px;margin-bottom:4px;"><span>Horas de labor en barra</span><span>140 de 200 h</span></div>
+          <div class="progress-bar"><div style="width:70%"></div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ============ BARISTA: GRADER ============ -->
+<div id="screen-grader" class="screen">
+  <div class="app">
+    <div class="sidebar-slot" data-active="grader"></div>
+    <div class="main">
+      <div class="topbar"><div><h2>Grader</h2><div class="subtitle">Catación y control de calidad de taza</div></div></div>
+      <div class="card" style="text-align:center;">
+        <div style="font-size:34px;">🏆</div>
+        <h3>Rol de alta especialización</h3>
+        <div class="desc">Don Salazar cuenta actualmente con 1 Grader certificado en el equipo</div>
+        <p style="font-size:13.5px;line-height:1.7;color:var(--ink-900);margin:16px 0 0 0;">El Grader evalúa y califica la calidad de taza siguiendo el protocolo de catación de especialidad. Es un rol de acceso restringido, asignado por el equipo de Cultura según desempeño y formación avanzada.</p>
+      </div>
+      <div class="card">
+        <h3>Grader actual</h3>
+        <div class="desc">Este dato lo administra el equipo de Cultura desde el Panel Cultura (admin)</div>
+        <table>
+          <tr><th>Nombre</th><th>Tienda</th><th>Certificado desde</th></tr>
+          <tr><td>(ejemplo) Barista certificado</td><td>Sede Cultura</td><td>2025</td></tr>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ============ BARISTA: MIS CERTIFICACIONES ============ -->
+<div id="screen-mis-certificaciones" class="screen">
+  <div class="app">
+    <div class="sidebar-slot" data-active="certificaciones"></div>
+    <div class="main">
+      <div class="topbar"><div><h2>Mis certificaciones</h2><div class="subtitle">Certificados obtenidos y pendientes por subir</div></div></div>
+      <div class="card">
+        <table>
+          <tr><th>Certificación</th><th>Fecha</th><th>Nota</th><th>Estado</th><th>Documento</th></tr>
+          <tr><td>Cultura Don Salazar</td><td>03 ago 2026</td><td>93%</td><td><span class="tag-pill green">Aprobado</span></td><td><span class="doc-link">📄 certificado_cultura_ds.pdf</span></td></tr>
+          <tr><td>Barista SCA Foundation</td><td>—</td><td>—</td><td><span class="tag-pill amber">En curso</span></td><td><span class="doc-pending">Pendiente de aprobar</span></td></tr>
+          <tr><td>Barista SCA Avanzado</td><td>—</td><td>—</td><td><span class="tag-pill red">Bloqueado</span></td><td><span class="doc-pending">—</span></td></tr>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ============ BARISTA: CULTURA DON SALAZAR ============ -->
+<div id="screen-cultura-valores" class="screen">
+  <div class="app">
+    <div class="sidebar-slot" data-active="valores"></div>
+    <div class="main">
+      <div class="topbar"><div><h2>Cultura Don Salazar</h2><div class="subtitle">Origen, legado y valores de la marca</div></div></div>
+      <div class="card">
+        <h3>Nuestra historia</h3>
+        <div class="desc">Finca Villa Rica (3ra generación) → Tostaduría → Tiendas → Comunidad DS</div>
+        <p style="font-size:13.5px;line-height:1.6;color:var(--ink-900);">Contenido del curso: el legado familiar de Arturo Marín Salazar, el origen del café peruano de especialidad en Villa Rica, y el estándar de servicio que nos convierte en referentes de "Café con Sabor a Perú".</p>
+      </div>
+      <div class="card" style="text-align:center;">
+        <div class="status done" style="position:static;display:inline-block;margin-bottom:8px;">Completado</div>
+        <div class="desc">Certificación obtenida el 03 ago 2026 · Nota 93%</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ============ ADMIN: DASHBOARD ============ -->
+<div id="screen-admin-dashboard" class="screen">
+  <div class="app">
+    <div class="sidebar">
+      <div class="brand"><h1>Academia DS</h1><p>Panel de Cultura</p></div>
+      <div class="nav-item active" onclick="setAdminNav(this,'screen-admin-dashboard')">👥 Progreso de baristas</div>
+      <div class="nav-item" onclick="setAdminNav(this,'screen-admin-certificaciones')">📄 Certificaciones</div>
+      <div class="nav-item">🎬 Gestión de contenidos</div>
+      <div class="nav-item">📊 Reportes</div>
+      <div class="nav-item" onclick="goTo('screen-login-admin')">🚪 Cerrar sesión</div>
+      <div class="sidebar-foot">
+        <div class="who"><b>Jhampier Escalante</b>Equipo Cultura</div>
+      </div>
+    </div>
+    <div class="main">
+      <div class="topbar">
+        <div><h2>Progreso de baristas</h2><div class="subtitle">Visible solo para el equipo administrativo (5 correos autorizados)</div></div>
+      </div>
+
+      <div class="grid4" style="margin-bottom:18px;">
+        <div class="card" style="margin-bottom:0;text-align:center;"><div style="font-size:24px;font-weight:700;">24</div><div class="desc" style="margin:0;">Baristas activos</div></div>
+        <div class="card" style="margin-bottom:0;text-align:center;"><div style="font-size:24px;font-weight:700;">76%</div><div class="desc" style="margin:0;">Progreso promedio</div></div>
+        <div class="card" style="margin-bottom:0;text-align:center;"><div style="font-size:24px;font-weight:700;">88%</div><div class="desc" style="margin:0;">Nota promedio evaluaciones</div></div>
+        <div class="card" style="margin-bottom:0;text-align:center;"><div style="font-size:24px;font-weight:700;">14</div><div class="desc" style="margin:0;">Certificaciones emitidas</div></div>
+      </div>
+
+      <div class="card">
+        <div class="filter-row">
+          <div class="chip active">Todas las tiendas</div>
+          <div class="chip">Miraflores</div>
+          <div class="chip">San Isidro</div>
+          <div class="chip">Barranco</div>
+        </div>
+        <table>
+          <tr><th>Barista</th><th>Tienda</th><th>Curso actual</th><th>Progreso</th><th>Últ. evaluación</th><th>Estado</th></tr>
+          <tr><td>Renzo Quispe</td><td>Miraflores</td><td>SCA Foundation</td><td>58%</td><td>91%</td><td><span class="tag-pill green">Al día</span></td></tr>
+          <tr><td>Fiorella Vargas</td><td>San Isidro</td><td>Cultura Don Salazar</td><td>100%</td><td>96%</td><td><span class="tag-pill green">Completo</span></td></tr>
+          <tr><td>Diego Ramos</td><td>Barranco</td><td>SCA Foundation</td><td>20%</td><td>—</td><td><span class="tag-pill amber">Atrasado</span></td></tr>
+          <tr><td>Lucía Torres</td><td>Miraflores</td><td>SCA Avanzado</td><td>10%</td><td>78%</td><td><span class="tag-pill green">Al día</span></td></tr>
+          <tr><td>Bruno Salas</td><td>San Isidro</td><td>SCA Foundation</td><td>0%</td><td>—</td><td><span class="tag-pill red">Sin iniciar</span></td></tr>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ============ ADMIN: CERTIFICACIONES ============ -->
+<div id="screen-admin-certificaciones" class="screen">
+  <div class="app">
+    <div class="sidebar">
+      <div class="brand"><h1>Academia DS</h1><p>Panel de Cultura</p></div>
+      <div class="nav-item" onclick="setAdminNav(this,'screen-admin-dashboard')">👥 Progreso de baristas</div>
+      <div class="nav-item active" onclick="setAdminNav(this,'screen-admin-certificaciones')">📄 Certificaciones</div>
+      <div class="nav-item">🎬 Gestión de contenidos</div>
+      <div class="nav-item">📊 Reportes</div>
+      <div class="nav-item" onclick="goTo('screen-login-admin')">🚪 Cerrar sesión</div>
+      <div class="sidebar-foot">
+        <div class="who"><b>Jhampier Escalante</b>Equipo Cultura</div>
+      </div>
+    </div>
+    <div class="main">
+      <div class="topbar">
+        <div><h2>Certificaciones y documentos</h2><div class="subtitle">Documentos que cada barista sube al aprobar una evaluación</div></div>
+      </div>
+
+      <div class="card">
+        <div class="filter-row">
+          <div class="chip active">Todas</div>
+          <div class="chip">Con documento subido</div>
+          <div class="chip">Pendientes</div>
+        </div>
+        <table>
+          <tr><th>Barista</th><th>Certificación</th><th>Fecha</th><th>Nota</th><th>Documento</th><th></th></tr>
+          <tr><td>Renzo Quispe</td><td>Cultura Don Salazar</td><td>03 ago 2026</td><td>93%</td><td><span class="doc-link">📄 certificado_cultura_ds.pdf</span></td><td><span class="tag-pill green">Subido</span></td></tr>
+          <tr><td>Fiorella Vargas</td><td>Cultura Don Salazar</td><td>28 jul 2026</td><td>96%</td><td><span class="doc-link">📄 fiorella_certificado.jpg</span></td><td><span class="tag-pill green">Subido</span></td></tr>
+          <tr><td>Lucía Torres</td><td>SCA Foundation</td><td>02 ago 2026</td><td>78%</td><td><span class="doc-pending">Sin subir todavía</span></td><td><span class="tag-pill amber">Pendiente</span></td></tr>
+        </table>
+      </div>
+    </div>
   </div>
 </div>
 
 <script>
-function showView(name){
-  document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));
-  document.getElementById('view-'+name).classList.add('active');
-}
+const SIDEBAR_HTML = `
+  <div class="sidebar">
+    <div class="brand"><h1>Academia DS</h1><p>Café con Sabor a Perú</p></div>
+    <div class="nav-item" data-key="resumen" onclick="goTo('screen-barista-dashboard')">🏠 Resumen del día</div>
+    <div class="nav-item" onclick="toggleMenu('cu')">☕ Cultura <span class="chev">▾</span></div>
+    <div class="submenu open" id="menu-cu">
+      <div class="nav-item" onclick="toggleMenu('ac')">🎓 Academia <span class="chev">▾</span></div>
+      <div class="subsubmenu open" id="menu-ac">
+        <div class="nav-item" data-key="fichas" onclick="goTo('screen-fichas')">📖 Fichas técnicas</div>
+        <div class="nav-item" data-key="videos" onclick="goTo('screen-course-detail')">▶️ Videos</div>
+        <div class="nav-item" data-key="capacitaciones" onclick="goTo('screen-capacitaciones')">🎓 Capacitaciones</div>
+        <div class="nav-item" data-key="evaluaciones" onclick="goTo('screen-quiz')">📝 Evaluaciones</div>
+        <div class="nav-item" data-key="progreso" onclick="goTo('screen-progreso')">📈 Mi progreso</div>
+        <div class="nav-item" data-key="avance-area" onclick="goTo('screen-avance-area')">📊 Avance por área</div>
+        <div class="nav-item" onclick="toggleMenu('bar')">☕ Tipos de Barista (SCA) <span class="chev">▾</span></div>
+        <div class="subsubmenu open" id="menu-bar">
+          <div class="nav-item" data-key="barista-foundation" onclick="goTo('screen-barista-foundation')">Barista SCA Foundation <span class="lvl-tag">Junior</span></div>
+          <div class="nav-item" data-key="barista-avanzado" onclick="goTo('screen-barista-avanzado')">Barista SCA Avanzado <span class="lvl-tag">Senior</span></div>
+          <div class="nav-item" data-key="barista-ds" onclick="goTo('screen-barista-ds')">Barista DS <span class="lvl-tag">Interno</span></div>
+          <div class="nav-item" data-key="grader" onclick="goTo('screen-grader')">Grader <span class="lvl-tag">Especial</span></div>
+        </div>
+        <div class="nav-item" data-key="certificaciones" onclick="goTo('screen-mis-certificaciones')">🏅 Certificaciones</div>
+        <div class="nav-item" data-key="valores" onclick="goTo('screen-cultura-valores')">📜 Cultura Don Salazar</div>
+      </div>
+    </div>
+    <div class="nav-item" data-key="admin" onclick="goTo('screen-login-admin')">⚙️ Panel Cultura (admin)</div>
+    <div class="sidebar-foot">
+      <div class="who"><b>Renzo Quispe</b>Barista · Miraflores</div>
+      <div class="nav-item" style="padding:0;" onclick="goTo('screen-login-barista')">🚪 Cerrar sesión</div>
+    </div>
+  </div>
+`;
 function toggleMenu(id){
-  var el = document.getElementById('menu-'+id);
+  const el = document.getElementById('menu-'+id);
   if(el) el.classList.toggle('open');
 }
-
-// Quiz demo logic
-var currentQ = 0;
-var score = 0;
-var answered = [false,false,false];
-
-function selectOption(el){
-  var q = el.parentElement;
-  if(q.dataset.locked === "true") return;
-  q.querySelectorAll('.option').forEach(o=>o.classList.remove('selected'));
+function renderSidebars(){
+  document.querySelectorAll('.sidebar-slot').forEach(slot=>{
+    const activeKey = slot.dataset.active;
+    const wrapper = document.createElement('div');
+    wrapper.innerHTML = SIDEBAR_HTML.trim();
+    const sidebarEl = wrapper.firstElementChild;
+    const match = sidebarEl.querySelector('[data-key="'+activeKey+'"]');
+    if(match) match.classList.add('active');
+    slot.replaceWith(sidebarEl);
+  });
+}
+function setAdminNav(el, screenId){
+  el.parentElement.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
+  el.classList.add('active');
+  goTo(screenId);
+}
+function mockUpload(input){
+  const box = document.getElementById('certUploaded');
+  if(input.files && input.files.length){
+    box.innerHTML = '<div class="file-chip">📎 '+input.files[0].name+' <span class="x" onclick="clearUpload()">✕</span></div>';
+  }
+}
+function clearUpload(){
+  document.getElementById('certFile').value = '';
+  document.getElementById('certUploaded').innerHTML = '';
+}
+function uploadFicha(input){
+  if(!input.files || !input.files.length) return;
+  const table = document.getElementById('fichasTable');
+  const row = document.createElement('tr');
+  row.innerHTML = '<td>'+input.files[0].name+'</td><td>Nueva</td><td>recién subida</td><td><span class="tag-pill green">Subida</span></td>';
+  table.appendChild(row);
+  input.value = '';
+}
+function goTo(id){
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  window.scrollTo(0,0);
+}
+function selectOpt(el){
+  el.parentElement.querySelectorAll('.quiz-opt').forEach(o=>o.classList.remove('selected'));
   el.classList.add('selected');
 }
-
-function nextQuestion(){
-  var questions = document.querySelectorAll('.question');
-  var q = questions[currentQ];
-  var selected = q.querySelector('.option.selected');
-  if(!selected){ alert('Selecciona una opción para continuar'); return; }
-  if(!answered[currentQ]){
-    q.querySelectorAll('.option').forEach(o=>{
-      if(o.dataset.correct === "true") o.classList.add('correct');
-      else if(o === selected) o.classList.add('incorrect');
-    });
-    if(selected.dataset.correct === "true") score++;
-    answered[currentQ] = true;
-    q.dataset.locked = "true";
-    document.getElementById('quiz-next').innerText = (currentQ === questions.length-1) ? 'Ver resultado' : 'Siguiente';
-    return;
-  }
-  if(currentQ < questions.length - 1){
-    q.classList.remove('active');
-    currentQ++;
-    questions[currentQ].classList.add('active');
-    document.getElementById('quiz-progress').innerText = 'Pregunta ' + (currentQ+1) + ' de ' + questions.length;
-    document.getElementById('quiz-next').innerText = 'Siguiente';
-  } else {
-    document.querySelector('.quiz-box > div[data-q]').parentElement; // noop
-    document.querySelectorAll('.question').forEach(qq=>qq.style.display='none');
-    document.getElementById('quiz-progress').style.display='none';
-    document.getElementById('quiz-next').style.display='none';
-    var pct = Math.round(score/questions.length*100);
-    document.getElementById('quiz-score').innerText = pct + '%';
-    document.getElementById('quiz-result').style.display = 'block';
-  }
-}
+renderSidebars();
 </script>
 </body>
 </html>
