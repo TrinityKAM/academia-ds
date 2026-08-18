@@ -318,11 +318,11 @@
             <div class="meta">3 videos · 1 evaluación</div>
             <div class="progress-bar"><div style="width:100%"></div></div>
           </div>
-          <div class="course-tile">
-            <div class="status locked">Bloqueado</div>
+          <div class="course-tile" onclick="goTo('screen-barista-avanzado')">
+            <div class="status progress">No iniciado</div>
             <div class="icon">🎓</div>
             <h4>Barista SCA Avanzado</h4>
-            <div class="meta">Disponible al terminar Foundation</div>
+            <div class="meta">5 videos · 1 evaluación</div>
             <div class="progress-bar"><div style="width:0%"></div></div>
           </div>
         </div>
@@ -471,10 +471,10 @@
             <div class="progress-bar"><div style="width:100%"></div></div>
           </div>
           <div class="course-tile" onclick="goTo('screen-barista-avanzado')">
-            <div class="status locked">Bloqueado</div>
+            <div class="status progress">No iniciado</div>
             <div class="icon">🎓</div>
             <h4>Barista SCA Avanzado <span class="lvl-tag" style="background:var(--cream-200);color:var(--brown-800);">Senior</span></h4>
-            <div class="meta">Disponible al terminar Foundation</div>
+            <div class="meta">5 videos · 1 evaluación</div>
             <div class="progress-bar"><div style="width:0%"></div></div>
           </div>
         </div>
@@ -505,7 +505,7 @@
           <div class="progress-bar"><div style="width:100%"></div></div>
         </div>
         <div>
-          <div style="display:flex;justify-content:space-between;font-size:12.5px;margin-bottom:4px;"><span>Barista SCA Avanzado</span><span>0% · bloqueado</span></div>
+          <div style="display:flex;justify-content:space-between;font-size:12.5px;margin-bottom:4px;"><span>Barista SCA Avanzado</span><span>0%</span></div>
           <div class="progress-bar"><div style="width:0%"></div></div>
         </div>
       </div>
@@ -558,60 +558,12 @@
       <div class="topbar">
         <div><h2>Barista SCA Avanzado <span class="lvl-tag" style="background:var(--cream-200);color:var(--brown-800);">Nivel Senior</span></h2><div class="subtitle">Cata, extracción avanzada y latte art</div></div>
       </div>
-      <div class="card" style="text-align:center;">
-        <div style="font-size:34px;">🔒</div>
-        <h3>Disponible al aprobar Barista SCA Foundation</h3>
-        <div class="desc">Este nivel se desbloquea automáticamente al completar el nivel Junior</div>
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- ============ BARISTA: BARISTA DS ============ -->
-<div id="screen-barista-ds" class="screen">
-  <div class="app">
-    <div class="sidebar-slot" data-active="barista-ds"></div>
-    <div class="main">
-      <div class="topbar"><div><h2>Barista DS <span class="lvl-tag" style="background:var(--cream-200);color:var(--brown-800);">Programa interno</span></h2><div class="subtitle">Reconocimiento propio de Don Salazar, sin depender del cupo SCA</div></div></div>
       <div class="card">
-        <h3>¿Qué es Barista DS?</h3>
-        <div class="desc">No todos los baristas tienen ni tendrán acceso al programa SCA — Barista DS es la ruta interna para reconocer su desarrollo igual.</div>
-        <p style="font-size:13.5px;line-height:1.7;color:var(--ink-900);margin:0;">Se obtiene al completar ciertas capacitaciones internas y acumular horas de labor en barra, sin depender de la disponibilidad del programa SCA.</p>
-      </div>
-      <div class="card">
-        <h3>Tus requisitos</h3>
-        <div style="margin-bottom:14px;">
-          <div style="display:flex;justify-content:space-between;font-size:12.5px;margin-bottom:4px;"><span>Capacitaciones internas completadas</span><span>3 de 5</span></div>
-          <div class="progress-bar"><div style="width:60%"></div></div>
-        </div>
-        <div>
-          <div style="display:flex;justify-content:space-between;font-size:12.5px;margin-bottom:4px;"><span>Horas de labor en barra</span><span>140 de 200 h</span></div>
-          <div class="progress-bar"><div style="width:70%"></div></div>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- ============ BARISTA: GRADER ============ -->
-<div id="screen-grader" class="screen">
-  <div class="app">
-    <div class="sidebar-slot" data-active="grader"></div>
-    <div class="main">
-      <div class="topbar"><div><h2>Grader</h2><div class="subtitle">Catación y control de calidad de taza</div></div></div>
-      <div class="card" style="text-align:center;">
-        <div style="font-size:34px;">🏆</div>
-        <h3>Rol de alta especialización</h3>
-        <div class="desc">Don Salazar cuenta actualmente con 1 Grader certificado en el equipo</div>
-        <p style="font-size:13.5px;line-height:1.7;color:var(--ink-900);margin:16px 0 0 0;">El Grader evalúa y califica la calidad de taza siguiendo el protocolo de catación de especialidad. Es un rol de acceso restringido, asignado por el equipo de Cultura según desempeño y formación avanzada.</p>
-      </div>
-      <div class="card">
-        <h3>Grader actual</h3>
-        <div class="desc">Este dato lo administra el equipo de Cultura desde el Panel Cultura (admin)</div>
-        <table>
-          <tr><th>Nombre</th><th>Tienda</th><th>Certificado desde</th></tr>
-          <tr><td>(ejemplo) Barista certificado</td><td>Sede Cultura</td><td>2025</td></tr>
-        </table>
+        <h3>Contenido del programa</h3>
+        <div class="desc">5 videos · 1 evaluación final · certificación al aprobar</div>
+        <div class="progress-bar"><div style="width:0%"></div></div>
+        <div style="font-size:12px;color:var(--ink-600);margin-top:8px;">0% completado</div>
+        <button class="btn gold" style="width:auto;padding:10px 26px;margin-top:16px;" onclick="goTo('screen-course-detail')">Comenzar a ver videos →</button>
       </div>
     </div>
   </div>
@@ -628,7 +580,7 @@
           <tr><th>Certificación</th><th>Fecha</th><th>Nota</th><th>Estado</th><th>Documento</th></tr>
           <tr><td>Cultura Don Salazar</td><td>03 ago 2026</td><td>93%</td><td><span class="tag-pill green">Aprobado</span></td><td><span class="doc-link">📄 certificado_cultura_ds.pdf</span></td></tr>
           <tr><td>Barista SCA Foundation</td><td>—</td><td>—</td><td><span class="tag-pill amber">En curso</span></td><td><span class="doc-pending">Pendiente de aprobar</span></td></tr>
-          <tr><td>Barista SCA Avanzado</td><td>—</td><td>—</td><td><span class="tag-pill red">Bloqueado</span></td><td><span class="doc-pending">—</span></td></tr>
+          <tr><td>Barista SCA Avanzado</td><td>—</td><td>—</td><td><span class="tag-pill red">Sin iniciar</span></td><td><span class="doc-pending">—</span></td></tr>
         </table>
       </div>
     </div>
@@ -755,8 +707,6 @@ const SIDEBAR_HTML = `
         <div class="subsubmenu open" id="menu-bar">
           <div class="nav-item" data-key="barista-foundation" onclick="goTo('screen-barista-foundation')">Barista SCA Foundation <span class="lvl-tag">Junior</span></div>
           <div class="nav-item" data-key="barista-avanzado" onclick="goTo('screen-barista-avanzado')">Barista SCA Avanzado <span class="lvl-tag">Senior</span></div>
-          <div class="nav-item" data-key="barista-ds" onclick="goTo('screen-barista-ds')">Barista DS <span class="lvl-tag">Interno</span></div>
-          <div class="nav-item" data-key="grader" onclick="goTo('screen-grader')">Grader <span class="lvl-tag">Especial</span></div>
         </div>
         <div class="nav-item" data-key="certificaciones" onclick="goTo('screen-mis-certificaciones')">🏅 Certificaciones</div>
         <div class="nav-item" data-key="valores" onclick="goTo('screen-cultura-valores')">📜 Cultura Don Salazar</div>
