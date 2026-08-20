@@ -92,6 +92,17 @@
   .pending-badge{ display:inline-block; background:var(--cream-200); color:var(--amber-600); font-size:11px; font-weight:700; padding:3px 10px; border-radius:10px; }
 
   footer{ text-align:center; padding:30px; color:var(--ink-600); font-size:12px; }
+
+  .cosecha-status{
+    background:var(--cream-50); border:1px solid #e8ddc9; border-radius:10px;
+    padding:12px 16px; margin-bottom:16px; font-size:13px;
+  }
+  .btn-ms, .btn-ms-outline{
+    font-size:12.5px; font-weight:700; padding:8px 16px; border-radius:8px; cursor:pointer;
+    border:1px solid var(--brown-900);
+  }
+  .btn-ms{ background:var(--brown-900); color:#fff; }
+  .btn-ms-outline{ background:transparent; color:var(--brown-900); }
 </style>
 </head>
 <body>
@@ -135,15 +146,23 @@
     <h2>Datos de cosecha</h2>
     <div class="subtitle">Conectado con DS_Finca_Sistema.xlsx (SharePoint) · hoja "1. Cosecha"</div>
     <div class="card">
+      <div class="cosecha-status" id="cosechaStatus">
+        <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;">
+          <div>🔒 Inicia sesión con tu cuenta <b>@donsalazar.com</b> para ver los datos en vivo del Excel real.</div>
+          <button class="btn-ms" onclick="loginCosecha()">Iniciar sesión con Microsoft</button>
+        </div>
+      </div>
       <p style="margin-bottom:14px;">Estructura y filas tal como están hoy en la hoja <b>1. Cosecha</b> del sistema de la Finca. Las filas están marcadas como plantilla/ejemplo en el propio archivo — en cuanto Ronaldo registre cosechas reales día a día, esta tabla reflejará esos datos.</p>
-      <table>
-        <tr><th>Fecha</th><th>Cosechero</th><th>Parcela</th><th>Variedad</th><th>Proceso</th><th>Kg cerezo</th><th>Precio/kg (S/)</th><th>Pago (S/)</th><th>Lote</th></tr>
-        <tr><td>20/05/2026</td><td>Verónica</td><td>Alicorp</td><td>Blend</td><td>Lavado</td><td>358,35</td><td>0,80</td><td>286,68</td><td>L-2026-001</td></tr>
-        <tr><td>23/05/2026</td><td>Jack</td><td>Alicorp</td><td>Blend</td><td>Lavado</td><td>162,55</td><td>0,80</td><td>130,04</td><td>L-2026-001</td></tr>
-        <tr><td>24/05/2026</td><td>Silverio</td><td>Alicorp</td><td>Blend</td><td>Lavado</td><td>469,80</td><td>0,80</td><td>375,84</td><td>L-2026-001</td></tr>
-        <tr><td>24/05/2026</td><td>Silverio</td><td>Alicorp</td><td>Blend</td><td>Lavado</td><td>469,80</td><td>0,80</td><td>375,84</td><td>L-2026-002</td></tr>
-      </table>
-      <div class="desc" style="margin-top:12px;">El sistema también incluye hojas de Lotes, Fermentación, Transformaciones, Gastos, Ventas, Compras y Rentabilidad — estas últimas configuradas en el propio archivo como tableros de solo lectura para Arturo Marín Salazar y Jhampier Escalante, por lo que no se muestran aquí.</div>
+      <div id="cosechaTableWrap">
+        <table>
+          <tr><th>Fecha</th><th>Cosechero</th><th>Parcela</th><th>Variedad</th><th>Proceso</th><th>Kg cerezo</th><th>Precio/kg (S/)</th><th>Pago (S/)</th><th>Lote</th></tr>
+          <tr><td>20/05/2026</td><td>Verónica</td><td>Alicorp</td><td>Blend</td><td>Lavado</td><td>358,35</td><td>0,80</td><td>286,68</td><td>L-2026-001</td></tr>
+          <tr><td>23/05/2026</td><td>Jack</td><td>Alicorp</td><td>Blend</td><td>Lavado</td><td>162,55</td><td>0,80</td><td>130,04</td><td>L-2026-001</td></tr>
+          <tr><td>24/05/2026</td><td>Silverio</td><td>Alicorp</td><td>Blend</td><td>Lavado</td><td>469,80</td><td>0,80</td><td>375,84</td><td>L-2026-001</td></tr>
+          <tr><td>24/05/2026</td><td>Silverio</td><td>Alicorp</td><td>Blend</td><td>Lavado</td><td>469,80</td><td>0,80</td><td>375,84</td><td>L-2026-002</td></tr>
+        </table>
+      </div>
+      <div class="desc" id="cosechaNote" style="margin-top:12px;">Vista de ejemplo (sin sesión iniciada). El sistema también incluye hojas de Lotes, Fermentación, Transformaciones, Gastos, Ventas, Compras y Rentabilidad — estas están configuradas en el propio archivo como tableros de solo lectura para Arturo Marín Salazar y Jhampier Escalante, y esta página nunca las lee ni las muestra.</div>
     </div>
   </section>
 
@@ -159,6 +178,158 @@
 </div>
 
 <footer>Don Salazar Coffee · Finca Villa Rica — página independiente de Academia DS</footer>
+
+<script src="https://alcdn.msauth.net/browser/3.7.1/js/msal-browser.min.js"></script>
+<script>
+// ============ Conexión en vivo con el Excel real (Fase 2) ============
+// Login restringido al tenant de Don Salazar (app ControlDOGO, tipo "Solo mi organización").
+// Solo cuentas @donsalazar.com pueden completar el inicio de sesión de Microsoft.
+// Se usa un permiso delegado (Files.Read) que no requiere consentimiento de administrador:
+// cada persona ve únicamente los archivos a los que ella misma ya tiene acceso.
+const MSAL_CLIENT_ID = "c574ba32-11b8-48d2-ba73-6e6d986f4310";
+const MSAL_TENANT_ID = "a5c99531-956a-48fe-a0c1-010d4ca36a2b";
+const COSECHA_SHEET = "1. Cosecha";
+const EXCEL_FILE_HINT = "ds_finca_sistema";
+
+let msalInstance = null;
+
+function cosechaEls(){
+  return {
+    status: document.getElementById('cosechaStatus'),
+    tableWrap: document.getElementById('cosechaTableWrap'),
+    note: document.getElementById('cosechaNote')
+  };
+}
+
+function renderLoggedOut(){
+  const { status } = cosechaEls();
+  status.innerHTML = `
+    <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;">
+      <div>🔒 Inicia sesión con tu cuenta <b>@donsalazar.com</b> para ver los datos en vivo del Excel real.</div>
+      <button class="btn-ms" onclick="loginCosecha()">Iniciar sesión con Microsoft</button>
+    </div>`;
+}
+
+function renderLoggedIn(account){
+  const { status } = cosechaEls();
+  status.innerHTML = `
+    <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;">
+      <div>✅ Conectado como <b>${account.username}</b></div>
+      <button class="btn-ms-outline" onclick="logoutCosecha()">Cerrar sesión</button>
+    </div>`;
+}
+
+async function loginCosecha(){
+  if(!msalInstance){
+    alert("No se pudo cargar el sistema de inicio de sesión de Microsoft. Intenta recargar la página o revisa tu conexión.");
+    return;
+  }
+  try{
+    await msalInstance.loginRedirect({ scopes: ["Files.Read"] });
+  }catch(err){
+    console.error("Error de login:", err);
+  }
+}
+
+async function logoutCosecha(){
+  if(!msalInstance) return;
+  try{
+    await msalInstance.logoutRedirect();
+  }catch(err){
+    console.error("Error al cerrar sesión:", err);
+  }
+}
+
+function renderCosechaTable(values){
+  const { tableWrap, note } = cosechaEls();
+  if(!values || values.length < 2){
+    tableWrap.innerHTML = '<div class="desc">La hoja de Cosecha está vacía por ahora.</div>';
+    note.textContent = 'Datos en vivo (hoja vacía).';
+    return;
+  }
+  const headers = values[0];
+  const rows = values.slice(1);
+  let html = '<table><tr>' + headers.map(h => `<th>${h ?? ''}</th>`).join('') + '</tr>';
+  rows.forEach(r => {
+    html += '<tr>' + r.map(c => `<td>${c === null || c === undefined ? '' : c}</td>`).join('') + '</tr>';
+  });
+  html += '</table>';
+  tableWrap.innerHTML = html;
+  note.textContent = 'Datos en vivo, leídos directamente del Excel real en SharePoint. El sistema también incluye hojas de Lotes, Fermentación, Transformaciones, Gastos, Ventas, Compras y Rentabilidad — esta página nunca las lee ni las muestra.';
+}
+
+async function loadCosechaLive(account){
+  const { tableWrap, note } = cosechaEls();
+  tableWrap.innerHTML = '<div class="desc">Cargando datos en vivo del Excel…</div>';
+  note.textContent = '';
+  try{
+    let tokenResp;
+    try{
+      tokenResp = await msalInstance.acquireTokenSilent({ scopes: ["Files.Read"], account });
+    }catch(silentErr){
+      tokenResp = await msalInstance.acquireTokenPopup({ scopes: ["Files.Read"] });
+    }
+    const token = tokenResp.accessToken;
+
+    const sharedResp = await fetch("https://graph.microsoft.com/v1.0/me/drive/sharedWithMe", {
+      headers: { Authorization: "Bearer " + token }
+    });
+    if(!sharedResp.ok) throw new Error("No se pudo revisar tus archivos compartidos (código " + sharedResp.status + ")");
+    const sharedData = await sharedResp.json();
+    const match = (sharedData.value || []).find(item =>
+      (item.name || '').toLowerCase().includes(EXCEL_FILE_HINT) && item.remoteItem
+    );
+    if(!match) throw new Error('No se encontró "DS_Finca_Sistema.xlsx" entre los archivos compartidos contigo.');
+
+    const driveId = match.remoteItem.parentReference.driveId;
+    const itemId = match.remoteItem.id;
+
+    const rangeUrl = `https://graph.microsoft.com/v1.0/drives/${driveId}/items/${itemId}/workbook/worksheets('${encodeURIComponent(COSECHA_SHEET)}')/usedRange(valuesOnly=true)`;
+    const rangeResp = await fetch(rangeUrl, { headers: { Authorization: "Bearer " + token } });
+    if(!rangeResp.ok) throw new Error('No se pudo leer la hoja "' + COSECHA_SHEET + '" (código ' + rangeResp.status + ')');
+    const rangeData = await rangeResp.json();
+    renderCosechaTable(rangeData.values);
+  }catch(err){
+    console.error("Error cargando Cosecha en vivo:", err);
+    note.innerHTML = '<span style="color:var(--red-600);">No se pudo cargar en vivo ahora mismo (' + err.message + '). Mostrando la última vista de ejemplo.</span>';
+  }
+}
+
+async function initCosechaAuth(){
+  try{
+    msalInstance = new msal.PublicClientApplication({
+      auth: {
+        clientId: MSAL_CLIENT_ID,
+        authority: "https://login.microsoftonline.com/" + MSAL_TENANT_ID,
+        redirectUri: window.location.origin + window.location.pathname
+      },
+      cache: { cacheLocation: "sessionStorage", storeAuthStateInCookie: false }
+    });
+    await msalInstance.initialize();
+    await msalInstance.handleRedirectPromise().catch(err => console.error("Error de redirect MSAL:", err));
+
+    let account = msalInstance.getActiveAccount();
+    if(!account){
+      const accounts = msalInstance.getAllAccounts();
+      if(accounts.length > 0){
+        account = accounts[0];
+        msalInstance.setActiveAccount(account);
+      }
+    }
+
+    if(account){
+      renderLoggedIn(account);
+      loadCosechaLive(account);
+    }else{
+      renderLoggedOut();
+    }
+  }catch(err){
+    console.error("No se pudo inicializar el login de Microsoft:", err);
+  }
+}
+
+document.addEventListener('DOMContentLoaded', initCosechaAuth);
+</script>
 
 </body>
 </html>
