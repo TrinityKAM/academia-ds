@@ -1,0 +1,1031 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Don Salazar · Sistema de Control de Finca (beta conexion en vivo)</title>
+<style>
+:root{
+  --bg:#f3e8d4; --page:#ece0c9; --sidebar:#241407; --sidebar-hover:#39230f; --sidebar-active:#4a2c14;
+  --card:#fffdf9; --ink:#2a1a0d; --ink-secondary:#6b5a48; --muted:#9c8a76; --border:rgba(42,26,13,0.10);
+  --accent:#b8863a; --accent-dark:#8a5d1f; --accent-light:#f0dcb4;
+  --good:#0ca30c; --good-bg:#e6f6e0; --warning:#b8790a; --warning-bg:#fdedcf; --critical:#c23b2f; --critical-bg:#fbe4e1;
+  --neutral-bg:#eee3d2; --neutral-ink:#6b5a48;
+}
+*{box-sizing:border-box;}
+body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;background:var(--page);color:var(--ink);}
+h1,h2,h3{font-family:Georgia,'Times New Roman',serif;font-weight:600;margin:0;}
+.layout{display:flex;min-height:100vh;}
+.sidebar{width:250px;flex-shrink:0;background:var(--sidebar);color:#f3e8d4;display:flex;flex-direction:column;padding:22px 14px;position:sticky;top:0;height:100vh;overflow-y:auto;}
+.brand{padding:6px 10px 14px 10px;border-bottom:1px solid rgba(255,255,255,0.10);margin-bottom:14px;}
+.brand-title{font-family:Georgia,serif;font-size:19px;font-weight:700;letter-spacing:0.3px;}
+.brand-sub{font-size:11.5px;color:#c9b48c;font-style:italic;margin-top:3px;}
+.campania-box{padding:0 10px 16px 10px;border-bottom:1px solid rgba(255,255,255,0.10);margin-bottom:8px;}
+.campania-label{font-size:10.5px;text-transform:uppercase;letter-spacing:0.08em;color:#9a8567;margin-bottom:7px;}
+.campania-select{width:100%;font-size:13px;padding:7px 9px;border-radius:8px;border:1px solid rgba(255,255,255,0.18);background:#3a230f;color:#f3e8d4;}
+.campania-select option{background:#2a1a0d;color:#f3e8d4;}
+.live-box{padding:0 10px 16px 10px;border-bottom:1px solid rgba(255,255,255,0.10);margin-bottom:8px;}
+.live-label{font-size:10.5px;text-transform:uppercase;letter-spacing:0.08em;color:#9a8567;margin-bottom:7px;}
+.live-btn{width:100%;font-size:12.5px;font-weight:700;padding:9px 10px;border-radius:8px;cursor:pointer;border:1px solid rgba(255,255,255,0.18);background:#3a230f;color:#f3e8d4;margin-bottom:6px;}
+.live-btn:hover{background:#4a2c14;}
+.live-status{font-size:11.5px;color:#c9b48c;line-height:1.4;}
+.live-status.ok{color:#8fd18f;}
+.live-status.err{color:#e79b8f;}
+.beta-banner{background:#3a230f;color:#f0dcb4;font-size:12px;padding:8px 24px;text-align:center;letter-spacing:0.02em;}
+.beta-banner b{color:#fff;}
+.nav-group{margin-bottom:4px;}
+.nav-label{font-size:10.5px;text-transform:uppercase;letter-spacing:0.08em;color:#9a8567;padding:14px 10px 6px 10px;}
+.nav-item{display:flex;align-items:center;gap:10px;padding:9px 10px;border-radius:8px;font-size:13.5px;color:#e9dcc3;cursor:pointer;transition:background .12s;}
+.nav-item:hover{background:var(--sidebar-hover);}
+.nav-item.active{background:var(--sidebar-active);color:#fff;font-weight:600;}
+.nav-icon{width:18px;text-align:center;font-size:14px;}
+.sidebar-footer{margin-top:auto;padding:14px 10px 4px 10px;border-top:1px solid rgba(255,255,255,0.10);font-size:12px;color:#b3a284;}
+.main{flex:1;padding:30px 40px 60px 40px;max-width:1180px;}
+.topbanner{background:#2a1a0d;color:#f0dcb4;padding:10px 18px;border-radius:10px;font-size:12.5px;margin-bottom:22px;display:flex;gap:10px;align-items:flex-start;}
+.topbanner b{color:#fff;}
+.section{display:none;}
+.section.active{display:block;}
+.page-head{margin-bottom:22px;display:flex;justify-content:space-between;align-items:flex-end;gap:16px;flex-wrap:wrap;}
+.page-head h1{font-size:26px;color:var(--ink);}
+.page-head p{color:var(--ink-secondary);margin-top:6px;font-size:14px;max-width:640px;}
+.campania-chip{font-size:11.5px;font-weight:700;color:var(--accent-dark);background:var(--accent-light);padding:5px 12px;border-radius:20px;white-space:nowrap;}
+.card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:22px 24px;margin-bottom:20px;box-shadow:0 1px 2px rgba(42,26,13,0.04);}
+.card h2{font-size:16.5px;margin-bottom:4px;}
+.card .card-sub{font-size:12.5px;color:var(--ink-secondary);margin-bottom:16px;}
+.grid{display:grid;gap:16px;}
+.grid-4{grid-template-columns:repeat(4,1fr);}
+.grid-3{grid-template-columns:repeat(3,1fr);}
+.grid-2{grid-template-columns:repeat(2,1fr);}
+@media(max-width:1000px){.grid-4{grid-template-columns:repeat(2,1fr);}.grid-3{grid-template-columns:repeat(2,1fr);}}
+.stat-tile{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:18px 20px;}
+.stat-label{font-size:11.5px;color:var(--ink-secondary);text-transform:uppercase;letter-spacing:.05em;margin-bottom:8px;}
+.stat-value{font-size:26px;font-weight:700;color:var(--ink);font-variant-numeric:tabular-nums;}
+.stat-value.accent{color:var(--accent-dark);}
+.stat-note{font-size:11.5px;color:var(--muted);margin-top:6px;}
+.progress-track{background:var(--neutral-bg);border-radius:6px;height:9px;width:100%;overflow:hidden;margin-top:10px;}
+.progress-fill{background:linear-gradient(90deg,var(--accent-dark),var(--accent));height:100%;border-radius:6px;}
+table{width:100%;border-collapse:collapse;font-size:13px;}
+th{text-align:left;font-size:11px;text-transform:uppercase;letter-spacing:.04em;color:var(--ink-secondary);padding:9px 12px;border-bottom:1px solid var(--border);white-space:nowrap;}
+td{padding:10px 12px;border-bottom:1px solid var(--border);color:var(--ink);font-variant-numeric:tabular-nums;white-space:nowrap;}
+tr:last-child td{border-bottom:none;}
+tr.total-row td{font-weight:700;background:var(--neutral-bg);}
+.table-wrap{overflow-x:auto;}
+.badge{display:inline-flex;align-items:center;gap:5px;font-size:11px;font-weight:600;padding:3px 9px;border-radius:20px;white-space:nowrap;}
+.badge-good{background:var(--good-bg);color:var(--good);}
+.badge-warning{background:var(--warning-bg);color:var(--warning);}
+.badge-critical{background:var(--critical-bg);color:var(--critical);}
+.badge-neutral{background:var(--neutral-bg);color:var(--neutral-ink);}
+.badge-example{background:#efe0e0;color:#8a4a4a;}
+.badge-campania{background:#e4d6ba;color:#5c4321;}
+.empty-state{padding:28px 10px;text-align:center;color:var(--muted);font-size:13.5px;}
+.select-row{display:flex;gap:10px;align-items:center;margin-bottom:16px;flex-wrap:wrap;}
+select{font-size:13px;padding:8px 12px;border-radius:8px;border:1px solid var(--border);background:#fff;color:var(--ink);}
+.passport{border:1.5px dashed var(--accent);border-radius:14px;padding:20px 24px;background:#fffaf0;}
+.passport-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px 30px;margin-top:6px;}
+.passport-row{display:flex;justify-content:space-between;font-size:13.5px;padding:6px 0;border-bottom:1px dashed var(--border);}
+.passport-row .k{color:var(--ink-secondary);}
+.passport-row .v{font-weight:600;}
+.passport-section-title{font-size:11px;text-transform:uppercase;letter-spacing:.06em;color:var(--accent-dark);font-weight:700;margin:16px 0 4px 0;}
+.bar-row{display:flex;align-items:center;gap:10px;margin-bottom:10px;}
+.bar-label{width:110px;font-size:12.5px;color:var(--ink-secondary);flex-shrink:0;}
+.bar-track{flex:1;background:var(--neutral-bg);border-radius:5px;height:16px;overflow:hidden;}
+.bar-fill{background:var(--accent);height:100%;border-radius:5px;}
+.bar-value{width:80px;text-align:right;font-size:12.5px;font-variant-numeric:tabular-nums;color:var(--ink);flex-shrink:0;}
+.two-col{display:grid;grid-template-columns:1.3fr 1fr;gap:20px;}
+@media(max-width:900px){.two-col{grid-template-columns:1fr;}}
+.footer-note{font-size:11.5px;color:var(--muted);text-align:center;margin-top:30px;padding-bottom:10px;}
+</style>
+<script src="https://alcdn.msauth.net/browser/3.7.1/js/msal-browser.min.js"></script>
+</head>
+<body>
+<div class="beta-banner"><b>Version beta</b> &middot; prueba de conexion en vivo con el Excel (Fase 2). El resto de la pagina sigue siendo el snapshot fijo del 17 ago 2026 hasta que se conecte.</div>
+<div class="layout">
+  <div class="sidebar">
+    <div class="brand">
+      <div class="brand-title">Don Salazar</div>
+      <div class="brand-sub">Cafe con Sabor a Peru</div>
+    </div>
+    <div class="campania-box">
+      <div class="campania-label">Campania</div>
+      <select class="campania-select" id="select-campania"></select>
+    </div>
+    <div class="live-box">
+      <div class="live-label">Datos (beta)</div>
+      <button class="live-btn" id="btn-live-connect">Conectar en vivo con Microsoft</button>
+      <div class="live-status" id="live-status">Modo: snapshot fijo (17 ago 2026)</div>
+    </div>
+    <div class="nav-label">Finca Villa Rica</div>
+    <div class="nav-item active" data-section="resumen"><span class="nav-icon">&#9679;</span> Resumen</div>
+    <div class="nav-item" data-section="cosecha"><span class="nav-icon">&#127805;</span> Cosecha</div>
+    <div class="nav-item" data-section="lotes"><span class="nav-icon">&#128230;</span> Lotes</div>
+    <div class="nav-item" data-section="fermentacion"><span class="nav-icon">&#9203;</span> Fermentacion y secado</div>
+    <div class="nav-item" data-section="transformaciones"><span class="nav-icon">&#9881;</span> Transformaciones</div>
+    <div class="nav-item" data-section="trazabilidad"><span class="nav-icon">&#128273;</span> Trazabilidad por lote</div>
+    <div class="nav-label">Tableros</div>
+    <div class="nav-item" data-section="rendimientos"><span class="nav-icon">&#128200;</span> Rendimientos</div>
+    <div class="nav-item" data-section="stock"><span class="nav-icon">&#128230;</span> Stock en verde</div>
+    <div class="nav-item" data-section="hectareas"><span class="nav-icon">&#127793;</span> Hectareas</div>
+    <div class="nav-item" data-section="rentabilidad"><span class="nav-icon">&#128176;</span> Rentabilidad</div>
+    <div class="nav-label">Finanzas de finca</div>
+    <div class="nav-item" data-section="gastos"><span class="nav-icon">&#128179;</span> Gastos</div>
+    <div class="nav-item" data-section="ventas"><span class="nav-icon">&#128722;</span> Ventas</div>
+    <div class="nav-item" data-section="compras"><span class="nav-icon">&#128722;</span> Compras a terceros</div>
+    <div class="nav-label">Configuracion</div>
+    <div class="nav-item" data-section="parcelas"><span class="nav-icon">&#128506;</span> Parcelas</div>
+    <div class="sidebar-footer">Cafe Grano A1 EIRL<br>Finca Villa Rica &middot; Peru</div>
+  </div>
+
+  <div class="main">
+    <div class="topbanner">
+      <span>&#9888;&#65039;</span>
+      <div><b>Nota de calidad de datos:</b> el sistema recien empieza a usarse. Las filas marcadas <span class="badge badge-example" style="margin:0 3px;">EJEMPLO</span> en el Excel original son de muestra (la propia hoja indica borrarlas); se muestran para que el equipo las identifique y reemplace. Todos los indicadores de esta pagina (incluyendo Rentabilidad, Stock, Rendimientos y Hectareas) se <b>recalculan en el navegador</b> a partir de las filas de cada hoja, filtradas por la campania seleccionada arriba &mdash; no son una copia fija de los tableros del Excel. Pagina generada a partir de <b>DS_Finca_Sistema.xlsx</b> el 17 ago 2026 &mdash; snapshot fijo (los datos no se actualizan solos todavia; ver seccion "Arquitectura" para el plan de sincronizacion en vivo).</div>
+    </div>
+
+    <!-- RESUMEN -->
+    <div class="section active" id="sec-resumen">
+      <div class="page-head">
+        <div>
+          <h1>Sistema de Control de Finca</h1>
+          <p>Cafe Grano A1 EIRL &middot; Finca Villa Rica. Trazabilidad completa del cafe: de la cereza en la chacra al oro verde listo para tueste, con el origen peruano como protagonista.</p>
+        </div>
+        <div class="campania-chip" id="chip-resumen"></div>
+      </div>
+      <div class="grid grid-4">
+        <div class="stat-tile"><div class="stat-label">Kg cerezo cosechado</div><div class="stat-value" id="st-kg-cerezo">-</div><div class="stat-note" id="st-campania-note">-</div></div>
+        <div class="stat-tile"><div class="stat-label">Kg oro verde producido</div><div class="stat-value" id="st-kg-verde">-</div><div class="stat-note" id="st-rend-global-note">-</div></div>
+        <div class="stat-tile"><div class="stat-label">Quintales (QQ verde)</div><div class="stat-value accent" id="st-qq">-</div><div class="stat-note" id="st-kg-qq-note">-</div></div>
+        <div class="stat-tile"><div class="stat-label">Costo por quintal</div><div class="stat-value accent" id="st-costo-qq">-</div><div class="stat-note">KPI principal de la finca</div></div>
+      </div>
+      <div class="grid grid-3" style="margin-top:16px;">
+        <div class="stat-tile"><div class="stat-label">Costo total campania</div><div class="stat-value" id="st-costo-total">-</div></div>
+        <div class="stat-tile"><div class="stat-label">Ingreso por venta intercompany</div><div class="stat-value" id="st-ingreso">-</div></div>
+        <div class="stat-tile"><div class="stat-label">Utilidad de la finca</div><div class="stat-value" id="st-utilidad">-</div><div class="stat-note" id="st-margen-note">-</div></div>
+      </div>
+
+      <div class="card" style="margin-top:20px;">
+        <h2>Que es este sistema</h2>
+        <div class="card-sub">Un solo lugar para seguir la finca: cosecha, lotes, fermentacion, stock, gastos, compras y ventas.</div>
+        <p style="font-size:13.5px;line-height:1.7;color:var(--ink);">Este es el pasaporte digital del cafe de Don Salazar: cada lote nace en una parcela de Villa Rica, pasa por cosecha, fermentacion y secado, se transforma de cereza a pergamino/bola y finalmente a oro verde, y termina siendo vendido. Cada etapa queda registrada para sostener la trazabilidad completa &mdash; la base del legado que Arturo Marin Salazar construyo desde el origen.</p>
+      </div>
+
+      <div class="card">
+        <h2>Hoja de ruta</h2>
+        <div class="card-sub">Evolucion del sistema de control</div>
+        <div class="grid grid-3">
+          <div><div class="badge badge-good" style="margin-bottom:8px;">Fase 1 &middot; Actual</div><div style="font-size:13px;">Excel operativo, exportado a esta pagina como snapshot.</div></div>
+          <div><div class="badge badge-neutral" style="margin-bottom:8px;">Fase 2</div><div style="font-size:13px;">Lectura en vivo del Excel en SharePoint (Microsoft Graph API).</div></div>
+          <div><div class="badge badge-neutral" style="margin-bottom:8px;">Fase 3</div><div style="font-size:13px;">Edicion bidireccional web &harr; Excel, y QR / pasaporte para el cliente.</div></div>
+        </div>
+        <div class="stat-note" style="margin-top:12px;">Ver el documento de arquitectura del sistema para el detalle tecnico de cada fase.</div>
+      </div>
+    </div>
+
+    <!-- COSECHA -->
+    <div class="section" id="sec-cosecha">
+      <div class="page-head"><div><h1>Cosecha</h1><p>Registro diario de cosecheros: kilos de cereza recolectados por parcela, variedad y proceso.</p></div><div class="campania-chip" id="chip-cosecha"></div></div>
+      <div class="card">
+        <div class="table-wrap">
+          <table><thead><tr><th>Fecha</th><th>Campania</th><th>Cosechero</th><th>Parcela</th><th>Variedad</th><th>Proceso</th><th>Kg cerezo</th><th>Precio/kg</th><th>Pago (S/)</th><th>Lote</th><th></th></tr></thead>
+          <tbody id="tbl-cosecha"></tbody></table>
+        </div>
+      </div>
+    </div>
+
+    <!-- LOTES -->
+    <div class="section" id="sec-lotes">
+      <div class="page-head"><div><h1>Lotes</h1><p>Cada lote agrupa la cosecha de una sola parcela, variedad y proceso.</p></div><div class="campania-chip" id="chip-lotes"></div></div>
+      <div class="grid grid-2" id="cards-lotes"></div>
+    </div>
+
+    <!-- FERMENTACION -->
+    <div class="section" id="sec-fermentacion">
+      <div class="page-head"><div><h1>Fermentacion y secado</h1><p>Fases post-cosecha: temperatura, pH, horas de fermentacion, humedad de grano y dias de secado.</p></div><div class="campania-chip" id="chip-fermentacion"></div></div>
+      <div class="card">
+        <div class="table-wrap">
+          <table><thead><tr><th>Fecha</th><th>Campania</th><th>Lote</th><th>Fase</th><th>Temp (C)</th><th>pH</th><th>Horas ferment.</th><th>Humedad (%)</th><th>Dias secado</th><th>Responsable</th><th></th></tr></thead>
+          <tbody id="tbl-fermentacion"></tbody></table>
+        </div>
+      </div>
+    </div>
+
+    <!-- TRANSFORMACIONES -->
+    <div class="section" id="sec-transformaciones">
+      <div class="page-head"><div><h1>Transformaciones</h1><p>Cereza &rarr; pergamino/bola &rarr; oro verde. Cada conversion registra rendimiento y merma.</p></div><div class="campania-chip" id="chip-transformaciones"></div></div>
+      <div class="card">
+        <div class="table-wrap">
+          <table><thead><tr><th>Fecha</th><th>Campania</th><th>Lote</th><th>Proceso</th><th>Etapa origen</th><th>Kg entra</th><th>Etapa destino</th><th>Kg producido</th><th>Rendimiento</th><th>Merma (kg)</th><th>Ubicacion</th><th>Responsable</th><th></th></tr></thead>
+          <tbody id="tbl-transformaciones"></tbody></table>
+        </div>
+      </div>
+    </div>
+
+    <!-- TRAZABILIDAD -->
+    <div class="section" id="sec-trazabilidad">
+      <div class="page-head"><div><h1>Trazabilidad por lote</h1><p>Ficha completa de cada lote &mdash; la base del futuro pasaporte QR del cafe para el cliente.</p></div><div class="campania-chip" id="chip-trazabilidad"></div></div>
+      <div class="select-row">
+        <label style="font-size:13px;color:var(--ink-secondary);">Selecciona un lote:</label>
+        <select id="select-lote"></select>
+      </div>
+      <div class="passport" id="passport-card"></div>
+    </div>
+
+    <!-- RENDIMIENTOS -->
+    <div class="section" id="sec-rendimientos">
+      <div class="page-head"><div><h1>Rendimientos</h1><p>Cereza &rarr; Pergamino/Bola &rarr; Verde. Rendimiento global de campania y por lote.</p></div><div class="campania-chip" id="chip-rendimientos"></div></div>
+      <div class="grid grid-4">
+        <div class="stat-tile"><div class="stat-label">Cerezo &rarr; Pergamino</div><div class="stat-value" id="st-r-cp">-</div></div>
+        <div class="stat-tile"><div class="stat-label">Cerezo &rarr; Bola</div><div class="stat-value" id="st-r-cb">-</div></div>
+        <div class="stat-tile"><div class="stat-label">Pergamino &rarr; Verde</div><div class="stat-value" id="st-r-pv">-</div></div>
+        <div class="stat-tile"><div class="stat-label">Bola &rarr; Verde</div><div class="stat-value" id="st-r-bv">-</div></div>
+      </div>
+      <div class="card" style="margin-top:16px;">
+        <h2>Rendimiento global de campania</h2>
+        <div class="card-sub">Cerezo cosechado &rarr; oro verde final</div>
+        <div class="progress-track"><div class="progress-fill" id="rend-global-bar" style="width:0%"></div></div>
+        <div class="stat-note" style="margin-top:8px;" id="rend-global-text">-</div>
+      </div>
+      <div class="card">
+        <h2>Rendimiento por lote</h2>
+        <div class="table-wrap">
+          <table><thead><tr><th>Lote</th><th>Kg cerezo</th><th>Kg pergamino</th><th>Kg bola</th><th>Kg verde</th><th>Rendimiento &rarr; verde</th></tr></thead>
+          <tbody id="tbl-rend-lotes"></tbody></table>
+        </div>
+      </div>
+    </div>
+
+    <!-- STOCK -->
+    <div class="section" id="sec-stock">
+      <div class="page-head"><div><h1>Stock en verde equivalente</h1><p>Cuanto cafe hay hoy, por etapa y por variedad/proceso, expresado en verde equivalente.</p></div><div class="campania-chip" id="chip-stock"></div></div>
+      <div class="two-col">
+        <div class="card">
+          <h2>Resumen por etapa</h2>
+          <div id="bars-stock"></div>
+        </div>
+        <div class="card">
+          <h2>Total en stock</h2>
+          <div class="stat-tile" style="margin-bottom:12px;"><div class="stat-label">Total en verde (kg)</div><div class="stat-value accent" id="st-stock-verde">-</div></div>
+          <div class="stat-tile"><div class="stat-label">Total en quintales (QQ)</div><div class="stat-value accent" id="st-stock-qq">-</div></div>
+        </div>
+      </div>
+      <div class="card">
+        <h2>Detalle por variedad y proceso</h2>
+        <div class="table-wrap">
+          <table><thead><tr><th>Variedad</th><th>Proceso</th><th>Cerezo</th><th>Pergamino</th><th>Bola</th><th>Oro verde</th><th>Total verde</th></tr></thead>
+          <tbody id="tbl-stock-detalle"></tbody></table>
+        </div>
+      </div>
+    </div>
+
+    <!-- HECTAREAS -->
+    <div class="section" id="sec-hectareas">
+      <div class="page-head"><div><h1>Eficiencia por hectarea</h1><p>Que parcela produce mas y cual es mas eficiente en costo.</p></div><div class="campania-chip" id="chip-hectareas"></div></div>
+      <div class="card">
+        <h2>Kg cerezo cosechado por parcela</h2>
+        <div id="bars-hectareas"></div>
+      </div>
+      <div class="card">
+        <h2>Rendimiento y costo por parcela</h2>
+        <div class="table-wrap">
+          <table><thead><tr><th>Parcela</th><th>Hectareas</th><th>N plantas</th><th>Kg cerezo</th><th>QQ</th><th>QQ/ha</th><th>Kg/planta</th><th>Costo asignado (S/)</th><th>Costo/QQ (S/)</th></tr></thead>
+          <tbody id="tbl-hectareas"></tbody></table>
+        </div>
+      </div>
+    </div>
+
+    <!-- RENTABILIDAD -->
+    <div class="section" id="sec-rentabilidad">
+      <div class="page-head"><div><h1>Rentabilidad y costo por quintal</h1><p>Vista financiera de la finca &mdash; uso interno del equipo de gerencia.</p></div><div class="campania-chip" id="chip-rentabilidad"></div></div>
+      <div class="grid grid-3">
+        <div class="stat-tile"><div class="stat-label">Costo por quintal (KPI principal)</div><div class="stat-value accent" id="st2-costo-qq">-</div></div>
+        <div class="stat-tile"><div class="stat-label">Utilidad de la finca</div><div class="stat-value" id="st2-utilidad">-</div></div>
+        <div class="stat-tile"><div class="stat-label">Margen sobre ventas</div><div class="stat-value" id="st2-margen">-</div></div>
+      </div>
+      <div class="card" style="margin-top:16px;">
+        <h2>Costos de produccion (S/)</h2>
+        <div class="table-wrap">
+          <table><tbody id="tbl-costos"></tbody></table>
+        </div>
+      </div>
+      <div class="card">
+        <h2>Produccion e ingresos de campania</h2>
+        <div class="table-wrap">
+          <table><tbody id="tbl-produccion"></tbody></table>
+        </div>
+      </div>
+    </div>
+
+    <!-- GASTOS -->
+    <div class="section" id="sec-gastos">
+      <div class="page-head"><div><h1>Gastos</h1><p>Cada gasto de la finca: siembra, fumigacion, abonamiento, mantenimiento y mas.</p></div><div class="campania-chip" id="chip-gastos"></div></div>
+      <div class="card">
+        <div class="table-wrap">
+          <table><thead><tr><th>Fecha</th><th>Campania</th><th>Cuenta</th><th>Sub cuenta</th><th>Parcela</th><th>Detalle</th><th>Monto (S/)</th><th>Estado</th></tr></thead>
+          <tbody id="tbl-gastos"></tbody></table>
+        </div>
+      </div>
+    </div>
+
+    <!-- VENTAS -->
+    <div class="section" id="sec-ventas">
+      <div class="page-head"><div><h1>Ventas</h1><p>Ventas de cafe oro verde &mdash; Finca &rarr; Don Salazar SAC (intercompany).</p></div><div class="campania-chip" id="chip-ventas"></div></div>
+      <div class="card">
+        <div class="table-wrap">
+          <table><thead><tr><th>Fecha</th><th>Campania</th><th>Lote</th><th>Variedad</th><th>Proceso</th><th>Kg oro verde</th><th>Precio/kg</th><th>Total (S/)</th><th>N factura</th></tr></thead>
+          <tbody id="tbl-ventas"></tbody></table>
+        </div>
+      </div>
+    </div>
+
+    <!-- COMPRAS -->
+    <div class="section" id="sec-compras">
+      <div class="page-head"><div><h1>Compras a terceros</h1><p>Cafe comprado a terceros para complementar el stock de la finca (no proviene de cosecha propia).</p></div><div class="campania-chip" id="chip-compras"></div></div>
+      <div class="card">
+        <div class="table-wrap">
+          <table><thead><tr><th>Fecha</th><th>Campania</th><th>Lote</th><th>Variedad</th><th>Proceso</th><th>Etapa</th><th>Kg</th><th>Proveedor</th><th>Costo (S/)</th><th>Detalle</th></tr></thead>
+          <tbody id="tbl-compras"></tbody></table>
+        </div>
+      </div>
+    </div>
+
+    <!-- PARCELAS -->
+    <div class="section" id="sec-parcelas">
+      <div class="page-head"><h1>Parcelas de la finca</h1><p>Configuracion base de Villa Rica: hectareas, plantas y variedad principal por parcela.</p></div>
+      <div class="grid grid-3" id="cards-parcelas"></div>
+    </div>
+
+    <div class="footer-note">Don Salazar &middot; Cafe con Sabor a Peru &middot; Sistema de Control de Finca &mdash; Cafe Grano A1 EIRL, Finca Villa Rica</div>
+  </div>
+</div>
+
+<script>
+let DATA = {"meta": {"campania_activa": 2026, "generado": "2026-08-17"}, "cosecha": [{"fecha": "2026-05-20", "cosechero": "Veronica", "parcela": "Alicorp", "variedad": "Blend", "proceso": "Lavado", "kg_cerezo": 358.35, "precio_kg": 0.8, "pago": 286.68, "lote": "L-2026-001", "obs": "EJEMPLO", "ejemplo": true}, {"fecha": "2026-05-23", "cosechero": "Jack", "parcela": "Alicorp", "variedad": "Blend", "proceso": "Lavado", "kg_cerezo": 162.55, "precio_kg": 0.8, "pago": 130.04000000000002, "lote": "L-2026-001", "obs": "EJEMPLO", "ejemplo": true}, {"fecha": "2026-05-24", "cosechero": "Silverio", "parcela": "Alicorp", "variedad": "Blend", "proceso": "Lavado", "kg_cerezo": 469.8, "precio_kg": 0.8, "pago": 375.84000000000003, "lote": "L-2026-001", "obs": "EJEMPLO", "ejemplo": true}, {"fecha": "2026-05-24", "cosechero": "Silverio", "parcela": "Alicorp", "variedad": "Blend", "proceso": "Lavado", "kg_cerezo": 469.8, "precio_kg": 0.8, "pago": 375.84000000000003, "lote": "L-2026-002", "obs": null, "ejemplo": false}], "lotes": [{"id": "L-2026-001", "campania": "2025-2026", "parcela": "Alicorp", "variedad": "Blend", "proceso": "Lavado", "fecha_apertura": "2026-05-20", "fecha_cierre": "2026-05-31", "kg_cerezo_auto": 990.7, "estado": "En stock", "obs": "EJEMPLO - borrar", "ejemplo": true}, {"id": "L-2026-002", "campania": "2025-2026", "parcela": "Porton", "variedad": "Obata", "proceso": "Natural", "fecha_apertura": "2026-06-20", "fecha_cierre": "2026-06-20", "kg_cerezo_auto": 1000, "estado": "En stock", "obs": null, "ejemplo": false}], "fermentacion": [{"fecha": "2026-05-24", "hora": null, "lote": "L-2026-001", "proceso": "Lavado", "fase": "Fermentacion", "temp": 22.5, "ph": null, "horas_ferm": 36, "humedad": null, "dias_secado": null, "responsable": "Fidel", "obs": "EJEMPLO", "ejemplo": true}, {"fecha": "2026-05-31", "hora": null, "lote": "L-2026-001", "proceso": null, "fase": "Secado", "temp": null, "ph": null, "horas_ferm": null, "humedad": 12, "dias_secado": 18, "responsable": "Fidel", "obs": "EJEMPLO", "ejemplo": true}], "transformaciones": [{"fecha": "2026-05-31", "lote": "L-2026-001", "variedad": "Blend", "proceso": "Lavado", "etapa_origen": "Cerezo", "kg_entra": 990.7, "etapa_destino": "Pergamino", "kg_producido": 198, "rendimiento": 0.19985868577773291, "merma": 792.7, "ubicacion": "Finca", "responsable": "Fidel", "detalle": "EJEMPLO", "ejemplo": true}, {"fecha": "2026-06-15", "lote": "L-2026-001", "variedad": "Blend", "proceso": "Lavado", "etapa_origen": "Pergamino", "kg_entra": 198, "etapa_destino": "Oro verde", "kg_producido": 162, "rendimiento": 0.8181818181818182, "merma": 36, "ubicacion": "Almacen", "responsable": "Fidel", "detalle": "EJEMPLO", "ejemplo": true}, {"fecha": "2026-07-14", "lote": "L-2026-001", "variedad": "Blend", "proceso": "Natural", "etapa_origen": "Cerezo", "kg_entra": 100, "etapa_destino": "Bola", "kg_producido": 50, "rendimiento": 0.5, "merma": 50, "ubicacion": "Almacen", "responsable": "Ronaldo", "detalle": "hola", "ejemplo": false}, {"fecha": "2026-07-24", "lote": "L-2026-001", "variedad": "Blend", "proceso": "Natural", "etapa_origen": "Bola", "kg_entra": 50, "etapa_destino": "Oro verde", "kg_producido": 20, "rendimiento": 0.4, "merma": 30, "ubicacion": null, "responsable": null, "detalle": null, "ejemplo": false}], "gastos": [{"fecha": "2026-02-01", "cuenta": "Siembra", "subcuenta": "Servicio siembra", "parcela": "DS-3", "lote": null, "detalle": "PAGO DE EMBOLSADO", "monto": 650, "status": "Cancelado", "fecha_pago_py": null, "fecha_pago_real": null}, {"fecha": "2026-03-28", "cuenta": "Fumigacion", "subcuenta": "Servicio fumigacion", "parcela": "Alicorp", "lote": null, "detalle": "APLICACION HERBICIDA", "monto": 375, "status": "Cancelado", "fecha_pago_py": null, "fecha_pago_real": null}, {"fecha": "2026-04-05", "cuenta": "Abonamiento", "subcuenta": "Compra insumos", "parcela": "Otros", "lote": null, "detalle": "CANCELACION DEUDA", "monto": 2720, "status": "Cancelado", "fecha_pago_py": null, "fecha_pago_real": null}], "ventas": [{"fecha": "2026-06-20", "lote": "L-2026-001", "variedad": "Blend", "proceso": "Lavado", "kg_oro_verde": 150, "precio_kg": 40, "total": 6000, "n_factura": "F001-123", "fecha_factura": null, "fecha_pago": null}], "compras": [], "parcelas": [{"parcela": "Alicorp", "hectareas": 2, "n_plantas": 5000, "variedad": "Blend", "anio_siembra": 2018, "altitud": 1650, "notas": null}, {"parcela": "Plantada", "hectareas": 1.5, "n_plantas": 3800, "variedad": "Obata", "anio_siembra": 2019, "altitud": 1700, "notas": null}, {"parcela": "Porton", "hectareas": 2, "n_plantas": 5200, "variedad": "Blend", "anio_siembra": 2017, "altitud": 1600, "notas": null}, {"parcela": "380", "hectareas": 1, "n_plantas": 2500, "variedad": "Tupi", "anio_siembra": 2020, "altitud": 1680, "notas": null}, {"parcela": "DS-3", "hectareas": 1, "n_plantas": 2600, "variedad": "Obata", "anio_siembra": 2021, "altitud": 1720, "notas": null}, {"parcela": "Ucumano", "hectareas": 0.8, "n_plantas": 2000, "variedad": "Durazno", "anio_siembra": 2022, "altitud": 1750, "notas": null}, {"parcela": "Otros", "hectareas": 0, "n_plantas": 0, "variedad": null, "anio_siembra": null, "altitud": null, "notas": "Gastos no asignables a parcela"}], "supuestos": {"factor_cerezo_qq": 265, "tc_usd_pen": 3.45, "precio_jornal": 0.8, "precio_venta_intercompany": 40, "campania_activa": 2026, "rend_cerezo_pergamino": 0.2, "rend_cerezo_bola": 0.28, "rend_pergamino_verde": 0.82, "rend_bola_verde": 0.55, "kg_por_quintal": 46, "factor_cerezo_verde": 0.17}, "d1": {"kg_cerezo_cosechado": 1460.5, "kg_oro_verde_producido": 182, "kg_por_quintal": 46, "qq_producidos": 3.9565217391304346, "costos": {"cosecha_jornales": 1168.4, "siembra": 650, "abonamiento": 2720, "macheteo": 0, "fumigacion": 375, "poda": 0, "mant_plantas": 0, "mant_construccion": 0, "cosecha_gastos": 0, "gastos_admin": 0, "caja_chica": 0}, "costo_total_campania": 4913.4, "costo_por_quintal": 1241.8483516483516, "ingreso_venta_intercompany": 6000, "kg_oro_verde_vendido": 150, "utilidad_finca": 1086.6000000000004, "margen_sobre_ventas": 0.18110000000000007}, "d2": {"resumen": [{"etapa": "Cerezo", "kg_fisico": 369.79999999999995, "factor": 0.17, "verde_equiv": 62.866}, {"etapa": "Pergamino", "kg_fisico": 0, "factor": 0.82, "verde_equiv": 0}, {"etapa": "Bola", "kg_fisico": 0, "factor": 0.55, "verde_equiv": 0}, {"etapa": "Oro verde", "kg_fisico": 32, "factor": 1, "verde_equiv": 32}], "total_verde": 94.866, "total_qq": 2.0623043478260867, "detalle": [{"variedad": "Blend", "proceso": "Lavado", "cerezo": 79.866, "pergamino": 0, "bola": 0, "oro_verde": 12, "total_verde": 91.866}, {"variedad": "Blend", "proceso": "Natural", "cerezo": -17, "pergamino": 0, "bola": 0, "oro_verde": 20, "total_verde": 3}, {"variedad": "Blend", "proceso": "Honey", "cerezo": 0, "pergamino": 0, "bola": 0, "oro_verde": 0, "total_verde": 0}, {"variedad": "Obata", "proceso": "Lavado", "cerezo": 0, "pergamino": 0, "bola": 0, "oro_verde": 0, "total_verde": 0}, {"variedad": "Obata", "proceso": "Natural", "cerezo": 0, "pergamino": 0, "bola": 0, "oro_verde": 0, "total_verde": 0}, {"variedad": "Obata", "proceso": "Honey", "cerezo": 0, "pergamino": 0, "bola": 0, "oro_verde": 0, "total_verde": 0}, {"variedad": "Tupi", "proceso": "Lavado", "cerezo": 0, "pergamino": 0, "bola": 0, "oro_verde": 0, "total_verde": 0}, {"variedad": "Tupi", "proceso": "Natural", "cerezo": 0, "pergamino": 0, "bola": 0, "oro_verde": 0, "total_verde": 0}, {"variedad": "Tupi", "proceso": "Honey", "cerezo": 0, "pergamino": 0, "bola": 0, "oro_verde": 0, "total_verde": 0}, {"variedad": "Durazno", "proceso": "Lavado", "cerezo": 0, "pergamino": 0, "bola": 0, "oro_verde": 0, "total_verde": 0}, {"variedad": "Durazno", "proceso": "Natural", "cerezo": 0, "pergamino": 0, "bola": 0, "oro_verde": 0, "total_verde": 0}, {"variedad": "Durazno", "proceso": "Honey", "cerezo": 0, "pergamino": 0, "bola": 0, "oro_verde": 0, "total_verde": 0}]}, "d3": {"parcelas": [{"parcela": "Alicorp", "hectareas": 2, "n_plantas": 5000, "kg_cerezo": 1460.5, "qq": 5.511320754716981, "qq_ha": 2.7556603773584905, "kg_planta": 0.2921, "costo_asignado": 1543.4, "costo_qq": 280.0417665183157}, {"parcela": "Plantada", "hectareas": 1.5, "n_plantas": 3800, "kg_cerezo": 0, "qq": 0, "qq_ha": 0, "kg_planta": 0, "costo_asignado": 0, "costo_qq": "-"}, {"parcela": "Porton", "hectareas": 2, "n_plantas": 5200, "kg_cerezo": 0, "qq": 0, "qq_ha": 0, "kg_planta": 0, "costo_asignado": 0, "costo_qq": "-"}, {"parcela": "380", "hectareas": 1, "n_plantas": 2500, "kg_cerezo": 0, "qq": 0, "qq_ha": 0, "kg_planta": 0, "costo_asignado": 0, "costo_qq": "-"}, {"parcela": "DS-3", "hectareas": 1, "n_plantas": 2600, "kg_cerezo": 0, "qq": 0, "qq_ha": 0, "kg_planta": 0, "costo_asignado": 650, "costo_qq": "-"}, {"parcela": "Ucumano", "hectareas": 0.8, "n_plantas": 2000, "kg_cerezo": 0, "qq": 0, "qq_ha": 0, "kg_planta": 0, "costo_asignado": 0, "costo_qq": "-"}, {"parcela": "Otros", "hectareas": 0, "n_plantas": 0, "kg_cerezo": 0, "qq": 0, "qq_ha": "-", "kg_planta": "-", "costo_asignado": 2720, "costo_qq": "-"}], "total": {"hectareas": 8.3, "n_plantas": 21100, "kg_cerezo": 1460.5, "qq": 5.511320754716981, "qq_ha": 0.664014548761082, "costo_asignado": 4913.4, "costo_qq": 891.5104416295788}}, "d5": {"global": {"kg_cerezo": 1460.5, "kg_pergamino": 198, "kg_bola": 50, "kg_verde": 182, "rend_cerezo_pergamino": 0.19985868577773291, "rend_cerezo_bola": 0.5, "rend_pergamino_verde": 0.8181818181818182, "rend_bola_verde": 0.4, "rend_global": 0.12461485792536803}, "lotes": [{"lote": "L-2026-001", "kg_cerezo": 990.7, "kg_pergamino": 198, "kg_bola": 50, "kg_verde": 182, "rend_verde": 0.18370848894720904}, {"lote": "L-2026-002", "kg_cerezo": 469.8, "kg_pergamino": 0, "kg_bola": 0, "kg_verde": 0, "rend_verde": 0}]}};
+
+function fmt(n, dec){
+  if(n===null || n===undefined || n==="" || n==="-" || Number.isNaN(n)) return "-";
+  if(typeof n !== "number") return n;
+  return n.toLocaleString("es-PE", {minimumFractionDigits:dec, maximumFractionDigits:dec});
+}
+function pct(n, dec){
+  if(n===null||n===undefined||n===""||typeof n !== "number"||Number.isNaN(n)) return "-";
+  return (n*100).toLocaleString("es-PE",{minimumFractionDigits:dec===undefined?1:dec, maximumFractionDigits:dec===undefined?1:dec})+"%";
+}
+function dash(v){ return (v===null||v===undefined||v==="") ? "-" : v; }
+function exBadge(row){ return row.ejemplo ? '<span class="badge badge-example">EJEMPLO</span>' : ""; }
+function safeDiv(a,b){ return (!b) ? null : a/b; }
+function sumBy(arr, fn){ return arr.reduce((s,r)=> s + (fn(r)||0), 0); }
+
+function statusBadge(status){
+  const s = (status||"").toLowerCase();
+  if(s.includes("cancelado")||s.includes("stock")||s.includes("aprobado")) return `<span class="badge badge-good">&#10003; ${dash(status)}</span>`;
+  if(s.includes("pendiente")||s.includes("proceso")||s.includes("secado")) return `<span class="badge badge-warning">&#9203; ${dash(status)}</span>`;
+  if(s.includes("vendido")) return `<span class="badge badge-neutral">&#10003; ${dash(status)}</span>`;
+  if(s.includes("abierto")) return `<span class="badge badge-neutral">${dash(status)}</span>`;
+  return `<span class="badge badge-neutral">${dash(status)}</span>`;
+}
+
+// ---- Campania (ciclo Ago-Jul, igual a la convencion del propio Excel) ----
+function campaniaOf(fecha){
+  if(!fecha) return null;
+  const parts = String(fecha).split('-');
+  if(parts.length < 2) return null;
+  const y = parseInt(parts[0],10), m = parseInt(parts[1],10);
+  if(Number.isNaN(y) || Number.isNaN(m)) return null;
+  return (m>=8) ? `${y}-${y+1}` : `${y-1}-${y}`;
+}
+function campaniaShort(camp){
+  if(!camp) return '-';
+  const parts = camp.split('-');
+  return parts.length===2 ? `'${parts[1].slice(-2)}` : camp;
+}
+
+// Tag every record with a computed campania (from fecha; Lotes uses its own explicit campania field).
+// Wrapped in a function (instead of one-shot top-level code) so it can be re-run after a live
+// refresh of DATA from Microsoft Graph, without reloading the page.
+let campActiva, ALL_CAMPS;
+function retagAndBuildCampaniaList(){
+  DATA.cosecha.forEach(r => r._camp = campaniaOf(r.fecha));
+  DATA.fermentacion.forEach(r => r._camp = campaniaOf(r.fecha));
+  DATA.transformaciones.forEach(r => r._camp = campaniaOf(r.fecha));
+  DATA.gastos.forEach(r => r._camp = campaniaOf(r.fecha));
+  DATA.ventas.forEach(r => r._camp = campaniaOf(r.fecha));
+  DATA.compras.forEach(r => r._camp = campaniaOf(r.fecha));
+  DATA.lotes.forEach(r => r._camp = r.campania || campaniaOf(r.fecha_apertura));
+
+  // Build the list of selectable campanias: whatever appears in the data, plus the active one
+  // and the next one (so "campania 27" is selectable before any real data exists for it).
+  campActiva = campaniaOf(`${DATA.meta.campania_activa}-06-01`) || `${DATA.meta.campania_activa-1}-${DATA.meta.campania_activa}`;
+  const [ay1] = campActiva.split('-').map(Number);
+  const campSiguiente = `${ay1+1}-${ay1+2}`;
+  const foundCamps = new Set();
+  [...DATA.cosecha, ...DATA.fermentacion, ...DATA.transformaciones, ...DATA.gastos, ...DATA.ventas, ...DATA.compras, ...DATA.lotes]
+    .forEach(r => { if(r._camp) foundCamps.add(r._camp); });
+  foundCamps.add(campActiva);
+  foundCamps.add(campSiguiente);
+  ALL_CAMPS = [...foundCamps].sort();
+}
+
+let currentCampania = 'todas';
+
+function filt(arr){
+  if(currentCampania === 'todas') return arr;
+  return arr.filter(r => r._camp === currentCampania);
+}
+
+// ==================== RENDER FUNCTIONS ====================
+
+function renderChips(){
+  const label = currentCampania==='todas' ? 'Todas las campanias' : `Campania ${currentCampania} (${campaniaShort(currentCampania)})`;
+  document.querySelectorAll('.campania-chip').forEach(el => el.textContent = label);
+}
+
+function renderCosecha(){
+  const rows = filt(DATA.cosecha);
+  const tbody = document.getElementById('tbl-cosecha');
+  if(rows.length===0){ tbody.innerHTML = '<tr><td colspan="11" class="empty-state">Sin registros de cosecha en esta campania.</td></tr>'; return; }
+  tbody.innerHTML = rows.map(r => `<tr>
+    <td>${dash(r.fecha)}</td><td><span class="badge badge-campania">${campaniaShort(r._camp)}</span></td><td>${dash(r.cosechero)}</td><td>${dash(r.parcela)}</td><td>${dash(r.variedad)}</td><td>${dash(r.proceso)}</td>
+    <td>${fmt(r.kg_cerezo,2)}</td><td>S/ ${fmt(r.precio_kg,2)}</td><td>S/ ${fmt(r.pago,2)}</td><td>${dash(r.lote)}</td><td>${exBadge(r)}</td>
+  </tr>`).join('');
+}
+
+function renderLotes(){
+  const rows = filt(DATA.lotes);
+  const wrap = document.getElementById('cards-lotes');
+  if(rows.length===0){ wrap.innerHTML = '<div class="empty-state">Sin lotes registrados en esta campania.</div>'; return; }
+  wrap.innerHTML = rows.map(l => {
+    const cosechaLote = DATA.cosecha.filter(r => r.lote===l.id);
+    const kgReal = sumBy(cosechaLote, r=>r.kg_cerezo);
+    return `
+    <div class="card">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;">
+        <h2>${l.id}</h2>
+        <div style="display:flex;gap:6px;">${exBadge(l)}${statusBadge(l.estado)}</div>
+      </div>
+      <div class="card-sub">Campania ${dash(l.campania)}</div>
+      <div class="passport-row"><span class="k">Parcela</span><span class="v">${dash(l.parcela)}</span></div>
+      <div class="passport-row"><span class="k">Variedad</span><span class="v">${dash(l.variedad)}</span></div>
+      <div class="passport-row"><span class="k">Proceso</span><span class="v">${dash(l.proceso)}</span></div>
+      <div class="passport-row"><span class="k">Fecha apertura</span><span class="v">${dash(l.fecha_apertura)}</span></div>
+      <div class="passport-row"><span class="k">Fecha cierre</span><span class="v">${dash(l.fecha_cierre)}</span></div>
+      <div class="passport-row"><span class="k">Kg cerezo (recalculado desde Cosecha)</span><span class="v">${fmt(kgReal,1)} kg</span></div>
+      ${l.obs && l.obs!=="EJEMPLO - borrar" ? `<div class="stat-note" style="margin-top:8px;">${l.obs}</div>` : ''}
+      ${l.ejemplo ? `<div class="stat-note" style="margin-top:8px;color:#8a4a4a;">Lote de ejemplo &mdash; pendiente de reemplazar por un lote real segun indica el propio Excel.</div>` : ''}
+    </div>
+  `;}).join('');
+}
+
+function renderFermentacion(){
+  const rows = filt(DATA.fermentacion);
+  const tbody = document.getElementById('tbl-fermentacion');
+  if(rows.length===0){ tbody.innerHTML = '<tr><td colspan="10" class="empty-state">Sin registros de fermentacion en esta campania.</td></tr>'; return; }
+  tbody.innerHTML = rows.map(r => `<tr>
+    <td>${dash(r.fecha)}</td><td><span class="badge badge-campania">${campaniaShort(r._camp)}</span></td><td>${dash(r.lote)}</td><td>${dash(r.fase)}</td><td>${fmt(r.temp,1)}</td><td>${dash(r.ph)}</td>
+    <td>${dash(r.horas_ferm)}</td><td>${dash(r.humedad)}</td><td>${dash(r.dias_secado)}</td><td>${dash(r.responsable)}</td><td>${exBadge(r)}</td>
+  </tr>`).join('');
+}
+
+function renderTransformaciones(){
+  const rows = filt(DATA.transformaciones);
+  const tbody = document.getElementById('tbl-transformaciones');
+  if(rows.length===0){ tbody.innerHTML = '<tr><td colspan="13" class="empty-state">Sin transformaciones registradas en esta campania.</td></tr>'; return; }
+  tbody.innerHTML = rows.map(r => `<tr>
+    <td>${dash(r.fecha)}</td><td><span class="badge badge-campania">${campaniaShort(r._camp)}</span></td><td>${dash(r.lote)}</td><td>${dash(r.proceso)}</td><td>${dash(r.etapa_origen)}</td><td>${fmt(r.kg_entra,1)}</td>
+    <td>${dash(r.etapa_destino)}</td><td>${fmt(r.kg_producido,1)}</td><td>${pct(r.rendimiento,1)}</td><td>${fmt(r.merma,1)}</td>
+    <td>${dash(r.ubicacion)}</td><td>${dash(r.responsable)}</td><td>${exBadge(r)}</td>
+  </tr>`).join('');
+}
+
+function renderGastos(){
+  const rows = filt(DATA.gastos);
+  const tbody = document.getElementById('tbl-gastos');
+  if(rows.length===0){ tbody.innerHTML = '<tr><td colspan="8" class="empty-state">Sin gastos registrados en esta campania.</td></tr>'; return; }
+  tbody.innerHTML = rows.map(r => `<tr>
+    <td>${dash(r.fecha)}</td><td><span class="badge badge-campania">${campaniaShort(r._camp)}</span></td><td>${dash(r.cuenta)}</td><td>${dash(r.subcuenta)}</td><td>${dash(r.parcela)}</td>
+    <td>${dash(r.detalle)}</td><td>S/ ${fmt(r.monto,2)}</td><td>${statusBadge(r.status)}</td>
+  </tr>`).join('');
+}
+
+function renderVentas(){
+  const rows = filt(DATA.ventas);
+  const tbody = document.getElementById('tbl-ventas');
+  if(rows.length===0){ tbody.innerHTML = '<tr><td colspan="9" class="empty-state">Sin ventas registradas en esta campania.</td></tr>'; return; }
+  tbody.innerHTML = rows.map(r => `<tr>
+    <td>${dash(r.fecha)}</td><td><span class="badge badge-campania">${campaniaShort(r._camp)}</span></td><td>${dash(r.lote)}</td><td>${dash(r.variedad)}</td><td>${dash(r.proceso)}</td>
+    <td>${fmt(r.kg_oro_verde,1)}</td><td>S/ ${fmt(r.precio_kg,2)}</td><td>S/ ${fmt(r.total,2)}</td><td>${dash(r.n_factura)}</td>
+  </tr>`).join('');
+}
+
+function renderCompras(){
+  const rows = filt(DATA.compras);
+  const tbody = document.getElementById('tbl-compras');
+  if(rows.length===0){ tbody.innerHTML = '<tr><td colspan="10" class="empty-state">Sin compras a terceros registradas en esta campania. La finca aun no ha necesitado comprar cafe adicional.</td></tr>'; return; }
+  tbody.innerHTML = rows.map(r => `<tr>
+    <td>${dash(r.fecha)}</td><td><span class="badge badge-campania">${campaniaShort(r._camp)}</span></td><td>${dash(r.lote)}</td><td>${dash(r.variedad)}</td><td>${dash(r.proceso)}</td>
+    <td>${dash(r.etapa)}</td><td>${fmt(r.kg,1)}</td><td>${dash(r.proveedor)}</td><td>S/ ${fmt(r.costo,2)}</td><td>${dash(r.detalle)}</td>
+  </tr>`).join('');
+}
+
+function renderParcelas(){
+  const wrap = document.getElementById('cards-parcelas');
+  wrap.innerHTML = DATA.parcelas.map(p => `
+    <div class="card">
+      <h2>${p.parcela}</h2>
+      <div class="passport-row"><span class="k">Hectareas</span><span class="v">${fmt(p.hectareas,1)}</span></div>
+      <div class="passport-row"><span class="k">N plantas</span><span class="v">${fmt(p.n_plantas,0)}</span></div>
+      <div class="passport-row"><span class="k">Variedad principal</span><span class="v">${dash(p.variedad)}</span></div>
+      <div class="passport-row"><span class="k">Ano siembra</span><span class="v">${dash(p.anio_siembra)}</span></div>
+      <div class="passport-row"><span class="k">Altitud (msnm)</span><span class="v">${dash(p.altitud)}</span></div>
+      ${p.notas? `<div class="stat-note" style="margin-top:8px;">${p.notas}</div>`:''}
+    </div>
+  `).join('');
+}
+
+// ---- Trazabilidad (D4 per lote, computed live from filtered raw data) ----
+function buildFicha(loteId){
+  const lote = DATA.lotes.find(l => l.id===loteId) || {};
+  const cosechaRows = filt(DATA.cosecha).filter(r => r.lote===loteId);
+  const fermRows = filt(DATA.fermentacion).filter(r => r.lote===loteId);
+  const ventaRows = filt(DATA.ventas).filter(r => r.lote===loteId);
+  const kgCerezoLote = sumBy(cosechaRows, r=>r.kg_cerezo);
+  const cosecheros = [...new Set(cosechaRows.map(r=>r.cosechero).filter(Boolean))].join(', ') || '-';
+  const fechas = cosechaRows.map(r=>r.fecha).filter(Boolean).sort();
+  const primeraFecha = fechas[0] || '-';
+  const ultimaFecha = fechas[fechas.length-1] || '-';
+  const avg = (arr) => arr.length ? (arr.reduce((a,b)=>a+b,0)/arr.length) : null;
+  const temp = avg(fermRows.map(r=>r.temp).filter(v=>typeof v==='number'));
+  const horas = avg(fermRows.map(r=>r.horas_ferm).filter(v=>typeof v==='number'));
+  const hum = avg(fermRows.map(r=>r.humedad).filter(v=>typeof v==='number'));
+  const secado = avg(fermRows.map(r=>r.dias_secado).filter(v=>typeof v==='number'));
+  const kgVendido = sumBy(ventaRows, r=>r.kg_oro_verde);
+  const fechaVenta = ventaRows.map(r=>r.fecha).filter(Boolean).sort().slice(-1)[0] || '-';
+  const anyEjemplo = lote.ejemplo || cosechaRows.some(r=>r.ejemplo) || fermRows.some(r=>r.ejemplo);
+
+  return `
+    ${anyEjemplo ? `<div class="stat-note" style="color:#8a4a4a;margin-bottom:10px;">Este lote incluye registros marcados EJEMPLO en el Excel original.</div>` : ''}
+    <div class="passport-section-title">Origen</div>
+    <div class="passport-grid">
+      <div class="passport-row"><span class="k">ID Lote</span><span class="v">${loteId}</span></div>
+      <div class="passport-row"><span class="k">Campania</span><span class="v">${dash(lote.campania)}</span></div>
+      <div class="passport-row"><span class="k">Parcela</span><span class="v">${dash(lote.parcela)}</span></div>
+      <div class="passport-row"><span class="k">Variedad</span><span class="v">${dash(lote.variedad)}</span></div>
+      <div class="passport-row"><span class="k">Proceso</span><span class="v">${dash(lote.proceso)}</span></div>
+      <div class="passport-row"><span class="k">Estado</span><span class="v">${statusBadge(lote.estado)}</span></div>
+    </div>
+    <div class="passport-section-title">Cosecha</div>
+    <div class="passport-grid">
+      <div class="passport-row"><span class="k">Primera fecha de cosecha</span><span class="v">${primeraFecha}</span></div>
+      <div class="passport-row"><span class="k">Ultima fecha de cosecha</span><span class="v">${ultimaFecha}</span></div>
+      <div class="passport-row"><span class="k">Kg cerezo del lote</span><span class="v">${fmt(kgCerezoLote,1)} kg</span></div>
+      <div class="passport-row"><span class="k">Cosecheros</span><span class="v">${cosecheros}</span></div>
+    </div>
+    <div class="passport-section-title">Post-cosecha / fermentacion</div>
+    <div class="passport-grid">
+      <div class="passport-row"><span class="k">Temp. promedio (C)</span><span class="v">${temp===null?'-':fmt(temp,1)}</span></div>
+      <div class="passport-row"><span class="k">Horas fermentacion (prom)</span><span class="v">${horas===null?'-':fmt(horas,0)}</span></div>
+      <div class="passport-row"><span class="k">Humedad grano (prom %)</span><span class="v">${hum===null?'-':fmt(hum,1)}</span></div>
+      <div class="passport-row"><span class="k">Dias de secado (prom)</span><span class="v">${secado===null?'-':fmt(secado,0)}</span></div>
+      <div class="passport-row"><span class="k">N registros de proceso</span><span class="v">${fermRows.length}</span></div>
+    </div>
+    <div class="passport-section-title">Destino</div>
+    <div class="passport-grid">
+      <div class="passport-row"><span class="k">Kg oro verde vendido</span><span class="v">${fmt(kgVendido,1)} kg</span></div>
+      <div class="passport-row"><span class="k">Fecha de venta</span><span class="v">${fechaVenta}</span></div>
+      <div class="passport-row"><span class="k">Estado del lote</span><span class="v">${statusBadge(lote.estado)}</span></div>
+    </div>
+    <div class="stat-note" style="margin-top:14px;">Esta ficha sera el contenido que vera el cliente al escanear el QR (Fase 3 de la hoja de ruta).</div>
+  `;
+}
+function renderTrazabilidad(){
+  const sel = document.getElementById('select-lote');
+  const rows = filt(DATA.lotes);
+  const prev = sel.value;
+  sel.innerHTML = rows.map(l => `<option value="${l.id}">${l.id} &mdash; ${l.parcela}</option>`).join('');
+  if(rows.length===0){ document.getElementById('passport-card').innerHTML = '<div class="empty-state">Sin lotes registrados en esta campania.</div>'; return; }
+  if(rows.some(l=>l.id===prev)) sel.value = prev;
+  document.getElementById('passport-card').innerHTML = buildFicha(sel.value);
+}
+document.getElementById('select-lote').addEventListener('change', () => {
+  document.getElementById('passport-card').innerHTML = buildFicha(document.getElementById('select-lote').value);
+});
+
+// ==================== AGGREGATE RECOMPUTE (mirrors the Excel formulas, live) ====================
+
+function computeAggregates(){
+  const cosecha = filt(DATA.cosecha);
+  const transf = filt(DATA.transformaciones);
+  const gastos = filt(DATA.gastos);
+  const ventas = filt(DATA.ventas);
+  const compras = filt(DATA.compras);
+  const sup = DATA.supuestos;
+
+  const kgCerezo = sumBy(cosecha, r=>r.kg_cerezo);
+  const kgVerde = sumBy(transf.filter(r=>r.etapa_destino==='Oro verde'), r=>r.kg_producido);
+  const kgPergamino = sumBy(transf.filter(r=>r.etapa_destino==='Pergamino'), r=>r.kg_producido);
+  const kgBola = sumBy(transf.filter(r=>r.etapa_destino==='Bola'), r=>r.kg_producido);
+  const qq = safeDiv(kgVerde, sup.kg_por_quintal) || 0;
+
+  const gastoPorCuenta = (cuenta) => sumBy(gastos.filter(g=>g.cuenta===cuenta), g=>g.monto);
+  const costos = {
+    cosecha_jornales: sumBy(cosecha, r=>r.pago),
+    siembra: gastoPorCuenta('Siembra'), abonamiento: gastoPorCuenta('Abonamiento'), macheteo: gastoPorCuenta('Macheteo'),
+    fumigacion: gastoPorCuenta('Fumigacion'), poda: gastoPorCuenta('Poda'), mant_plantas: gastoPorCuenta('Mantenimiento plantas'),
+    mant_construccion: gastoPorCuenta('Mantenimiento construccion'), cosecha_gastos: gastoPorCuenta('Cosecha'),
+    gastos_admin: gastoPorCuenta('Gastos administrativos'), caja_chica: gastoPorCuenta('Caja chica')
+  };
+  const costoTotal = Object.values(costos).reduce((a,b)=>a+b,0);
+  const costoPorQuintal = safeDiv(costoTotal, qq);
+  const ingreso = sumBy(ventas, r=>r.total);
+  const kgVendido = sumBy(ventas, r=>r.kg_oro_verde);
+  const utilidad = ingreso - costoTotal;
+  const margen = safeDiv(utilidad, ingreso);
+
+  const rendCP = safeDiv(sumBy(transf.filter(r=>r.etapa_origen==='Cerezo'&&r.etapa_destino==='Pergamino'), r=>r.kg_producido),
+                          sumBy(transf.filter(r=>r.etapa_origen==='Cerezo'&&r.etapa_destino==='Pergamino'), r=>r.kg_entra));
+  const rendCB = safeDiv(sumBy(transf.filter(r=>r.etapa_origen==='Cerezo'&&r.etapa_destino==='Bola'), r=>r.kg_producido),
+                          sumBy(transf.filter(r=>r.etapa_origen==='Cerezo'&&r.etapa_destino==='Bola'), r=>r.kg_entra));
+  const rendPV = safeDiv(sumBy(transf.filter(r=>r.etapa_origen==='Pergamino'&&r.etapa_destino==='Oro verde'), r=>r.kg_producido),
+                          sumBy(transf.filter(r=>r.etapa_origen==='Pergamino'&&r.etapa_destino==='Oro verde'), r=>r.kg_entra));
+  const rendBV = safeDiv(sumBy(transf.filter(r=>r.etapa_origen==='Bola'&&r.etapa_destino==='Oro verde'), r=>r.kg_producido),
+                          sumBy(transf.filter(r=>r.etapa_origen==='Bola'&&r.etapa_destino==='Oro verde'), r=>r.kg_entra));
+  const rendGlobal = safeDiv(kgVerde, kgCerezo);
+
+  const rendPorLote = filt(DATA.lotes).map(l => {
+    const t = transf.filter(r=>r.lote===l.id);
+    const kgC = sumBy(cosecha.filter(r=>r.lote===l.id), r=>r.kg_cerezo);
+    const kgP = sumBy(t.filter(r=>r.etapa_destino==='Pergamino'), r=>r.kg_producido);
+    const kgB = sumBy(t.filter(r=>r.etapa_destino==='Bola'), r=>r.kg_producido);
+    const kgV = sumBy(t.filter(r=>r.etapa_destino==='Oro verde'), r=>r.kg_producido);
+    return {lote:l.id, kg_cerezo:kgC, kg_pergamino:kgP, kg_bola:kgB, kg_verde:kgV, rend_verde: safeDiv(kgV,kgC)};
+  });
+
+  // Stock por etapa (fisico), a partir de cosecha/transformaciones/compras/ventas filtrados
+  const etapaFisico = {
+    'Cerezo': kgCerezo - sumBy(transf.filter(r=>r.etapa_origen==='Cerezo'), r=>r.kg_entra),
+    'Pergamino': kgPergamino + sumBy(compras.filter(r=>r.etapa==='Pergamino'), r=>r.kg) - sumBy(transf.filter(r=>r.etapa_origen==='Pergamino'), r=>r.kg_entra),
+    'Bola': kgBola + sumBy(compras.filter(r=>r.etapa==='Bola'), r=>r.kg) - sumBy(transf.filter(r=>r.etapa_origen==='Bola'), r=>r.kg_entra),
+    'Oro verde': kgVerde + sumBy(compras.filter(r=>r.etapa==='Oro verde'), r=>r.kg) - kgVendido
+  };
+  const factores = {'Cerezo':sup.factor_cerezo_verde, 'Pergamino':sup.rend_pergamino_verde, 'Bola':sup.rend_bola_verde, 'Oro verde':1};
+  const stockResumen = ['Cerezo','Pergamino','Bola','Oro verde'].map(etapa => ({
+    etapa, kg_fisico: etapaFisico[etapa], factor: factores[etapa], verde_equiv: etapaFisico[etapa]*factores[etapa]
+  }));
+  const totalVerde = sumBy(stockResumen, r=>r.verde_equiv);
+  const totalQQ = safeDiv(totalVerde, sup.kg_por_quintal);
+
+  const variedades = ['Blend','Obata','Tupi','Durazno'];
+  const procesos = ['Lavado','Natural','Honey'];
+  const stockDetalle = [];
+  variedades.forEach(v => procesos.forEach(p => {
+    const cCerezo = (sumBy(cosecha.filter(r=>r.variedad===v&&r.proceso===p), r=>r.kg_cerezo) -
+                     sumBy(transf.filter(r=>r.variedad===v&&r.proceso===p&&r.etapa_origen==='Cerezo'), r=>r.kg_entra)) * sup.factor_cerezo_verde;
+    const cPergamino = (sumBy(transf.filter(r=>r.variedad===v&&r.proceso===p&&r.etapa_destino==='Pergamino'), r=>r.kg_producido) -
+                        sumBy(transf.filter(r=>r.variedad===v&&r.proceso===p&&r.etapa_origen==='Pergamino'), r=>r.kg_entra)) * sup.rend_pergamino_verde;
+    const cBola = (sumBy(transf.filter(r=>r.variedad===v&&r.proceso===p&&r.etapa_destino==='Bola'), r=>r.kg_producido) -
+                  sumBy(transf.filter(r=>r.variedad===v&&r.proceso===p&&r.etapa_origen==='Bola'), r=>r.kg_entra)) * sup.rend_bola_verde;
+    const cOro = sumBy(transf.filter(r=>r.variedad===v&&r.proceso===p&&r.etapa_destino==='Oro verde'), r=>r.kg_producido) -
+                 sumBy(ventas.filter(r=>r.variedad===v&&r.proceso===p), r=>r.kg_oro_verde);
+    stockDetalle.push({variedad:v, proceso:p, cerezo:cCerezo, pergamino:cPergamino, bola:cBola, oro_verde:cOro, total_verde:cCerezo+cPergamino+cBola+cOro});
+  }));
+
+  const parcelas = DATA.parcelas.map(p => {
+    const kgC = sumBy(cosecha.filter(r=>r.parcela===p.parcela), r=>r.kg_cerezo);
+    const qqP = safeDiv(kgC, sup.factor_cerezo_qq) || 0;
+    const costoAsig = sumBy(gastos.filter(g=>g.parcela===p.parcela), g=>g.monto) + sumBy(cosecha.filter(r=>r.parcela===p.parcela), r=>r.pago);
+    return {
+      parcela: p.parcela, hectareas: p.hectareas, n_plantas: p.n_plantas, kg_cerezo: kgC, qq: qqP,
+      qq_ha: p.hectareas ? qqP/p.hectareas : '-', kg_planta: p.n_plantas ? kgC/p.n_plantas : '-',
+      costo_asignado: costoAsig, costo_qq: qqP ? costoAsig/qqP : '-'
+    };
+  });
+  const totalHa = sumBy(parcelas, p=>p.hectareas);
+  const totalPlantas = sumBy(parcelas, p=>p.n_plantas);
+  const totalKgC = sumBy(parcelas, p=>p.kg_cerezo);
+  const totalQQp = sumBy(parcelas, p=>p.qq);
+  const totalCosto = sumBy(parcelas, p=>p.costo_asignado);
+
+  return {
+    kgCerezo, kgVerde, kgPergamino, kgBola, qq, costos, costoTotal, costoPorQuintal, ingreso, kgVendido, utilidad, margen,
+    rendCP, rendCB, rendPV, rendBV, rendGlobal, rendPorLote,
+    stockResumen, totalVerde, totalQQ, stockDetalle,
+    parcelas, parcelasTotal: {hectareas:totalHa, n_plantas:totalPlantas, kg_cerezo:totalKgC, qq:totalQQp,
+      qq_ha: totalHa?totalQQp/totalHa:0, costo_asignado:totalCosto, costo_qq: totalQQp?totalCosto/totalQQp:'-'}
+  };
+}
+
+function renderAggregates(){
+  const a = computeAggregates();
+  const utilColor = a.utilidad>=0 ? '#0ca30c' : '#c23b2f';
+
+  // Resumen
+  document.getElementById('st-kg-cerezo').textContent = fmt(a.kgCerezo,1);
+  document.getElementById('st-campania-note').textContent = currentCampania==='todas' ? 'Todas las campanias' : `Campania ${currentCampania}`;
+  document.getElementById('st-kg-verde').textContent = fmt(a.kgVerde,1);
+  document.getElementById('st-rend-global-note').textContent = `Rendimiento global ${pct(a.rendGlobal,1)}`;
+  document.getElementById('st-qq').textContent = fmt(a.qq,2);
+  document.getElementById('st-kg-qq-note').textContent = `${fmt(DATA.supuestos.kg_por_quintal,0)} kg = 1 QQ`;
+  document.getElementById('st-costo-qq').textContent = 'S/ ' + fmt(a.costoPorQuintal,2);
+  document.getElementById('st-costo-total').textContent = 'S/ ' + fmt(a.costoTotal,2);
+  document.getElementById('st-ingreso').textContent = 'S/ ' + fmt(a.ingreso,2);
+  const stUtil = document.getElementById('st-utilidad'); stUtil.textContent = 'S/ ' + fmt(a.utilidad,2); stUtil.style.color = utilColor;
+  document.getElementById('st-margen-note').textContent = `Margen ${pct(a.margen,1)}`;
+
+  // Rendimientos
+  document.getElementById('st-r-cp').textContent = pct(a.rendCP,1);
+  document.getElementById('st-r-cb').textContent = pct(a.rendCB,1);
+  document.getElementById('st-r-pv').textContent = pct(a.rendPV,1);
+  document.getElementById('st-r-bv').textContent = pct(a.rendBV,1);
+  document.getElementById('rend-global-bar').style.width = Math.max(2,Math.min(100,(a.rendGlobal||0)*100)) + '%';
+  document.getElementById('rend-global-text').textContent = `${pct(a.rendGlobal,1)} de todo el cerezo cosechado termina convertido en oro verde vendible.`;
+  const tbodyRL = document.getElementById('tbl-rend-lotes');
+  tbodyRL.innerHTML = a.rendPorLote.length ? a.rendPorLote.map(l => `<tr>
+    <td>${l.lote}</td><td>${fmt(l.kg_cerezo,1)}</td><td>${fmt(l.kg_pergamino,1)}</td><td>${fmt(l.kg_bola,1)}</td>
+    <td>${fmt(l.kg_verde,1)}</td><td>${pct(l.rend_verde,1)}</td>
+  </tr>`).join('') : '<tr><td colspan="6" class="empty-state">Sin lotes en esta campania.</td></tr>';
+
+  // Stock
+  const wrapBars = document.getElementById('bars-stock');
+  const maxStock = Math.max(...a.stockResumen.map(r=>Math.abs(r.verde_equiv)), 1);
+  wrapBars.innerHTML = a.stockResumen.map(r => `
+    <div class="bar-row">
+      <div class="bar-label">${r.etapa}</div>
+      <div class="bar-track"><div class="bar-fill" style="width:${Math.max(2,(Math.abs(r.verde_equiv)/maxStock*100))}%"></div></div>
+      <div class="bar-value">${fmt(r.verde_equiv,1)} kg</div>
+    </div>
+  `).join('');
+  document.getElementById('st-stock-verde').textContent = fmt(a.totalVerde,1);
+  document.getElementById('st-stock-qq').textContent = fmt(a.totalQQ,2);
+  const detalleRows = a.stockDetalle.filter(r => Math.abs(r.total_verde) > 0.001 || Math.abs(r.cerezo) > 0.001);
+  const tbodySD = document.getElementById('tbl-stock-detalle');
+  tbodySD.innerHTML = detalleRows.length ? detalleRows.map(r => `<tr>
+    <td>${r.variedad}</td><td>${r.proceso}</td><td>${fmt(r.cerezo,1)}</td><td>${fmt(r.pergamino,1)}</td>
+    <td>${fmt(r.bola,1)}</td><td>${fmt(r.oro_verde,1)}</td><td>${fmt(r.total_verde,1)}</td>
+  </tr>`).join('') : '<tr><td colspan="7" class="empty-state">Sin stock en esta campania.</td></tr>';
+
+  // Hectareas
+  const wrapH = document.getElementById('bars-hectareas');
+  const maxH = Math.max(...a.parcelas.map(p=>p.kg_cerezo||0), 1);
+  wrapH.innerHTML = a.parcelas.map(p => `
+    <div class="bar-row">
+      <div class="bar-label">${p.parcela}</div>
+      <div class="bar-track"><div class="bar-fill" style="width:${Math.max(2,((p.kg_cerezo||0)/maxH*100))}%"></div></div>
+      <div class="bar-value">${fmt(p.kg_cerezo,1)} kg</div>
+    </div>
+  `).join('');
+  const tbodyH = document.getElementById('tbl-hectareas');
+  const rowsH = a.parcelas.map(p => `<tr>
+    <td>${p.parcela}</td><td>${fmt(p.hectareas,1)}</td><td>${fmt(p.n_plantas,0)}</td><td>${fmt(p.kg_cerezo,1)}</td>
+    <td>${fmt(p.qq,2)}</td><td>${typeof p.qq_ha==='number'?fmt(p.qq_ha,2):dash(p.qq_ha)}</td>
+    <td>${typeof p.kg_planta==='number'?fmt(p.kg_planta,3):dash(p.kg_planta)}</td>
+    <td>${fmt(p.costo_asignado,2)}</td><td>${typeof p.costo_qq==='number'?fmt(p.costo_qq,2):dash(p.costo_qq)}</td>
+  </tr>`).join('');
+  const t = a.parcelasTotal;
+  tbodyH.innerHTML = rowsH + `<tr class="total-row"><td>TOTAL</td><td>${fmt(t.hectareas,1)}</td><td>${fmt(t.n_plantas,0)}</td>
+    <td>${fmt(t.kg_cerezo,1)}</td><td>${fmt(t.qq,2)}</td><td>${fmt(t.qq_ha,3)}</td><td>-</td>
+    <td>${fmt(t.costo_asignado,2)}</td><td>${typeof t.costo_qq==='number'?fmt(t.costo_qq,2):dash(t.costo_qq)}</td></tr>`;
+
+  // Rentabilidad
+  document.getElementById('st2-costo-qq').textContent = 'S/ ' + fmt(a.costoPorQuintal,2);
+  const stU2 = document.getElementById('st2-utilidad'); stU2.textContent = 'S/ ' + fmt(a.utilidad,2); stU2.style.color = utilColor;
+  document.getElementById('st2-margen').textContent = pct(a.margen,1);
+  const labels = {
+    cosecha_jornales:'Cosecha — jornales (pago a cosecheros)', siembra:'Siembra', abonamiento:'Abonamiento',
+    macheteo:'Macheteo', fumigacion:'Fumigacion', poda:'Poda', mant_plantas:'Mantenimiento plantas',
+    mant_construccion:'Mantenimiento construccion', cosecha_gastos:'Cosecha (gastos)', gastos_admin:'Gastos administrativos', caja_chica:'Caja chica'
+  };
+  document.getElementById('tbl-costos').innerHTML = Object.keys(labels).map(k => `<tr><td>${labels[k]}</td><td style="text-align:right;">S/ ${fmt(a.costos[k],2)}</td></tr>`).join('')
+    + `<tr class="total-row"><td>COSTO TOTAL CAMPANIA</td><td style="text-align:right;">S/ ${fmt(a.costoTotal,2)}</td></tr>`;
+  document.getElementById('tbl-produccion').innerHTML = `
+    <tr><td>Kg de cerezo cosechado</td><td style="text-align:right;">${fmt(a.kgCerezo,1)} kg</td></tr>
+    <tr><td>Kg de oro verde producido (real)</td><td style="text-align:right;">${fmt(a.kgVerde,1)} kg</td></tr>
+    <tr><td>Quintales producidos (QQ verde)</td><td style="text-align:right;">${fmt(a.qq,2)}</td></tr>
+    <tr><td>Ingreso por venta intercompany</td><td style="text-align:right;">S/ ${fmt(a.ingreso,2)}</td></tr>
+    <tr><td>Kg oro verde vendido</td><td style="text-align:right;">${fmt(a.kgVendido,1)} kg</td></tr>
+  `;
+}
+
+function renderAll(){
+  renderChips();
+  renderCosecha(); renderLotes(); renderFermentacion(); renderTransformaciones();
+  renderGastos(); renderVentas(); renderCompras(); renderParcelas();
+  renderTrazabilidad();
+  renderAggregates();
+}
+
+// ---- Campania selector ----
+function setupCampaniaSelector(){
+  const sel = document.getElementById('select-campania');
+  const opts = [`<option value="todas">Todas las campanias</option>`]
+    .concat(ALL_CAMPS.map(c => `<option value="${c}">Campania ${c} (${campaniaShort(c)})</option>`));
+  sel.innerHTML = opts.join('');
+  sel.value = campActiva;
+  currentCampania = campActiva;
+}
+document.getElementById('select-campania').addEventListener('change', (e) => { currentCampania = e.target.value; renderAll(); });
+
+// Re-runs the campania tagging + selector rebuild + full render. Called once at page load
+// (over the fixed snapshot embedded below) and again after a successful live fetch from Excel.
+function bootstrapUI(){
+  retagAndBuildCampaniaList();
+  setupCampaniaSelector();
+  renderAll();
+}
+
+// ---- Navigation ----
+document.querySelectorAll('.nav-item').forEach(item => {
+  item.addEventListener('click', () => {
+    document.querySelectorAll('.nav-item').forEach(i=>i.classList.remove('active'));
+    document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
+    item.classList.add('active');
+    document.getElementById('sec-'+item.dataset.section).classList.add('active');
+    window.scrollTo(0,0);
+  });
+});
+
+bootstrapUI();
+
+// ==================== FASE 2 (BETA) — LECTURA EN VIVO DESDE EXCEL VIA MICROSOFT GRAPH ====================
+// Estado de esta seccion: prueba / no confirmada. MSAL_CLIENT_ID y MSAL_TENANT_ID de abajo son el
+// mismo registro de app que ya aparece en index.html (Academia DS) — se reutiliza aqui como punto de
+// partida, pero NO esta confirmado que ese registro tenga consentimiento otorgado para el permiso
+// "Files.Read" fuera de Academia DS. Si el boton de abajo falla con un error de consentimiento o de
+// tenant, es la senal de que hace falta un registro de app propio (o extender el existente) desde el
+// portal de Azure AD / Entra — accion que solo puede hacer quien tenga rol de administrador de
+// Microsoft 365 en Don Salazar.
+//
+// Alcance actual: esta version SOLO refresca en vivo las 7 hojas transaccionales (Cosecha, Lotes,
+// Fermentacion, Transformaciones, Gastos, Ventas, Compras). Parcelas y Supuestos (hoja Maestros)
+// siguen viniendo del snapshot fijo del 17 ago 2026, porque cambian con mucha menor frecuencia.
+const MSAL_CLIENT_ID = "c574ba32-11b8-48d2-ba73-6e6d986f4310";
+const MSAL_TENANT_ID = "a5c99531-956a-48fe-a0c1-010d4ca36a2b";
+const EXCEL_FILE_HINT = "ds_finca_sistema";
+let msalInstance = null;
+
+function numOrNull(v){ return (v===null||v===undefined||v==="") ? null : Number(v); }
+function strOrNull(v){ return (v===null||v===undefined||v==="") ? null : String(v); }
+function isEjemplo(v){ return typeof v === "string" && v.toUpperCase().includes("EJEMPLO"); }
+
+// Excel guarda las fechas como numero de serie (dias desde 1899-12-30). Si Graph devolviera texto
+// en vez de numero (deberia venir como numero con valuesOnly=true), tambien lo intenta parsear.
+function xlDateToISO(v){
+  if(v===null || v===undefined || v==="") return null;
+  if(typeof v === "number"){
+    const ms = Math.round((v - 25569) * 86400 * 1000);
+    return new Date(ms).toISOString().slice(0,10);
+  }
+  const d = new Date(v);
+  return isNaN(d) ? null : d.toISOString().slice(0,10);
+}
+
+// values = usedRange.values de Graph: fila 0 = titulo de la hoja, fila 1 = encabezados, fila 2+ = datos.
+// Una fila se considera vacia (fin de la tabla) si su primera columna esta vacia — mismo criterio
+// usado para la extraccion original con openpyxl.
+function rowsToObjects(values, mapper){
+  if(!values || values.length < 3) return [];
+  const headers = values[1] || [];
+  const get = (row, name) => { const idx = headers.indexOf(name); return idx===-1 ? undefined : row[idx]; };
+  const out = [];
+  for(let i=2; i<values.length; i++){
+    const row = values[i];
+    if(!row || row[0]===null || row[0]===undefined || row[0]==="") continue;
+    out.push(mapper((name)=>get(row,name)));
+  }
+  return out;
+}
+
+const mapCosecha = (get) => ({
+  fecha: xlDateToISO(get("Fecha")), cosechero: strOrNull(get("Cosechero")), parcela: strOrNull(get("Parcela")),
+  variedad: strOrNull(get("Variedad")), proceso: strOrNull(get("Proceso")), kg_cerezo: numOrNull(get("Kg cerezo")),
+  precio_kg: numOrNull(get("Precio/kg (S/)")), pago: numOrNull(get("Pago (S/)")), lote: strOrNull(get("Lote")),
+  obs: strOrNull(get("Observaciones")), ejemplo: isEjemplo(get("Observaciones"))
+});
+const mapLotes = (get) => ({
+  id: strOrNull(get("ID Lote")), campania: strOrNull(get("Campania")), parcela: strOrNull(get("Parcela")),
+  variedad: strOrNull(get("Variedad")), proceso: strOrNull(get("Proceso")), fecha_apertura: xlDateToISO(get("Fecha apertura")),
+  fecha_cierre: xlDateToISO(get("Fecha cierre")), kg_cerezo_auto: numOrNull(get("Kg cerezo (auto)")),
+  estado: strOrNull(get("Estado")), obs: strOrNull(get("Observaciones")), ejemplo: isEjemplo(get("Observaciones"))
+});
+const mapFermentacion = (get) => ({
+  fecha: xlDateToISO(get("Fecha")), hora: get("Hora") ?? null, lote: strOrNull(get("Lote")), proceso: strOrNull(get("Proceso")),
+  fase: strOrNull(get("Fase")), temp: numOrNull(get("Temp (C)")), ph: numOrNull(get("pH")),
+  horas_ferm: numOrNull(get("Horas ferment.")), humedad: numOrNull(get("Humedad grano (%)")),
+  dias_secado: numOrNull(get("Dias secado")), responsable: strOrNull(get("Responsable")),
+  obs: strOrNull(get("Observaciones")), ejemplo: isEjemplo(get("Observaciones"))
+});
+const mapTransformaciones = (get) => ({
+  fecha: xlDateToISO(get("Fecha")), lote: strOrNull(get("Lote")), variedad: strOrNull(get("Variedad")),
+  proceso: strOrNull(get("Proceso")), etapa_origen: strOrNull(get("Etapa origen")), kg_entra: numOrNull(get("Kg que entra")),
+  etapa_destino: strOrNull(get("Etapa destino")), kg_producido: numOrNull(get("Kg producido")),
+  rendimiento: numOrNull(get("Rendimiento %")), merma: numOrNull(get("Merma (kg)")), ubicacion: strOrNull(get("Ubicacion")),
+  responsable: strOrNull(get("Responsable")), detalle: strOrNull(get("Detalle")), ejemplo: isEjemplo(get("Detalle"))
+});
+const mapGastos = (get) => ({
+  fecha: xlDateToISO(get("Fecha")), cuenta: strOrNull(get("Cuenta")), subcuenta: strOrNull(get("Sub cuenta")),
+  parcela: strOrNull(get("Parcela")), lote: strOrNull(get("Lote (opc.)")), detalle: strOrNull(get("Detalle")),
+  monto: numOrNull(get("Monto (S/)")), status: strOrNull(get("Status")),
+  fecha_pago_py: xlDateToISO(get("Fecha pago PY")), fecha_pago_real: xlDateToISO(get("Fecha pago Real"))
+});
+const mapVentas = (get) => ({
+  fecha: xlDateToISO(get("Fecha")), lote: strOrNull(get("Lote")), variedad: strOrNull(get("Variedad")),
+  proceso: strOrNull(get("Proceso")), kg_oro_verde: numOrNull(get("Cantidad oro verde (kg)")),
+  precio_kg: numOrNull(get("Precio/kg (S/)")), total: numOrNull(get("Total (S/)")), n_factura: strOrNull(get("N factura")),
+  fecha_factura: xlDateToISO(get("Fecha factura")), fecha_pago: xlDateToISO(get("Fecha pago"))
+});
+const mapCompras = (get) => ({
+  fecha: xlDateToISO(get("Fecha")), lote: strOrNull(get("Lote")), variedad: strOrNull(get("Variedad")),
+  proceso: strOrNull(get("Proceso")), etapa: strOrNull(get("Etapa")), kg: numOrNull(get("Kg")),
+  proveedor: strOrNull(get("Proveedor")), costo: numOrNull(get("Costo (S/)")), detalle: strOrNull(get("Detalle"))
+});
+
+async function graphFetchSheet(driveId, itemId, headers, sheetName){
+  const url = "https://graph.microsoft.com/v1.0/drives/"+driveId+"/items/"+itemId+"/workbook/worksheets('"+encodeURIComponent(sheetName)+"')/usedRange(valuesOnly=true)";
+  const resp = await fetch(url, { headers });
+  if(!resp.ok) throw new Error("No se pudo leer la hoja '"+sheetName+"' (Graph "+resp.status+")");
+  const data = await resp.json();
+  return data.values || [];
+}
+
+async function findExcelFile(account){
+  const tokenResp = await msalInstance.acquireTokenSilent({ scopes: ["Files.Read"], account }).catch(() =>
+    msalInstance.acquireTokenPopup({ scopes: ["Files.Read"] })
+  );
+  const headers = { Authorization: "Bearer " + tokenResp.accessToken };
+  async function search(url){
+    const resp = await fetch(url, { headers });
+    if(!resp.ok) throw new Error("Graph " + resp.status + " en " + url);
+    const data = await resp.json();
+    return (data.value || []).find(it => (it.name||"").toLowerCase().includes(EXCEL_FILE_HINT));
+  }
+  let match = await search("https://graph.microsoft.com/v1.0/me/drive/recent").catch(()=>null);
+  if(!match) match = await search("https://graph.microsoft.com/v1.0/me/drive/sharedWithMe").catch(()=>null);
+  if(!match) throw new Error("No se encontro DS_Finca_Sistema.xlsx. Abrelo una vez desde OneDrive/SharePoint con esta cuenta y vuelve a intentar.");
+  if(match.remoteItem) return { driveId: match.remoteItem.parentReference.driveId, itemId: match.remoteItem.id, headers };
+  return { driveId: match.parentReference.driveId, itemId: match.id, headers };
+}
+
+async function loadLiveData(account){
+  const statusEl = document.getElementById('live-status');
+  try{
+    statusEl.className = 'live-status';
+    statusEl.textContent = 'Conectando con el Excel en vivo...';
+    const { driveId, itemId, headers } = await findExcelFile(account);
+
+    const sheetSpecs = [
+      { name: '1. Cosecha', key: 'cosecha', map: mapCosecha },
+      { name: '2. Lotes', key: 'lotes', map: mapLotes },
+      { name: '3. Fermentacion', key: 'fermentacion', map: mapFermentacion },
+      { name: '4. Transformaciones', key: 'transformaciones', map: mapTransformaciones },
+      { name: '5. Gastos', key: 'gastos', map: mapGastos },
+      { name: '6. Ventas', key: 'ventas', map: mapVentas },
+      { name: '7. Compras', key: 'compras', map: mapCompras }
+    ];
+    const nuevo = { meta: { ...DATA.meta, generado: new Date().toISOString().slice(0,10) }, parcelas: DATA.parcelas, supuestos: DATA.supuestos };
+    for(const spec of sheetSpecs){
+      statusEl.textContent = 'Leyendo hoja "' + spec.name + '"...';
+      const values = await graphFetchSheet(driveId, itemId, headers, spec.name);
+      nuevo[spec.key] = rowsToObjects(values, spec.map);
+    }
+    DATA = nuevo;
+    bootstrapUI();
+    const ahora = new Date().toLocaleTimeString('es-PE', {hour:'2-digit', minute:'2-digit'});
+    statusEl.className = 'live-status ok';
+    statusEl.textContent = 'Conectado en vivo — leido a las ' + ahora + ' desde DS_Finca_Sistema.xlsx. (Parcelas y supuestos aun vienen del snapshot fijo.)';
+  }catch(err){
+    console.error('Error cargando datos en vivo de Finca:', err);
+    statusEl.className = 'live-status err';
+    statusEl.textContent = 'No se pudo conectar en vivo: ' + (err.message || err);
+  }
+}
+
+document.getElementById('btn-live-connect').addEventListener('click', async () => {
+  const statusEl = document.getElementById('live-status');
+  if(!window.msal){
+    statusEl.className = 'live-status err';
+    statusEl.textContent = 'No se pudo cargar el sistema de login de Microsoft. Revisa tu conexion e intenta de nuevo.';
+    return;
+  }
+  try{
+    if(!msalInstance){
+      msalInstance = new msal.PublicClientApplication({
+        auth: {
+          clientId: MSAL_CLIENT_ID,
+          authority: "https://login.microsoftonline.com/" + MSAL_TENANT_ID,
+          redirectUri: window.location.origin + window.location.pathname
+        },
+        cache: { cacheLocation: "sessionStorage", storeAuthStateInCookie: false }
+      });
+      await msalInstance.initialize();
+    }
+    statusEl.className = 'live-status';
+    statusEl.textContent = 'Abriendo inicio de sesion de Microsoft...';
+    const loginResp = await msalInstance.loginPopup({ scopes: ["Files.Read"] });
+    msalInstance.setActiveAccount(loginResp.account);
+    await loadLiveData(loginResp.account);
+  }catch(err){
+    console.error('Error en login de Microsoft:', err);
+    statusEl.className = 'live-status err';
+    statusEl.textContent = 'No se pudo iniciar sesion: ' + (err.errorCode || err.message || err);
+  }
+});
+</script>
+</body>
+</html>
