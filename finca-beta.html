@@ -33,6 +33,21 @@ h1,h2,h3{font-family:Georgia,'Times New Roman',serif;font-weight:600;margin:0;}
 .live-status.err{color:#e79b8f;}
 .beta-banner{background:#3a230f;color:#f0dcb4;font-size:12px;padding:8px 24px;text-align:center;letter-spacing:0.02em;}
 .beta-banner b{color:#fff;}
+.btn-add-row{background:var(--accent);color:#fff;border:none;border-radius:8px;padding:8px 14px;font-size:12.5px;font-weight:700;cursor:pointer;}
+.btn-add-row:hover{background:var(--accent-dark);}
+.modal-overlay{display:none;position:fixed;inset:0;background:rgba(20,12,4,0.55);z-index:100;align-items:center;justify-content:center;}
+.modal-overlay.open{display:flex;}
+.modal-box{background:var(--card);border-radius:14px;padding:24px 26px;width:440px;max-width:92vw;max-height:86vh;overflow-y:auto;box-shadow:0 20px 60px rgba(0,0,0,0.35);}
+.modal-box h2{font-size:18px;margin-bottom:4px;}
+.modal-box .modal-sub{font-size:12.5px;color:var(--ink-secondary);margin-bottom:16px;}
+.modal-field{margin-bottom:12px;}
+.modal-field label{display:block;font-size:12px;font-weight:700;color:var(--ink-secondary);margin-bottom:4px;}
+.modal-field input,.modal-field select{width:100%;padding:8px 10px;border-radius:8px;border:1px solid var(--border);font-size:13.5px;background:#fff;color:var(--ink);}
+.modal-actions{display:flex;gap:10px;margin-top:18px;}
+.modal-actions button{flex:1;padding:10px;border-radius:8px;font-size:13.5px;font-weight:700;cursor:pointer;border:1px solid var(--border);}
+.modal-actions .btn-cancel{background:transparent;color:var(--ink-secondary);}
+.modal-actions .btn-save{background:var(--accent);color:#fff;border:none;}
+.modal-note{background:var(--warning-bg);color:var(--warning);border-radius:8px;padding:8px 10px;font-size:11.5px;margin-bottom:14px;}
 .nav-group{margin-bottom:4px;}
 .nav-label{font-size:10.5px;text-transform:uppercase;letter-spacing:0.08em;color:#9a8567;padding:14px 10px 6px 10px;}
 .nav-item{display:flex;align-items:center;gap:10px;padding:9px 10px;border-radius:8px;font-size:13.5px;color:#e9dcc3;cursor:pointer;transition:background .12s;}
@@ -76,6 +91,7 @@ tr.total-row td{font-weight:700;background:var(--neutral-bg);}
 .badge-critical{background:var(--critical-bg);color:var(--critical);}
 .badge-neutral{background:var(--neutral-bg);color:var(--neutral-ink);}
 .badge-example{background:#efe0e0;color:#8a4a4a;}
+.badge-local{background:#e9dcc3;color:#6b4a1f;}
 .badge-campania{background:#e4d6ba;color:#5c4321;}
 .empty-state{padding:28px 10px;text-align:center;color:var(--muted);font-size:13.5px;}
 .select-row{display:flex;gap:10px;align-items:center;margin-bottom:16px;flex-wrap:wrap;}
@@ -182,7 +198,7 @@ select{font-size:13px;padding:8px 12px;border-radius:8px;border:1px solid var(--
 
     <!-- COSECHA -->
     <div class="section" id="sec-cosecha">
-      <div class="page-head"><div><h1>Cosecha</h1><p>Registro diario de cosecheros: kilos de cereza recolectados por parcela, variedad y proceso.</p></div><div class="campania-chip" id="chip-cosecha"></div></div>
+      <div class="page-head"><div><h1>Cosecha</h1><p>Registro diario de cosecheros: kilos de cereza recolectados por parcela, variedad y proceso.</p></div><div style="display:flex;align-items:center;gap:10px;"><button class="btn-add-row" onclick="openForm('cosecha')">+ Registrar cosecha</button><div class="campania-chip" id="chip-cosecha"></div></div></div>
       <div class="card">
         <div class="table-wrap">
           <table><thead><tr><th>Fecha</th><th>Campania</th><th>Cosechero</th><th>Parcela</th><th>Variedad</th><th>Proceso</th><th>Kg cerezo</th><th>Precio/kg</th><th>Pago (S/)</th><th>Lote</th><th></th></tr></thead>
@@ -316,7 +332,7 @@ select{font-size:13px;padding:8px 12px;border-radius:8px;border:1px solid var(--
 
     <!-- GASTOS -->
     <div class="section" id="sec-gastos">
-      <div class="page-head"><div><h1>Gastos</h1><p>Cada gasto de la finca: siembra, fumigacion, abonamiento, mantenimiento y mas.</p></div><div class="campania-chip" id="chip-gastos"></div></div>
+      <div class="page-head"><div><h1>Gastos</h1><p>Cada gasto de la finca: siembra, fumigacion, abonamiento, mantenimiento y mas.</p></div><div style="display:flex;align-items:center;gap:10px;"><button class="btn-add-row" onclick="openForm('gastos')">+ Registrar gasto</button><div class="campania-chip" id="chip-gastos"></div></div></div>
       <div class="card">
         <div class="table-wrap">
           <table><thead><tr><th>Fecha</th><th>Campania</th><th>Cuenta</th><th>Sub cuenta</th><th>Parcela</th><th>Detalle</th><th>Monto (S/)</th><th>Estado</th></tr></thead>
@@ -327,7 +343,7 @@ select{font-size:13px;padding:8px 12px;border-radius:8px;border:1px solid var(--
 
     <!-- VENTAS -->
     <div class="section" id="sec-ventas">
-      <div class="page-head"><div><h1>Ventas</h1><p>Ventas de cafe oro verde &mdash; Finca &rarr; Don Salazar SAC (intercompany).</p></div><div class="campania-chip" id="chip-ventas"></div></div>
+      <div class="page-head"><div><h1>Ventas</h1><p>Ventas de cafe oro verde &mdash; Finca &rarr; Don Salazar SAC (intercompany).</p></div><div style="display:flex;align-items:center;gap:10px;"><button class="btn-add-row" onclick="openForm('ventas')">+ Registrar venta</button><div class="campania-chip" id="chip-ventas"></div></div></div>
       <div class="card">
         <div class="table-wrap">
           <table><thead><tr><th>Fecha</th><th>Campania</th><th>Lote</th><th>Variedad</th><th>Proceso</th><th>Kg oro verde</th><th>Precio/kg</th><th>Total (S/)</th><th>N factura</th></tr></thead>
@@ -357,6 +373,21 @@ select{font-size:13px;padding:8px 12px;border-radius:8px;border:1px solid var(--
   </div>
 </div>
 
+<!-- FASE 3 (prototipo) — formulario generico de alta de registros. Ver comentario junto a FORM_SPECS
+     en el script: por ahora esto SOLO guarda en memoria del navegador, no escribe al Excel. -->
+<div class="modal-overlay" id="modal-overlay">
+  <div class="modal-box">
+    <h2 id="modal-title"></h2>
+    <div class="modal-sub" id="modal-sub"></div>
+    <div class="modal-note">Prototipo Fase 3: esto agrega la fila solo en esta pagina (en memoria de tu navegador) para probar el flujo. Todavia no escribe de vuelta al Excel — eso requiere el permiso Files.ReadWrite y convertir las hojas a Tablas de Excel (ver documento de arquitectura).</div>
+    <div id="modal-fields"></div>
+    <div class="modal-actions">
+      <button class="btn-cancel" onclick="closeForm()">Cancelar</button>
+      <button class="btn-save" onclick="submitForm()">Guardar (local)</button>
+    </div>
+  </div>
+</div>
+
 <script>
 let DATA = {"meta": {"campania_activa": 2026, "generado": "2026-08-17"}, "cosecha": [{"fecha": "2026-05-20", "cosechero": "Veronica", "parcela": "Alicorp", "variedad": "Blend", "proceso": "Lavado", "kg_cerezo": 358.35, "precio_kg": 0.8, "pago": 286.68, "lote": "L-2026-001", "obs": "EJEMPLO", "ejemplo": true}, {"fecha": "2026-05-23", "cosechero": "Jack", "parcela": "Alicorp", "variedad": "Blend", "proceso": "Lavado", "kg_cerezo": 162.55, "precio_kg": 0.8, "pago": 130.04000000000002, "lote": "L-2026-001", "obs": "EJEMPLO", "ejemplo": true}, {"fecha": "2026-05-24", "cosechero": "Silverio", "parcela": "Alicorp", "variedad": "Blend", "proceso": "Lavado", "kg_cerezo": 469.8, "precio_kg": 0.8, "pago": 375.84000000000003, "lote": "L-2026-001", "obs": "EJEMPLO", "ejemplo": true}, {"fecha": "2026-05-24", "cosechero": "Silverio", "parcela": "Alicorp", "variedad": "Blend", "proceso": "Lavado", "kg_cerezo": 469.8, "precio_kg": 0.8, "pago": 375.84000000000003, "lote": "L-2026-002", "obs": null, "ejemplo": false}], "lotes": [{"id": "L-2026-001", "campania": "2025-2026", "parcela": "Alicorp", "variedad": "Blend", "proceso": "Lavado", "fecha_apertura": "2026-05-20", "fecha_cierre": "2026-05-31", "kg_cerezo_auto": 990.7, "estado": "En stock", "obs": "EJEMPLO - borrar", "ejemplo": true}, {"id": "L-2026-002", "campania": "2025-2026", "parcela": "Porton", "variedad": "Obata", "proceso": "Natural", "fecha_apertura": "2026-06-20", "fecha_cierre": "2026-06-20", "kg_cerezo_auto": 1000, "estado": "En stock", "obs": null, "ejemplo": false}], "fermentacion": [{"fecha": "2026-05-24", "hora": null, "lote": "L-2026-001", "proceso": "Lavado", "fase": "Fermentacion", "temp": 22.5, "ph": null, "horas_ferm": 36, "humedad": null, "dias_secado": null, "responsable": "Fidel", "obs": "EJEMPLO", "ejemplo": true}, {"fecha": "2026-05-31", "hora": null, "lote": "L-2026-001", "proceso": null, "fase": "Secado", "temp": null, "ph": null, "horas_ferm": null, "humedad": 12, "dias_secado": 18, "responsable": "Fidel", "obs": "EJEMPLO", "ejemplo": true}], "transformaciones": [{"fecha": "2026-05-31", "lote": "L-2026-001", "variedad": "Blend", "proceso": "Lavado", "etapa_origen": "Cerezo", "kg_entra": 990.7, "etapa_destino": "Pergamino", "kg_producido": 198, "rendimiento": 0.19985868577773291, "merma": 792.7, "ubicacion": "Finca", "responsable": "Fidel", "detalle": "EJEMPLO", "ejemplo": true}, {"fecha": "2026-06-15", "lote": "L-2026-001", "variedad": "Blend", "proceso": "Lavado", "etapa_origen": "Pergamino", "kg_entra": 198, "etapa_destino": "Oro verde", "kg_producido": 162, "rendimiento": 0.8181818181818182, "merma": 36, "ubicacion": "Almacen", "responsable": "Fidel", "detalle": "EJEMPLO", "ejemplo": true}, {"fecha": "2026-07-14", "lote": "L-2026-001", "variedad": "Blend", "proceso": "Natural", "etapa_origen": "Cerezo", "kg_entra": 100, "etapa_destino": "Bola", "kg_producido": 50, "rendimiento": 0.5, "merma": 50, "ubicacion": "Almacen", "responsable": "Ronaldo", "detalle": "hola", "ejemplo": false}, {"fecha": "2026-07-24", "lote": "L-2026-001", "variedad": "Blend", "proceso": "Natural", "etapa_origen": "Bola", "kg_entra": 50, "etapa_destino": "Oro verde", "kg_producido": 20, "rendimiento": 0.4, "merma": 30, "ubicacion": null, "responsable": null, "detalle": null, "ejemplo": false}], "gastos": [{"fecha": "2026-02-01", "cuenta": "Siembra", "subcuenta": "Servicio siembra", "parcela": "DS-3", "lote": null, "detalle": "PAGO DE EMBOLSADO", "monto": 650, "status": "Cancelado", "fecha_pago_py": null, "fecha_pago_real": null}, {"fecha": "2026-03-28", "cuenta": "Fumigacion", "subcuenta": "Servicio fumigacion", "parcela": "Alicorp", "lote": null, "detalle": "APLICACION HERBICIDA", "monto": 375, "status": "Cancelado", "fecha_pago_py": null, "fecha_pago_real": null}, {"fecha": "2026-04-05", "cuenta": "Abonamiento", "subcuenta": "Compra insumos", "parcela": "Otros", "lote": null, "detalle": "CANCELACION DEUDA", "monto": 2720, "status": "Cancelado", "fecha_pago_py": null, "fecha_pago_real": null}], "ventas": [{"fecha": "2026-06-20", "lote": "L-2026-001", "variedad": "Blend", "proceso": "Lavado", "kg_oro_verde": 150, "precio_kg": 40, "total": 6000, "n_factura": "F001-123", "fecha_factura": null, "fecha_pago": null}], "compras": [], "parcelas": [{"parcela": "Alicorp", "hectareas": 2, "n_plantas": 5000, "variedad": "Blend", "anio_siembra": 2018, "altitud": 1650, "notas": null}, {"parcela": "Plantada", "hectareas": 1.5, "n_plantas": 3800, "variedad": "Obata", "anio_siembra": 2019, "altitud": 1700, "notas": null}, {"parcela": "Porton", "hectareas": 2, "n_plantas": 5200, "variedad": "Blend", "anio_siembra": 2017, "altitud": 1600, "notas": null}, {"parcela": "380", "hectareas": 1, "n_plantas": 2500, "variedad": "Tupi", "anio_siembra": 2020, "altitud": 1680, "notas": null}, {"parcela": "DS-3", "hectareas": 1, "n_plantas": 2600, "variedad": "Obata", "anio_siembra": 2021, "altitud": 1720, "notas": null}, {"parcela": "Ucumano", "hectareas": 0.8, "n_plantas": 2000, "variedad": "Durazno", "anio_siembra": 2022, "altitud": 1750, "notas": null}, {"parcela": "Otros", "hectareas": 0, "n_plantas": 0, "variedad": null, "anio_siembra": null, "altitud": null, "notas": "Gastos no asignables a parcela"}], "supuestos": {"factor_cerezo_qq": 265, "tc_usd_pen": 3.45, "precio_jornal": 0.8, "precio_venta_intercompany": 40, "campania_activa": 2026, "rend_cerezo_pergamino": 0.2, "rend_cerezo_bola": 0.28, "rend_pergamino_verde": 0.82, "rend_bola_verde": 0.55, "kg_por_quintal": 46, "factor_cerezo_verde": 0.17}, "d1": {"kg_cerezo_cosechado": 1460.5, "kg_oro_verde_producido": 182, "kg_por_quintal": 46, "qq_producidos": 3.9565217391304346, "costos": {"cosecha_jornales": 1168.4, "siembra": 650, "abonamiento": 2720, "macheteo": 0, "fumigacion": 375, "poda": 0, "mant_plantas": 0, "mant_construccion": 0, "cosecha_gastos": 0, "gastos_admin": 0, "caja_chica": 0}, "costo_total_campania": 4913.4, "costo_por_quintal": 1241.8483516483516, "ingreso_venta_intercompany": 6000, "kg_oro_verde_vendido": 150, "utilidad_finca": 1086.6000000000004, "margen_sobre_ventas": 0.18110000000000007}, "d2": {"resumen": [{"etapa": "Cerezo", "kg_fisico": 369.79999999999995, "factor": 0.17, "verde_equiv": 62.866}, {"etapa": "Pergamino", "kg_fisico": 0, "factor": 0.82, "verde_equiv": 0}, {"etapa": "Bola", "kg_fisico": 0, "factor": 0.55, "verde_equiv": 0}, {"etapa": "Oro verde", "kg_fisico": 32, "factor": 1, "verde_equiv": 32}], "total_verde": 94.866, "total_qq": 2.0623043478260867, "detalle": [{"variedad": "Blend", "proceso": "Lavado", "cerezo": 79.866, "pergamino": 0, "bola": 0, "oro_verde": 12, "total_verde": 91.866}, {"variedad": "Blend", "proceso": "Natural", "cerezo": -17, "pergamino": 0, "bola": 0, "oro_verde": 20, "total_verde": 3}, {"variedad": "Blend", "proceso": "Honey", "cerezo": 0, "pergamino": 0, "bola": 0, "oro_verde": 0, "total_verde": 0}, {"variedad": "Obata", "proceso": "Lavado", "cerezo": 0, "pergamino": 0, "bola": 0, "oro_verde": 0, "total_verde": 0}, {"variedad": "Obata", "proceso": "Natural", "cerezo": 0, "pergamino": 0, "bola": 0, "oro_verde": 0, "total_verde": 0}, {"variedad": "Obata", "proceso": "Honey", "cerezo": 0, "pergamino": 0, "bola": 0, "oro_verde": 0, "total_verde": 0}, {"variedad": "Tupi", "proceso": "Lavado", "cerezo": 0, "pergamino": 0, "bola": 0, "oro_verde": 0, "total_verde": 0}, {"variedad": "Tupi", "proceso": "Natural", "cerezo": 0, "pergamino": 0, "bola": 0, "oro_verde": 0, "total_verde": 0}, {"variedad": "Tupi", "proceso": "Honey", "cerezo": 0, "pergamino": 0, "bola": 0, "oro_verde": 0, "total_verde": 0}, {"variedad": "Durazno", "proceso": "Lavado", "cerezo": 0, "pergamino": 0, "bola": 0, "oro_verde": 0, "total_verde": 0}, {"variedad": "Durazno", "proceso": "Natural", "cerezo": 0, "pergamino": 0, "bola": 0, "oro_verde": 0, "total_verde": 0}, {"variedad": "Durazno", "proceso": "Honey", "cerezo": 0, "pergamino": 0, "bola": 0, "oro_verde": 0, "total_verde": 0}]}, "d3": {"parcelas": [{"parcela": "Alicorp", "hectareas": 2, "n_plantas": 5000, "kg_cerezo": 1460.5, "qq": 5.511320754716981, "qq_ha": 2.7556603773584905, "kg_planta": 0.2921, "costo_asignado": 1543.4, "costo_qq": 280.0417665183157}, {"parcela": "Plantada", "hectareas": 1.5, "n_plantas": 3800, "kg_cerezo": 0, "qq": 0, "qq_ha": 0, "kg_planta": 0, "costo_asignado": 0, "costo_qq": "-"}, {"parcela": "Porton", "hectareas": 2, "n_plantas": 5200, "kg_cerezo": 0, "qq": 0, "qq_ha": 0, "kg_planta": 0, "costo_asignado": 0, "costo_qq": "-"}, {"parcela": "380", "hectareas": 1, "n_plantas": 2500, "kg_cerezo": 0, "qq": 0, "qq_ha": 0, "kg_planta": 0, "costo_asignado": 0, "costo_qq": "-"}, {"parcela": "DS-3", "hectareas": 1, "n_plantas": 2600, "kg_cerezo": 0, "qq": 0, "qq_ha": 0, "kg_planta": 0, "costo_asignado": 650, "costo_qq": "-"}, {"parcela": "Ucumano", "hectareas": 0.8, "n_plantas": 2000, "kg_cerezo": 0, "qq": 0, "qq_ha": 0, "kg_planta": 0, "costo_asignado": 0, "costo_qq": "-"}, {"parcela": "Otros", "hectareas": 0, "n_plantas": 0, "kg_cerezo": 0, "qq": 0, "qq_ha": "-", "kg_planta": "-", "costo_asignado": 2720, "costo_qq": "-"}], "total": {"hectareas": 8.3, "n_plantas": 21100, "kg_cerezo": 1460.5, "qq": 5.511320754716981, "qq_ha": 0.664014548761082, "costo_asignado": 4913.4, "costo_qq": 891.5104416295788}}, "d5": {"global": {"kg_cerezo": 1460.5, "kg_pergamino": 198, "kg_bola": 50, "kg_verde": 182, "rend_cerezo_pergamino": 0.19985868577773291, "rend_cerezo_bola": 0.5, "rend_pergamino_verde": 0.8181818181818182, "rend_bola_verde": 0.4, "rend_global": 0.12461485792536803}, "lotes": [{"lote": "L-2026-001", "kg_cerezo": 990.7, "kg_pergamino": 198, "kg_bola": 50, "kg_verde": 182, "rend_verde": 0.18370848894720904}, {"lote": "L-2026-002", "kg_cerezo": 469.8, "kg_pergamino": 0, "kg_bola": 0, "kg_verde": 0, "rend_verde": 0}]}};
 
@@ -371,6 +402,7 @@ function pct(n, dec){
 }
 function dash(v){ return (v===null||v===undefined||v==="") ? "-" : v; }
 function exBadge(row){ return row.ejemplo ? '<span class="badge badge-example">EJEMPLO</span>' : ""; }
+function localBadge(row){ return row._local ? '<span class="badge badge-local" title="Agregado en esta pagina, aun no escrito al Excel">SOLO LOCAL</span>' : ""; }
 function safeDiv(a,b){ return (!b) ? null : a/b; }
 function sumBy(arr, fn){ return arr.reduce((s,r)=> s + (fn(r)||0), 0); }
 
@@ -444,7 +476,7 @@ function renderCosecha(){
   if(rows.length===0){ tbody.innerHTML = '<tr><td colspan="11" class="empty-state">Sin registros de cosecha en esta campania.</td></tr>'; return; }
   tbody.innerHTML = rows.map(r => `<tr>
     <td>${dash(r.fecha)}</td><td><span class="badge badge-campania">${campaniaShort(r._camp)}</span></td><td>${dash(r.cosechero)}</td><td>${dash(r.parcela)}</td><td>${dash(r.variedad)}</td><td>${dash(r.proceso)}</td>
-    <td>${fmt(r.kg_cerezo,2)}</td><td>S/ ${fmt(r.precio_kg,2)}</td><td>S/ ${fmt(r.pago,2)}</td><td>${dash(r.lote)}</td><td>${exBadge(r)}</td>
+    <td>${fmt(r.kg_cerezo,2)}</td><td>S/ ${fmt(r.precio_kg,2)}</td><td>S/ ${fmt(r.pago,2)}</td><td>${dash(r.lote)}</td><td>${exBadge(r)}${localBadge(r)}</td>
   </tr>`).join('');
 }
 
@@ -501,7 +533,7 @@ function renderGastos(){
   if(rows.length===0){ tbody.innerHTML = '<tr><td colspan="8" class="empty-state">Sin gastos registrados en esta campania.</td></tr>'; return; }
   tbody.innerHTML = rows.map(r => `<tr>
     <td>${dash(r.fecha)}</td><td><span class="badge badge-campania">${campaniaShort(r._camp)}</span></td><td>${dash(r.cuenta)}</td><td>${dash(r.subcuenta)}</td><td>${dash(r.parcela)}</td>
-    <td>${dash(r.detalle)}</td><td>S/ ${fmt(r.monto,2)}</td><td>${statusBadge(r.status)}</td>
+    <td>${dash(r.detalle)}</td><td>S/ ${fmt(r.monto,2)}</td><td>${statusBadge(r.status)} ${localBadge(r)}</td>
   </tr>`).join('');
 }
 
@@ -511,7 +543,7 @@ function renderVentas(){
   if(rows.length===0){ tbody.innerHTML = '<tr><td colspan="9" class="empty-state">Sin ventas registradas en esta campania.</td></tr>'; return; }
   tbody.innerHTML = rows.map(r => `<tr>
     <td>${dash(r.fecha)}</td><td><span class="badge badge-campania">${campaniaShort(r._camp)}</span></td><td>${dash(r.lote)}</td><td>${dash(r.variedad)}</td><td>${dash(r.proceso)}</td>
-    <td>${fmt(r.kg_oro_verde,1)}</td><td>S/ ${fmt(r.precio_kg,2)}</td><td>S/ ${fmt(r.total,2)}</td><td>${dash(r.n_factura)}</td>
+    <td>${fmt(r.kg_oro_verde,1)}</td><td>S/ ${fmt(r.precio_kg,2)}</td><td>S/ ${fmt(r.total,2)}</td><td>${dash(r.n_factura)} ${localBadge(r)}</td>
   </tr>`).join('');
 }
 
@@ -1026,6 +1058,120 @@ document.getElementById('btn-live-connect').addEventListener('click', async () =
     statusEl.textContent = 'No se pudo iniciar sesion: ' + (err.errorCode || err.message || err);
   }
 });
+
+// ==================== FASE 3 (PROTOTIPO) — FORMULARIOS DE ALTA ====================
+// Objetivo de esta seccion: probar el flujo y la validacion de "agregar una fila" tal como
+// se veria en Fase 3, SIN escribir todavia al Excel real. Las filas que se agregan aqui:
+//  - viven solo en la memoria de este navegador (se pierden al recargar la pagina)
+//  - se marcan con la etiqueta "SOLO LOCAL" en las tablas para que no se confundan con datos reales
+// Para que esto escriba de verdad al Excel hacen falta dos cosas que todavia no estan resueltas
+// (ver documento de arquitectura): permiso Files.ReadWrite (en vez de solo lectura) y convertir
+// las hojas de rangos sueltos a Tablas de Excel formales, para poder usar la API de "agregar fila"
+// sin romper las formulas SUMIFS de los tableros D1-D5.
+const VARIEDADES = ['Blend','Obata','Tupi','Durazno'];
+const PROCESOS = ['Lavado','Natural','Honey'];
+const CUENTAS_GASTO = ['Siembra','Abonamiento','Macheteo','Fumigacion','Poda','Mantenimiento plantas','Mantenimiento construccion','Cosecha','Gastos administrativos','Caja chica'];
+function parcelaOptions(){ return DATA.parcelas.map(p=>p.parcela); }
+
+const FORM_SPECS = {
+  cosecha: {
+    title: 'Registrar cosecha', sub: 'Se agregaria como fila nueva en la hoja "1. Cosecha".',
+    fields: [
+      {key:'fecha', label:'Fecha', type:'date', required:true},
+      {key:'cosechero', label:'Cosechero', type:'text', required:true},
+      {key:'parcela', label:'Parcela', type:'select', options:parcelaOptions, required:true},
+      {key:'variedad', label:'Variedad', type:'select', options:()=>VARIEDADES, required:true},
+      {key:'proceso', label:'Proceso', type:'select', options:()=>PROCESOS, required:true},
+      {key:'kg_cerezo', label:'Kg cerezo', type:'number', required:true},
+      {key:'precio_kg', label:'Precio/kg (S/)', type:'number', default:DATA.supuestos.precio_jornal},
+      {key:'lote', label:'Lote (ID, opcional)', type:'text'}
+    ],
+    build(v){
+      const pago = (Number(v.kg_cerezo)||0) * (Number(v.precio_kg)||0);
+      return {fecha:v.fecha, cosechero:v.cosechero, parcela:v.parcela, variedad:v.variedad, proceso:v.proceso,
+        kg_cerezo:Number(v.kg_cerezo), precio_kg:Number(v.precio_kg)||0, pago, lote:v.lote||null, obs:null, ejemplo:false, _local:true};
+    }
+  },
+  gastos: {
+    title: 'Registrar gasto', sub: 'Se agregaria como fila nueva en la hoja "5. Gastos".',
+    fields: [
+      {key:'fecha', label:'Fecha', type:'date', required:true},
+      {key:'cuenta', label:'Cuenta', type:'select', options:()=>CUENTAS_GASTO, required:true},
+      {key:'subcuenta', label:'Sub cuenta', type:'text'},
+      {key:'parcela', label:'Parcela', type:'select', options:parcelaOptions},
+      {key:'detalle', label:'Detalle', type:'text', required:true},
+      {key:'monto', label:'Monto (S/)', type:'number', required:true},
+      {key:'status', label:'Estado', type:'select', options:()=>['Pendiente','Cancelado'], default:'Pendiente'}
+    ],
+    build(v){
+      return {fecha:v.fecha, cuenta:v.cuenta, subcuenta:v.subcuenta||null, parcela:v.parcela||null, lote:null,
+        detalle:v.detalle, monto:Number(v.monto), status:v.status, fecha_pago_py:null, fecha_pago_real:null, _local:true};
+    }
+  },
+  ventas: {
+    title: 'Registrar venta', sub: 'Se agregaria como fila nueva en la hoja "6. Ventas".',
+    fields: [
+      {key:'fecha', label:'Fecha', type:'date', required:true},
+      {key:'lote', label:'Lote (ID)', type:'text', required:true},
+      {key:'variedad', label:'Variedad', type:'select', options:()=>VARIEDADES, required:true},
+      {key:'proceso', label:'Proceso', type:'select', options:()=>PROCESOS, required:true},
+      {key:'kg_oro_verde', label:'Kg oro verde', type:'number', required:true},
+      {key:'precio_kg', label:'Precio/kg (S/)', type:'number', default:DATA.supuestos.precio_venta_intercompany},
+      {key:'n_factura', label:'N factura', type:'text'}
+    ],
+    build(v){
+      const total = (Number(v.kg_oro_verde)||0) * (Number(v.precio_kg)||0);
+      return {fecha:v.fecha, lote:v.lote, variedad:v.variedad, proceso:v.proceso, kg_oro_verde:Number(v.kg_oro_verde),
+        precio_kg:Number(v.precio_kg)||0, total, n_factura:v.n_factura||null, fecha_factura:null, fecha_pago:null, _local:true};
+    }
+  }
+};
+
+let currentFormType = null;
+
+function openForm(type){
+  currentFormType = type;
+  const spec = FORM_SPECS[type];
+  document.getElementById('modal-title').textContent = spec.title;
+  document.getElementById('modal-sub').textContent = spec.sub;
+  document.getElementById('modal-fields').innerHTML = spec.fields.map(f => {
+    const id = 'field-' + f.key;
+    if(f.type === 'select'){
+      const optsHtml = f.options().map(o => `<option value="${o}">${o}</option>`).join('');
+      return `<div class="modal-field"><label>${f.label}${f.required?' *':''}</label><select id="${id}">${optsHtml}</select></div>`;
+    }
+    const val = f.default !== undefined ? f.default : '';
+    return `<div class="modal-field"><label>${f.label}${f.required?' *':''}</label><input id="${id}" type="${f.type}" value="${val}"></div>`;
+  }).join('');
+  document.getElementById('modal-overlay').classList.add('open');
+}
+
+function closeForm(){
+  document.getElementById('modal-overlay').classList.remove('open');
+  currentFormType = null;
+}
+
+function submitForm(){
+  const spec = FORM_SPECS[currentFormType];
+  const vals = {};
+  const missing = [];
+  spec.fields.forEach(f => {
+    const el = document.getElementById('field-' + f.key);
+    vals[f.key] = el.value;
+    if(f.required && !el.value) missing.push(f.label);
+  });
+  if(missing.length){ alert('Falta completar: ' + missing.join(', ')); return; }
+  const row = spec.build(vals);
+  DATA[currentFormType].push(row);
+  closeForm();
+  // Recalcula todo y cambia a "Todas las campanias" para garantizar que la fila nueva sea visible
+  // de inmediato, sin importar en que campania haya caido segun su fecha.
+  retagAndBuildCampaniaList();
+  setupCampaniaSelector();
+  document.getElementById('select-campania').value = 'todas';
+  currentCampania = 'todas';
+  renderAll();
+}
 </script>
 </body>
 </html>
