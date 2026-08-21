@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Don Salazar — Arquitectura viva · Sistema de Control de Finca</title>
+<style>
+  :root{
+    --bg:#0b0b0a; --grid:#1c1a16; --card:#16140f; --card-border:#2e2a20;
+    --ink:#f2ead8; --ink-soft:#a99a7d; --ink-mute:#6f6552;
+    --gold:#e0ab3c; --gold-soft:#8a6a2c;
+    --good:#3fae66; --risk:#e2574c; --doubt:#e0ab3c; --data:#e0ab3c;
+  }
+  *{box-sizing:border-box;}
+  body{margin:0;background:var(--bg);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;overflow-x:auto;}
+  .topbar{position:sticky;top:0;z-index:20;display:flex;align-items:center;justify-content:space-between;padding:12px 24px;background:#0e0d0b;border-bottom:1px solid var(--card-border);}
+  .brand{display:flex;align-items:center;gap:12px;}
+  .brand-mark{width:34px;height:34px;border-radius:9px;background:linear-gradient(135deg,var(--gold),#8a6a2c);display:flex;align-items:center;justify-content:center;font-weight:800;color:#1a1204;font-size:13px;letter-spacing:.5px;}
+  .brand-title{font-size:15px;font-weight:700;}
+  .brand-title em{color:var(--gold);font-style:italic;font-weight:700;}
+  .brand-sub{font-size:10.5px;letter-spacing:.12em;color:var(--ink-mute);text-transform:uppercase;margin-top:2px;}
+  .tabs{display:flex;gap:8px;}
+  .tab{padding:8px 16px;border-radius:8px;font-size:12.5px;font-weight:600;color:var(--ink-soft);border:1px solid var(--card-border);background:#141210;cursor:pointer;}
+  .tab.active{background:var(--gold);color:#1a1204;border-color:var(--gold);}
+
+  .canvas-wrap{position:relative;width:1560px;margin:0 auto;padding:50px 0 40px 0;
+    background-image: radial-gradient(circle, #232019 1px, transparent 1px);
+    background-size: 22px 22px;
+  }
+  .row-label{position:absolute;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-mute);font-weight:700;}
+  svg.connectors{position:absolute;top:0;left:0;width:100%;height:100%;pointer-events:none;}
+  .card{position:absolute;width:260px;background:var(--card);border:1px solid var(--card-border);border-radius:10px;padding:12px 14px;box-shadow:0 4px 18px rgba(0,0,0,.35);}
+  .card-head{display:flex;align-items:center;gap:8px;font-size:13px;font-weight:700;margin-bottom:8px;color:var(--ink);}
+  .card-head .dot{width:7px;height:7px;border-radius:50%;flex-shrink:0;}
+  .dot-good{background:var(--good);} .dot-risk{background:var(--risk);} .dot-doubt{background:var(--doubt);} .dot-gold{background:var(--gold);}
+  .card ul{list-style:none;margin:0;padding:0;}
+  .card li{display:flex;justify-content:space-between;align-items:center;gap:8px;font-size:11.3px;color:var(--ink-soft);padding:3px 0;border-top:1px solid rgba(255,255,255,0.04);}
+  .card li:first-child{border-top:none;}
+  .card li b{color:var(--ink);font-weight:600;}
+  .tag{font-size:9px;letter-spacing:.04em;text-transform:uppercase;color:var(--ink-mute);white-space:nowrap;flex-shrink:0;}
+  .tag.risk{color:var(--risk);} .tag.doubt{color:var(--doubt);} .tag.good{color:var(--good);}
+  .card.risk{border-color:#4a2a24;}
+  .card.future{opacity:.92;border-style:dashed;}
+  .legend{position:sticky;bottom:0;z-index:20;display:flex;gap:26px;align-items:center;justify-content:center;padding:12px;background:#0e0d0b;border-top:1px solid var(--card-border);font-size:11.5px;color:var(--ink-soft);flex-wrap:wrap;}
+  .legend-item{display:flex;align-items:center;gap:7px;}
+  .legend-line{width:26px;height:0;border-top:2px solid var(--gold);}
+  .legend-line.dashed{border-top:2px dashed var(--ink-mute);}
+  .legend-dot{width:9px;height:9px;border-radius:50%;}
+  .phase{transition:opacity .2s;}
+  .phase.hidden{display:none;}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="brand">
+    <div class="brand-mark">DS</div>
+    <div>
+      <div class="brand-title"><em>Arquitectura viva</em> &middot; Sistema de Control de Finca</div>
+      <div class="brand-sub">Don Salazar &middot; v1.0 &middot; Agosto 2026</div>
+    </div>
+  </div>
+  <div class="tabs" id="tabs">
+    <div class="tab active" data-phase="all">Vista general</div>
+    <div class="tab" data-phase="1">Fase 1 &middot; Actual</div>
+    <div class="tab" data-phase="2">Fase 2 &middot; Propuesta</div>
+    <div class="tab" data-phase="3">Fase 3 &middot; Propuesta</div>
+  </div>
+</div>
+
+<div class="canvas-wrap" id="canvas" style="height:900px;">
+  <svg class="connectors" viewBox="0 0 1560 900" preserveAspectRatio="none">
+    <!-- Fase 1: confirmed flow, solid gold -->
+    <path class="phase p1" d="M 340 175 L 340 230" stroke="#e0ab3c" stroke-width="2" fill="none"/>
+    <path class="phase p1" d="M 470 270 L 560 270" stroke="#e0ab3c" stroke-width="2" fill="none"/>
+    <path class="phase p1" d="M 830 270 L 920 270" stroke="#e0ab3c" stroke-width="2" fill="none"/>
+    <path class="phase p1" d="M 1190 270 L 1280 270" stroke="#e0ab3c" stroke-width="2" fill="none"/>
+    <circle class="phase p1" cx="340" cy="200" r="3" fill="#e0ab3c"/>
+    <circle class="phase p1" cx="515" cy="270" r="3" fill="#e0ab3c"/>
+    <circle class="phase p1" cx="875" cy="270" r="3" fill="#e0ab3c"/>
+    <circle class="phase p1" cx="1235" cy="270" r="3" fill="#e0ab3c"/>
+
+    <!-- gap: navegador no escribe de vuelta al excel (riesgo, dashed, curva de regreso) -->
+    <path class="phase p1" d="M 1410 340 C 1480 420, 1480 40, 340 40 C 240 40, 200 60, 200 175"
+          stroke="#e2574c" stroke-width="1.6" stroke-dasharray="5 5" fill="none"/>
+    <text class="phase p1" x="900" y="34" fill="#e2574c" font-size="10.5" letter-spacing="0.03em">sin escritura de vuelta al Excel &mdash; riesgo / brecha actual</text>
+
+    <!-- Fase 2: dashed doubt lines -->
+    <path class="phase p2" d="M 340 340 L 340 460" stroke="#e0ab3c" stroke-width="1.6" stroke-dasharray="5 5" fill="none"/>
+    <path class="phase p2" d="M 600 500 L 690 500" stroke="#e0ab3c" stroke-width="1.6" stroke-dasharray="5 5" fill="none"/>
+    <path class="phase cross" d="M 950 500 C 1050 500, 1050 300, 1090 270" stroke="#e0ab3c" stroke-width="1.6" stroke-dasharray="5 5" fill="none"/>
+
+    <!-- Fase 3: dashed lines -->
+    <path class="phase p3" d="M 340 620 L 340 690" stroke="#e0ab3c" stroke-width="1.6" stroke-dasharray="5 5" fill="none"/>
+    <path class="phase p3" d="M 600 730 L 690 730" stroke="#e0ab3c" stroke-width="1.6" stroke-dasharray="5 5" fill="none"/>
+    <path class="phase p3" d="M 950 730 L 1040 730" stroke="#e0ab3c" stroke-width="1.6" stroke-dasharray="5 5" fill="none"/>
+    <path class="phase cross" d="M 820 690 C 900 610, 900 560, 830 530" stroke="#e0ab3c" stroke-width="1.6" stroke-dasharray="5 5" fill="none"/>
+    <text class="phase cross" x="835" y="600" fill="#a99a7d" font-size="10">escribe fila &middot; POST</text>
+  </svg>
+
+  <div class="row-label" style="top:66px;left:40px;">Origen de datos</div>
+  <div class="card" style="top:90px;left:210px;width:280px;">
+    <div class="card-head"><span class="dot dot-good"></span> Excel &mdash; DS_Finca_Sistema.xlsx</div>
+    <ul>
+      <li><b>SharePoint</b> / OneDrive (Jhampier Escalante)<span class="tag good">storage</span></li>
+      <li>7 hojas operativas + Maestros<span class="tag">sheets</span></li>
+      <li>Formulas SUMIFS &rarr; tableros D1-D5<span class="tag">calc</span></li>
+    </ul>
+  </div>
+
+  <div class="row-label phase p1" style="top:206px;left:40px;">Fase 1 &middot; Actual &mdash; snapshot manual (en producci&oacute;n)</div>
+
+  <div class="card phase p1" style="top:230px;left:100px;">
+    <div class="card-head"><span class="dot dot-good"></span> Claude (sesi&oacute;n Cowork)</div>
+    <ul>
+      <li>Lee el Excel con <b>openpyxl</b><span class="tag good">read</span></li>
+      <li>Recalcula formulas en Python<span class="tag good">calc</span></li>
+      <li>Genera <b>finca.html</b><span class="tag good">build</span></li>
+    </ul>
+  </div>
+  <div class="card phase p1" style="top:230px;left:560px;">
+    <div class="card-head"><span class="dot dot-good"></span> GitHub &mdash; TrinityKAM/academia-ds</div>
+    <ul>
+      <li>finca.html<span class="tag good">git</span></li>
+      <li>index.html (Academia DS)<span class="tag">git</span></li>
+      <li>Commit manual v&iacute;a navegador<span class="tag good">verificado</span></li>
+    </ul>
+  </div>
+  <div class="card phase p1" style="top:230px;left:920px;">
+    <div class="card-head"><span class="dot dot-good"></span> GitHub Pages</div>
+    <ul>
+      <li>Build autom&aacute;tico al hacer push<span class="tag good">hosting</span></li>
+      <li>trinitykam.github.io/academia-ds/<span class="tag">url</span></li>
+    </ul>
+  </div>
+  <div class="card phase p1 risk" style="top:230px;left:1280px;">
+    <div class="card-head"><span class="dot dot-risk"></span> Navegador del equipo</div>
+    <ul>
+      <li>JS recalcula KPIs en vivo<span class="tag good">cliente</span></li>
+      <li>Filtro por campania<span class="tag good">ui</span></li>
+      <li>Datos = foto fija del Excel<span class="tag risk">riesgo</span></li>
+      <li>No escribe de vuelta<span class="tag risk">riesgo</span></li>
+    </ul>
+  </div>
+
+  <div class="row-label phase p2" style="top:436px;left:40px;">Fase 2 &middot; Propuesta &mdash; lectura en vivo</div>
+  <div class="card phase p2 future" style="top:460px;left:100px;width:500px;">
+    <div class="card-head"><span class="dot dot-doubt"></span> Microsoft Graph API &mdash; Excel REST (workbook)</div>
+    <ul>
+      <li>Lee rangos / tablas del Excel en SharePoint en tiempo real<span class="tag doubt">api</span></li>
+      <li>Requiere registrar app en <b>Azure AD</b> (tenant Don Salazar)<span class="tag risk">admin M365</span></li>
+      <li>Permiso minimo: Files.Read (solo lectura, fase 2)<span class="tag doubt">scope</span></li>
+      <li>&iquest;Qui&eacute;n aprueba el registro de la app? &mdash; ver con Jonel Aguado<span class="tag doubt">duda abierta</span></li>
+    </ul>
+  </div>
+  <div class="card phase p2 future" style="top:460px;left:690px;">
+    <div class="card-head"><span class="dot dot-doubt"></span> finca.html v2</div>
+    <ul>
+      <li>Login Microsoft (MSAL.js)<span class="tag doubt">auth</span></li>
+      <li>Reemplaza snapshot fijo por fetch en vivo<span class="tag doubt">live</span></li>
+      <li>Sigue sin poder editar<span class="tag">solo lectura</span></li>
+    </ul>
+  </div>
+
+  <div class="row-label phase p3" style="top:666px;left:40px;">Fase 3 &middot; Propuesta &mdash; edici&oacute;n bidireccional</div>
+  <div class="card phase p3 future" style="top:690px;left:100px;">
+    <div class="card-head"><span class="dot dot-doubt"></span> Hojas &rarr; Tablas de Excel</div>
+    <ul>
+      <li>Convertir rangos sueltos en Tablas formales<span class="tag doubt">migracion</span></li>
+      <li>Necesario para escribir filas sin romper formulas D1-D5<span class="tag risk">riesgo</span></li>
+    </ul>
+  </div>
+  <div class="card phase p3 future" style="top:690px;left:690px;">
+    <div class="card-head"><span class="dot dot-doubt"></span> finca.html v3 &mdash; formularios</div>
+    <ul>
+      <li>Editar Cosecha / Gastos / Ventas desde la web<span class="tag doubt">feature</span></li>
+      <li>POST a Graph API &rarr; escribe fila en el Excel<span class="tag doubt">write</span></li>
+      <li>Permiso: Files.ReadWrite<span class="tag risk">admin M365</span></li>
+    </ul>
+  </div>
+  <div class="card phase p3 future" style="top:690px;left:1040px;">
+    <div class="card-head"><span class="dot dot-doubt"></span> Control de conflictos</div>
+    <ul>
+      <li>&iquest;Bloqueo optimista o gana la ultima escritura?<span class="tag doubt">duda abierta</span></li>
+      <li>&iquest;Quien es dueno del dato si chocan Excel y web?<span class="tag doubt">duda abierta</span></li>
+    </ul>
+  </div>
+</div>
+
+<div class="legend">
+  <div class="legend-item"><span class="legend-line"></span> flujo confirmado (en producci&oacute;n)</div>
+  <div class="legend-item"><span class="legend-line dashed"></span> propuesto / por construir</div>
+  <div class="legend-item"><span class="legend-dot" style="background:#e0ab3c;"></span> dato / decision</div>
+  <div class="legend-item"><span class="legend-dot" style="background:#e2574c;"></span> riesgo</div>
+  <div class="legend-item"><span class="legend-dot" style="background:#e0ab3c;"></span> duda abierta</div>
+  <div class="legend-item"><span class="legend-dot" style="background:#3fae66;"></span> verificado en producci&oacute;n</div>
+</div>
+
+<script>
+document.querySelectorAll('.tab').forEach(tab => {
+  tab.addEventListener('click', () => {
+    document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+    tab.classList.add('active');
+    const phase = tab.dataset.phase;
+    document.querySelectorAll('.phase').forEach(el => {
+      if(phase==='all'){ el.classList.remove('hidden'); return; }
+      if(el.classList.contains('cross')){ el.classList.add('hidden'); return; }
+      el.classList.toggle('hidden', !el.classList.contains('p'+phase));
+    });
+  });
+});
+</script>
+</body>
+</html>
