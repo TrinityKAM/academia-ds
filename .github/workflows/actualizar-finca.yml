@@ -1,0 +1,55 @@
+# Actualiza finca.html en vivo desde DS_Finca_Sistema.xlsx (SharePoint) via Microsoft Graph.
+#
+# ESTADO: creado pero INACTIVO. Este workflow todavia NO tiene un "schedule:" (cron) a
+# proposito — si lo tuviera, correria solo cada cierto tiempo y fallaria en cada corrida
+# porque faltan los GitHub Secrets que necesita, llenando de notificaciones de error a
+# quien administre el repo. Por ahora solo se puede correr a mano desde la pestaña
+# "Actions" del repo (botón "Run workflow"), para poder probarlo con seguridad una vez
+# que los secrets existan.
+#
+# Ver AUTOMATIZACION.md en la raiz del repo para la lista completa de lo que falta antes
+# de que esto pueda activarse de verdad, y quien tiene que resolverlo.
+#
+# Una vez que el primer "Run workflow" manual funcione sin errores, se puede agregar
+# el bloque `schedule:` de abajo (ahora mismo comentado) para que corra solo, por
+# ejemplo, una vez por dia.
+
+name: Actualizar Finca (Fase 2b)
+
+on:
+  workflow_dispatch: {}
+  # schedule:
+  #   - cron: '0 11 * * *'   # 11:00 UTC = 6:00 am hora Peru — ajustar si se activa
+
+jobs:
+  actualizar:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Descargar el repositorio
+        uses: actions/checkout@v4
+
+      - name: Configurar Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Leer el Excel en vivo y regenerar finca.html
+        env:
+          GRAPH_TENANT_ID: ${{ secrets.GRAPH_TENANT_ID }}
+          GRAPH_CLIENT_ID: ${{ secrets.GRAPH_CLIENT_ID }}
+          GRAPH_CLIENT_SECRET: ${{ secrets.GRAPH_CLIENT_SECRET }}
+          GRAPH_DRIVE_ID: ${{ secrets.GRAPH_DRIVE_ID }}
+          GRAPH_ITEM_ID: ${{ secrets.GRAPH_ITEM_ID }}
+        run: python3 scripts/actualizar_finca.py
+
+      - name: Publicar cambios si hay datos nuevos
+        run: |
+          git config user.name "Actualizacion automatica Finca"
+          git config user.email "actions@users.noreply.github.com"
+          git add data.json finca.html
+          if git diff --cached --quiet; then
+            echo "Sin cambios en los datos — no se hace commit."
+          else
+            git commit -m "Actualizacion automatica de Finca desde Excel en vivo"
+            git push
+          fi
