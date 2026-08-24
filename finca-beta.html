@@ -122,7 +122,7 @@ select{font-size:13px;padding:8px 12px;border-radius:8px;border:1px solid var(--
       <div class="brand-sub">Cafe con Sabor a Peru</div>
     </div>
     <div class="campania-box">
-      <div class="campania-label">Campania</div>
+      <div class="campania-label">Campaña</div>
       <select class="campania-select" id="select-campania"></select>
     </div>
     <div class="live-box">
@@ -154,7 +154,7 @@ select{font-size:13px;padding:8px 12px;border-radius:8px;border:1px solid var(--
   <div class="main">
     <div class="topbanner">
       <span>&#9888;&#65039;</span>
-      <div><b>Nota de calidad de datos:</b> el sistema recien empieza a usarse. Las filas marcadas <span class="badge badge-example" style="margin:0 3px;">EJEMPLO</span> en el Excel original son de muestra (la propia hoja indica borrarlas); se muestran para que el equipo las identifique y reemplace. Todos los indicadores de esta pagina (incluyendo Rentabilidad, Stock, Rendimientos y Hectareas) se <b>recalculan en el navegador</b> a partir de las filas de cada hoja, filtradas por la campania seleccionada arriba &mdash; no son una copia fija de los tableros del Excel. Pagina generada a partir de <b>DS_Finca_Sistema.xlsx</b> el 17 ago 2026 &mdash; snapshot fijo (los datos no se actualizan solos todavia; ver seccion "Arquitectura" para el plan de sincronizacion en vivo).</div>
+      <div><b>Nota de calidad de datos:</b> el sistema recien empieza a usarse. Las filas marcadas <span class="badge badge-example" style="margin:0 3px;">EJEMPLO</span> en el Excel original son de muestra (la propia hoja indica borrarlas); se muestran para que el equipo las identifique y reemplace. Todos los indicadores de esta pagina (incluyendo Rentabilidad, Stock, Rendimientos y Hectareas) se <b>recalculan en el navegador</b> a partir de las filas de cada hoja, filtradas por la campaña seleccionada arriba &mdash; no son una copia fija de los tableros del Excel. Pagina generada a partir de <b>DS_Finca_Sistema.xlsx</b> el 17 ago 2026 &mdash; snapshot fijo (los datos no se actualizan solos todavia; ver seccion "Arquitectura" para el plan de sincronizacion en vivo).</div>
     </div>
 
     <!-- RESUMEN -->
@@ -173,7 +173,7 @@ select{font-size:13px;padding:8px 12px;border-radius:8px;border:1px solid var(--
         <div class="stat-tile"><div class="stat-label">Costo por quintal</div><div class="stat-value accent" id="st-costo-qq">-</div><div class="stat-note">KPI principal de la finca</div></div>
       </div>
       <div class="grid grid-3" style="margin-top:16px;">
-        <div class="stat-tile"><div class="stat-label">Costo total campania</div><div class="stat-value" id="st-costo-total">-</div></div>
+        <div class="stat-tile"><div class="stat-label">Costo total campaña</div><div class="stat-value" id="st-costo-total">-</div></div>
         <div class="stat-tile"><div class="stat-label">Ingreso por venta intercompany</div><div class="stat-value" id="st-ingreso">-</div></div>
         <div class="stat-tile"><div class="stat-label">Utilidad de la finca</div><div class="stat-value" id="st-utilidad">-</div><div class="stat-note" id="st-margen-note">-</div></div>
       </div>
@@ -201,7 +201,7 @@ select{font-size:13px;padding:8px 12px;border-radius:8px;border:1px solid var(--
       <div class="page-head"><div><h1>Cosecha</h1><p>Registro diario de cosecheros: kilos de cereza recolectados por parcela, variedad y proceso.</p></div><div style="display:flex;align-items:center;gap:10px;"><button class="btn-add-row" onclick="openForm('cosecha')">+ Registrar cosecha</button><div class="campania-chip" id="chip-cosecha"></div></div></div>
       <div class="card">
         <div class="table-wrap">
-          <table><thead><tr><th>Fecha</th><th>Campania</th><th>Cosechero</th><th>Parcela</th><th>Variedad</th><th>Proceso</th><th>Kg cerezo</th><th>Precio/kg</th><th>Pago (S/)</th><th>Lote</th><th></th></tr></thead>
+          <table><thead><tr><th>Fecha</th><th>Campaña</th><th>Cosechero</th><th>Parcela</th><th>Variedad</th><th>Proceso</th><th>Kg cerezo</th><th>Precio/kg</th><th>Pago (S/)</th><th>Lote</th><th></th></tr></thead>
           <tbody id="tbl-cosecha"></tbody></table>
         </div>
       </div>
@@ -218,7 +218,7 @@ select{font-size:13px;padding:8px 12px;border-radius:8px;border:1px solid var(--
       <div class="page-head"><div><h1>Fermentacion y secado</h1><p>Fases post-cosecha: temperatura, pH, horas de fermentacion, humedad de grano y dias de secado.</p></div><div class="campania-chip" id="chip-fermentacion"></div></div>
       <div class="card">
         <div class="table-wrap">
-          <table><thead><tr><th>Fecha</th><th>Campania</th><th>Lote</th><th>Fase</th><th>Temp (C)</th><th>pH</th><th>Horas ferment.</th><th>Humedad (%)</th><th>Dias secado</th><th>Responsable</th><th></th></tr></thead>
+          <table><thead><tr><th>Fecha</th><th>Campaña</th><th>Lote</th><th>Fase</th><th>Temp (C)</th><th>pH</th><th>Horas ferment.</th><th>Humedad (%)</th><th>Dias secado</th><th>Responsable</th><th></th></tr></thead>
           <tbody id="tbl-fermentacion"></tbody></table>
         </div>
       </div>
@@ -229,7 +229,7 @@ select{font-size:13px;padding:8px 12px;border-radius:8px;border:1px solid var(--
       <div class="page-head"><div><h1>Transformaciones</h1><p>Cereza &rarr; pergamino/bola &rarr; oro verde. Cada conversion registra rendimiento y merma.</p></div><div class="campania-chip" id="chip-transformaciones"></div></div>
       <div class="card">
         <div class="table-wrap">
-          <table><thead><tr><th>Fecha</th><th>Campania</th><th>Lote</th><th>Proceso</th><th>Etapa origen</th><th>Kg entra</th><th>Etapa destino</th><th>Kg producido</th><th>Rendimiento</th><th>Merma (kg)</th><th>Ubicacion</th><th>Responsable</th><th></th></tr></thead>
+          <table><thead><tr><th>Fecha</th><th>Campaña</th><th>Lote</th><th>Proceso</th><th>Etapa origen</th><th>Kg entra</th><th>Etapa destino</th><th>Kg producido</th><th>Rendimiento</th><th>Merma (kg)</th><th>Ubicacion</th><th>Responsable</th><th></th></tr></thead>
           <tbody id="tbl-transformaciones"></tbody></table>
         </div>
       </div>
@@ -247,7 +247,7 @@ select{font-size:13px;padding:8px 12px;border-radius:8px;border:1px solid var(--
 
     <!-- RENDIMIENTOS -->
     <div class="section" id="sec-rendimientos">
-      <div class="page-head"><div><h1>Rendimientos</h1><p>Cereza &rarr; Pergamino/Bola &rarr; Verde. Rendimiento global de campania y por lote.</p></div><div class="campania-chip" id="chip-rendimientos"></div></div>
+      <div class="page-head"><div><h1>Rendimientos</h1><p>Cereza &rarr; Pergamino/Bola &rarr; Verde. Rendimiento global de campaña y por lote.</p></div><div class="campania-chip" id="chip-rendimientos"></div></div>
       <div class="grid grid-4">
         <div class="stat-tile"><div class="stat-label">Cerezo &rarr; Pergamino</div><div class="stat-value" id="st-r-cp">-</div></div>
         <div class="stat-tile"><div class="stat-label">Cerezo &rarr; Bola</div><div class="stat-value" id="st-r-cb">-</div></div>
@@ -255,7 +255,7 @@ select{font-size:13px;padding:8px 12px;border-radius:8px;border:1px solid var(--
         <div class="stat-tile"><div class="stat-label">Bola &rarr; Verde</div><div class="stat-value" id="st-r-bv">-</div></div>
       </div>
       <div class="card" style="margin-top:16px;">
-        <h2>Rendimiento global de campania</h2>
+        <h2>Rendimiento global de campaña</h2>
         <div class="card-sub">Cerezo cosechado &rarr; oro verde final</div>
         <div class="progress-track"><div class="progress-fill" id="rend-global-bar" style="width:0%"></div></div>
         <div class="stat-note" style="margin-top:8px;" id="rend-global-text">-</div>
@@ -323,7 +323,7 @@ select{font-size:13px;padding:8px 12px;border-radius:8px;border:1px solid var(--
         </div>
       </div>
       <div class="card">
-        <h2>Produccion e ingresos de campania</h2>
+        <h2>Produccion e ingresos de campaña</h2>
         <div class="table-wrap">
           <table><tbody id="tbl-produccion"></tbody></table>
         </div>
@@ -335,7 +335,7 @@ select{font-size:13px;padding:8px 12px;border-radius:8px;border:1px solid var(--
       <div class="page-head"><div><h1>Gastos</h1><p>Cada gasto de la finca: siembra, fumigacion, abonamiento, mantenimiento y mas.</p></div><div style="display:flex;align-items:center;gap:10px;"><button class="btn-add-row" onclick="openForm('gastos')">+ Registrar gasto</button><div class="campania-chip" id="chip-gastos"></div></div></div>
       <div class="card">
         <div class="table-wrap">
-          <table><thead><tr><th>Fecha</th><th>Campania</th><th>Cuenta</th><th>Sub cuenta</th><th>Parcela</th><th>Detalle</th><th>Monto (S/)</th><th>Estado</th></tr></thead>
+          <table><thead><tr><th>Fecha</th><th>Campaña</th><th>Cuenta</th><th>Sub cuenta</th><th>Parcela</th><th>Detalle</th><th>Monto (S/)</th><th>Estado</th></tr></thead>
           <tbody id="tbl-gastos"></tbody></table>
         </div>
       </div>
@@ -346,7 +346,7 @@ select{font-size:13px;padding:8px 12px;border-radius:8px;border:1px solid var(--
       <div class="page-head"><div><h1>Ventas</h1><p>Ventas de cafe oro verde &mdash; Finca &rarr; Don Salazar SAC (intercompany).</p></div><div style="display:flex;align-items:center;gap:10px;"><button class="btn-add-row" onclick="openForm('ventas')">+ Registrar venta</button><div class="campania-chip" id="chip-ventas"></div></div></div>
       <div class="card">
         <div class="table-wrap">
-          <table><thead><tr><th>Fecha</th><th>Campania</th><th>Lote</th><th>Variedad</th><th>Proceso</th><th>Kg oro verde</th><th>Precio/kg</th><th>Total (S/)</th><th>N factura</th></tr></thead>
+          <table><thead><tr><th>Fecha</th><th>Campaña</th><th>Lote</th><th>Variedad</th><th>Proceso</th><th>Kg oro verde</th><th>Precio/kg</th><th>Total (S/)</th><th>N factura</th></tr></thead>
           <tbody id="tbl-ventas"></tbody></table>
         </div>
       </div>
@@ -357,7 +357,7 @@ select{font-size:13px;padding:8px 12px;border-radius:8px;border:1px solid var(--
       <div class="page-head"><div><h1>Compras a terceros</h1><p>Cafe comprado a terceros para complementar el stock de la finca (no proviene de cosecha propia).</p></div><div class="campania-chip" id="chip-compras"></div></div>
       <div class="card">
         <div class="table-wrap">
-          <table><thead><tr><th>Fecha</th><th>Campania</th><th>Lote</th><th>Variedad</th><th>Proceso</th><th>Etapa</th><th>Kg</th><th>Proveedor</th><th>Costo (S/)</th><th>Detalle</th></tr></thead>
+          <table><thead><tr><th>Fecha</th><th>Campaña</th><th>Lote</th><th>Variedad</th><th>Proceso</th><th>Etapa</th><th>Kg</th><th>Proveedor</th><th>Costo (S/)</th><th>Detalle</th></tr></thead>
           <tbody id="tbl-compras"></tbody></table>
         </div>
       </div>
@@ -415,7 +415,7 @@ function statusBadge(status){
   return `<span class="badge badge-neutral">${dash(status)}</span>`;
 }
 
-// ---- Campania (ciclo Ago-Jul, igual a la convencion del propio Excel) ----
+// ---- Campaña (ciclo Ago-Jul, igual a la convencion del propio Excel) ----
 function campaniaOf(fecha){
   if(!fecha) return null;
   const parts = String(fecha).split('-');
@@ -430,7 +430,7 @@ function campaniaShort(camp){
   return parts.length===2 ? `'${parts[1].slice(-2)}` : camp;
 }
 
-// Tag every record with a computed campania (from fecha; Lotes uses its own explicit campania field).
+// Tag every record with a computed campaña (from fecha; Lotes uses its own explicit campania field).
 // Wrapped in a function (instead of one-shot top-level code) so it can be re-run after a live
 // refresh of DATA from Microsoft Graph, without reloading the page.
 let campActiva, ALL_CAMPS;
@@ -443,8 +443,8 @@ function retagAndBuildCampaniaList(){
   DATA.compras.forEach(r => r._camp = campaniaOf(r.fecha));
   DATA.lotes.forEach(r => r._camp = r.campania || campaniaOf(r.fecha_apertura));
 
-  // Build the list of selectable campanias: whatever appears in the data, plus the active one
-  // and the next one (so "campania 27" is selectable before any real data exists for it).
+  // Build the list of selectable campañas: whatever appears in the data, plus the active one
+  // and the next one (so "campaña 27" is selectable before any real data exists for it).
   campActiva = campaniaOf(`${DATA.meta.campania_activa}-06-01`) || `${DATA.meta.campania_activa-1}-${DATA.meta.campania_activa}`;
   const [ay1] = campActiva.split('-').map(Number);
   const campSiguiente = `${ay1+1}-${ay1+2}`;
@@ -466,14 +466,14 @@ function filt(arr){
 // ==================== RENDER FUNCTIONS ====================
 
 function renderChips(){
-  const label = currentCampania==='todas' ? 'Todas las campanias' : `Campania ${currentCampania} (${campaniaShort(currentCampania)})`;
+  const label = currentCampania==='todas' ? 'Todas las campañas' : `Campaña ${currentCampania} (${campaniaShort(currentCampania)})`;
   document.querySelectorAll('.campania-chip').forEach(el => el.textContent = label);
 }
 
 function renderCosecha(){
   const rows = filt(DATA.cosecha);
   const tbody = document.getElementById('tbl-cosecha');
-  if(rows.length===0){ tbody.innerHTML = '<tr><td colspan="11" class="empty-state">Sin registros de cosecha en esta campania.</td></tr>'; return; }
+  if(rows.length===0){ tbody.innerHTML = '<tr><td colspan="11" class="empty-state">Sin registros de cosecha en esta campaña.</td></tr>'; return; }
   tbody.innerHTML = rows.map(r => `<tr>
     <td>${dash(r.fecha)}</td><td><span class="badge badge-campania">${campaniaShort(r._camp)}</span></td><td>${dash(r.cosechero)}</td><td>${dash(r.parcela)}</td><td>${dash(r.variedad)}</td><td>${dash(r.proceso)}</td>
     <td>${fmt(r.kg_cerezo,2)}</td><td>S/ ${fmt(r.precio_kg,2)}</td><td>S/ ${fmt(r.pago,2)}</td><td>${dash(r.lote)}</td><td>${exBadge(r)}${localBadge(r)}</td>
@@ -483,7 +483,7 @@ function renderCosecha(){
 function renderLotes(){
   const rows = filt(DATA.lotes);
   const wrap = document.getElementById('cards-lotes');
-  if(rows.length===0){ wrap.innerHTML = '<div class="empty-state">Sin lotes registrados en esta campania.</div>'; return; }
+  if(rows.length===0){ wrap.innerHTML = '<div class="empty-state">Sin lotes registrados en esta campaña.</div>'; return; }
   wrap.innerHTML = rows.map(l => {
     const cosechaLote = DATA.cosecha.filter(r => r.lote===l.id);
     const kgReal = sumBy(cosechaLote, r=>r.kg_cerezo);
@@ -493,7 +493,7 @@ function renderLotes(){
         <h2>${l.id}</h2>
         <div style="display:flex;gap:6px;">${exBadge(l)}${statusBadge(l.estado)}</div>
       </div>
-      <div class="card-sub">Campania ${dash(l.campania)}</div>
+      <div class="card-sub">Campaña ${dash(l.campania)}</div>
       <div class="passport-row"><span class="k">Parcela</span><span class="v">${dash(l.parcela)}</span></div>
       <div class="passport-row"><span class="k">Variedad</span><span class="v">${dash(l.variedad)}</span></div>
       <div class="passport-row"><span class="k">Proceso</span><span class="v">${dash(l.proceso)}</span></div>
@@ -509,7 +509,7 @@ function renderLotes(){
 function renderFermentacion(){
   const rows = filt(DATA.fermentacion);
   const tbody = document.getElementById('tbl-fermentacion');
-  if(rows.length===0){ tbody.innerHTML = '<tr><td colspan="10" class="empty-state">Sin registros de fermentacion en esta campania.</td></tr>'; return; }
+  if(rows.length===0){ tbody.innerHTML = '<tr><td colspan="10" class="empty-state">Sin registros de fermentacion en esta campaña.</td></tr>'; return; }
   tbody.innerHTML = rows.map(r => `<tr>
     <td>${dash(r.fecha)}</td><td><span class="badge badge-campania">${campaniaShort(r._camp)}</span></td><td>${dash(r.lote)}</td><td>${dash(r.fase)}</td><td>${fmt(r.temp,1)}</td><td>${dash(r.ph)}</td>
     <td>${dash(r.horas_ferm)}</td><td>${dash(r.humedad)}</td><td>${dash(r.dias_secado)}</td><td>${dash(r.responsable)}</td><td>${exBadge(r)}</td>
@@ -519,7 +519,7 @@ function renderFermentacion(){
 function renderTransformaciones(){
   const rows = filt(DATA.transformaciones);
   const tbody = document.getElementById('tbl-transformaciones');
-  if(rows.length===0){ tbody.innerHTML = '<tr><td colspan="13" class="empty-state">Sin transformaciones registradas en esta campania.</td></tr>'; return; }
+  if(rows.length===0){ tbody.innerHTML = '<tr><td colspan="13" class="empty-state">Sin transformaciones registradas en esta campaña.</td></tr>'; return; }
   tbody.innerHTML = rows.map(r => `<tr>
     <td>${dash(r.fecha)}</td><td><span class="badge badge-campania">${campaniaShort(r._camp)}</span></td><td>${dash(r.lote)}</td><td>${dash(r.proceso)}</td><td>${dash(r.etapa_origen)}</td><td>${fmt(r.kg_entra,1)}</td>
     <td>${dash(r.etapa_destino)}</td><td>${fmt(r.kg_producido,1)}</td><td>${pct(r.rendimiento,1)}</td><td>${fmt(r.merma,1)}</td>
@@ -530,7 +530,7 @@ function renderTransformaciones(){
 function renderGastos(){
   const rows = filt(DATA.gastos);
   const tbody = document.getElementById('tbl-gastos');
-  if(rows.length===0){ tbody.innerHTML = '<tr><td colspan="8" class="empty-state">Sin gastos registrados en esta campania.</td></tr>'; return; }
+  if(rows.length===0){ tbody.innerHTML = '<tr><td colspan="8" class="empty-state">Sin gastos registrados en esta campaña.</td></tr>'; return; }
   tbody.innerHTML = rows.map(r => `<tr>
     <td>${dash(r.fecha)}</td><td><span class="badge badge-campania">${campaniaShort(r._camp)}</span></td><td>${dash(r.cuenta)}</td><td>${dash(r.subcuenta)}</td><td>${dash(r.parcela)}</td>
     <td>${dash(r.detalle)}</td><td>S/ ${fmt(r.monto,2)}</td><td>${statusBadge(r.status)} ${localBadge(r)}</td>
@@ -540,7 +540,7 @@ function renderGastos(){
 function renderVentas(){
   const rows = filt(DATA.ventas);
   const tbody = document.getElementById('tbl-ventas');
-  if(rows.length===0){ tbody.innerHTML = '<tr><td colspan="9" class="empty-state">Sin ventas registradas en esta campania.</td></tr>'; return; }
+  if(rows.length===0){ tbody.innerHTML = '<tr><td colspan="9" class="empty-state">Sin ventas registradas en esta campaña.</td></tr>'; return; }
   tbody.innerHTML = rows.map(r => `<tr>
     <td>${dash(r.fecha)}</td><td><span class="badge badge-campania">${campaniaShort(r._camp)}</span></td><td>${dash(r.lote)}</td><td>${dash(r.variedad)}</td><td>${dash(r.proceso)}</td>
     <td>${fmt(r.kg_oro_verde,1)}</td><td>S/ ${fmt(r.precio_kg,2)}</td><td>S/ ${fmt(r.total,2)}</td><td>${dash(r.n_factura)} ${localBadge(r)}</td>
@@ -550,7 +550,7 @@ function renderVentas(){
 function renderCompras(){
   const rows = filt(DATA.compras);
   const tbody = document.getElementById('tbl-compras');
-  if(rows.length===0){ tbody.innerHTML = '<tr><td colspan="10" class="empty-state">Sin compras a terceros registradas en esta campania. La finca aun no ha necesitado comprar cafe adicional.</td></tr>'; return; }
+  if(rows.length===0){ tbody.innerHTML = '<tr><td colspan="10" class="empty-state">Sin compras a terceros registradas en esta campaña. La finca aun no ha necesitado comprar cafe adicional.</td></tr>'; return; }
   tbody.innerHTML = rows.map(r => `<tr>
     <td>${dash(r.fecha)}</td><td><span class="badge badge-campania">${campaniaShort(r._camp)}</span></td><td>${dash(r.lote)}</td><td>${dash(r.variedad)}</td><td>${dash(r.proceso)}</td>
     <td>${dash(r.etapa)}</td><td>${fmt(r.kg,1)}</td><td>${dash(r.proveedor)}</td><td>S/ ${fmt(r.costo,2)}</td><td>${dash(r.detalle)}</td>
@@ -597,7 +597,7 @@ function buildFicha(loteId){
     <div class="passport-section-title">Origen</div>
     <div class="passport-grid">
       <div class="passport-row"><span class="k">ID Lote</span><span class="v">${loteId}</span></div>
-      <div class="passport-row"><span class="k">Campania</span><span class="v">${dash(lote.campania)}</span></div>
+      <div class="passport-row"><span class="k">Campaña</span><span class="v">${dash(lote.campania)}</span></div>
       <div class="passport-row"><span class="k">Parcela</span><span class="v">${dash(lote.parcela)}</span></div>
       <div class="passport-row"><span class="k">Variedad</span><span class="v">${dash(lote.variedad)}</span></div>
       <div class="passport-row"><span class="k">Proceso</span><span class="v">${dash(lote.proceso)}</span></div>
@@ -632,7 +632,7 @@ function renderTrazabilidad(){
   const rows = filt(DATA.lotes);
   const prev = sel.value;
   sel.innerHTML = rows.map(l => `<option value="${l.id}">${l.id} &mdash; ${l.parcela}</option>`).join('');
-  if(rows.length===0){ document.getElementById('passport-card').innerHTML = '<div class="empty-state">Sin lotes registrados en esta campania.</div>'; return; }
+  if(rows.length===0){ document.getElementById('passport-card').innerHTML = '<div class="empty-state">Sin lotes registrados en esta campaña.</div>'; return; }
   if(rows.some(l=>l.id===prev)) sel.value = prev;
   document.getElementById('passport-card').innerHTML = buildFicha(sel.value);
 }
@@ -750,7 +750,7 @@ function renderAggregates(){
 
   // Resumen
   document.getElementById('st-kg-cerezo').textContent = fmt(a.kgCerezo,1);
-  document.getElementById('st-campania-note').textContent = currentCampania==='todas' ? 'Todas las campanias' : `Campania ${currentCampania}`;
+  document.getElementById('st-campania-note').textContent = currentCampania==='todas' ? 'Todas las campañas' : `Campaña ${currentCampania}`;
   document.getElementById('st-kg-verde').textContent = fmt(a.kgVerde,1);
   document.getElementById('st-rend-global-note').textContent = `Rendimiento global ${pct(a.rendGlobal,1)}`;
   document.getElementById('st-qq').textContent = fmt(a.qq,2);
@@ -772,7 +772,7 @@ function renderAggregates(){
   tbodyRL.innerHTML = a.rendPorLote.length ? a.rendPorLote.map(l => `<tr>
     <td>${l.lote}</td><td>${fmt(l.kg_cerezo,1)}</td><td>${fmt(l.kg_pergamino,1)}</td><td>${fmt(l.kg_bola,1)}</td>
     <td>${fmt(l.kg_verde,1)}</td><td>${pct(l.rend_verde,1)}</td>
-  </tr>`).join('') : '<tr><td colspan="6" class="empty-state">Sin lotes en esta campania.</td></tr>';
+  </tr>`).join('') : '<tr><td colspan="6" class="empty-state">Sin lotes en esta campaña.</td></tr>';
 
   // Stock
   const wrapBars = document.getElementById('bars-stock');
@@ -791,7 +791,7 @@ function renderAggregates(){
   tbodySD.innerHTML = detalleRows.length ? detalleRows.map(r => `<tr>
     <td>${r.variedad}</td><td>${r.proceso}</td><td>${fmt(r.cerezo,1)}</td><td>${fmt(r.pergamino,1)}</td>
     <td>${fmt(r.bola,1)}</td><td>${fmt(r.oro_verde,1)}</td><td>${fmt(r.total_verde,1)}</td>
-  </tr>`).join('') : '<tr><td colspan="7" class="empty-state">Sin stock en esta campania.</td></tr>';
+  </tr>`).join('') : '<tr><td colspan="7" class="empty-state">Sin stock en esta campaña.</td></tr>';
 
   // Hectareas
   const wrapH = document.getElementById('bars-hectareas');
@@ -843,11 +843,11 @@ function renderAll(){
   renderAggregates();
 }
 
-// ---- Campania selector ----
+// ---- Campaña selector ----
 function setupCampaniaSelector(){
   const sel = document.getElementById('select-campania');
-  const opts = [`<option value="todas">Todas las campanias</option>`]
-    .concat(ALL_CAMPS.map(c => `<option value="${c}">Campania ${c} (${campaniaShort(c)})</option>`));
+  const opts = [`<option value="todas">Todas las campañas</option>`]
+    .concat(ALL_CAMPS.map(c => `<option value="${c}">Campaña ${c} (${campaniaShort(c)})</option>`));
   sel.innerHTML = opts.join('');
   sel.value = campActiva;
   currentCampania = campActiva;
