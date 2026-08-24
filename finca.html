@@ -772,7 +772,7 @@ function renderAggregates(){
     mant_construccion:'Mantenimiento construccion', cosecha_gastos:'Cosecha (gastos)', gastos_admin:'Gastos administrativos', caja_chica:'Caja chica'
   };
   document.getElementById('tbl-costos').innerHTML = Object.keys(labels).map(k => `<tr><td>${labels[k]}</td><td style="text-align:right;">S/ ${fmt(a.costos[k],2)}</td></tr>`).join('')
-    + `<tr class="total-row"><td>COSTO TOTAL CAMPANIA</td><td style="text-align:right;">S/ ${fmt(a.costoTotal,2)}</td></tr>`;
+    + `<tr class="total-row"><td>COSTO TOTAL CAMPAÑA</td><td style="text-align:right;">S/ ${fmt(a.costoTotal,2)}</td></tr>`;
   document.getElementById('tbl-produccion').innerHTML = `
     <tr><td>Kg de cerezo cosechado</td><td style="text-align:right;">${fmt(a.kgCerezo,1)} kg</td></tr>
     <tr><td>Kg de oro verde producido (real)</td><td style="text-align:right;">${fmt(a.kgVerde,1)} kg</td></tr>
