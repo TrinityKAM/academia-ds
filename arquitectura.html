@@ -57,7 +57,7 @@
     <div class="brand-mark">DS</div>
     <div>
       <div class="brand-title"><em>Arquitectura viva</em> &middot; Sistema de Control de Finca</div>
-      <div class="brand-sub">Don Salazar &middot; v1.0 &middot; Agosto 2026</div>
+      <div class="brand-sub">Don Salazar &middot; v1.1 &middot; Agosto 2026</div>
     </div>
   </div>
   <div class="tabs" id="tabs">
@@ -68,8 +68,8 @@
   </div>
 </div>
 
-<div class="canvas-wrap" id="canvas" style="height:900px;">
-  <svg class="connectors" viewBox="0 0 1560 900" preserveAspectRatio="none">
+<div class="canvas-wrap" id="canvas" style="height:1080px;">
+  <svg class="connectors" viewBox="0 0 1560 1080" preserveAspectRatio="none">
     <!-- Fase 1: confirmed flow, solid gold -->
     <path class="phase p1" d="M 340 175 L 340 230" stroke="#e0ab3c" stroke-width="2" fill="none"/>
     <path class="phase p1" d="M 470 270 L 560 270" stroke="#e0ab3c" stroke-width="2" fill="none"/>
@@ -90,12 +90,19 @@
     <path class="phase p2" d="M 600 500 L 690 500" stroke="#e0ab3c" stroke-width="1.6" stroke-dasharray="5 5" fill="none"/>
     <path class="phase cross" d="M 950 500 C 1050 500, 1050 300, 1090 270" stroke="#e0ab3c" stroke-width="1.6" stroke-dasharray="5 5" fill="none"/>
 
+    <!-- Fase 2 · Automatizacion completa (opcional, mismo tab que Fase 2) -->
+    <path class="phase p2" d="M 340 610 L 340 654" stroke="#e0ab3c" stroke-width="1.6" stroke-dasharray="5 5" fill="none"/>
+    <path class="phase p2" d="M 420 724 L 460 724" stroke="#e0ab3c" stroke-width="1.6" stroke-dasharray="5 5" fill="none"/>
+    <path class="phase p2" d="M 780 724 L 820 724" stroke="#e0ab3c" stroke-width="1.6" stroke-dasharray="5 5" fill="none"/>
+    <path class="phase cross" d="M 620 794 C 560 830, 560 470, 690 372" stroke="#e0ab3c" stroke-width="1.6" stroke-dasharray="5 5" fill="none"/>
+    <text class="phase cross" x="530" y="600" fill="#a99a7d" font-size="10">commit automatico &middot; sin intervencion</text>
+
     <!-- Fase 3: dashed lines -->
-    <path class="phase p3" d="M 340 620 L 340 690" stroke="#e0ab3c" stroke-width="1.6" stroke-dasharray="5 5" fill="none"/>
-    <path class="phase p3" d="M 600 730 L 690 730" stroke="#e0ab3c" stroke-width="1.6" stroke-dasharray="5 5" fill="none"/>
-    <path class="phase p3" d="M 950 730 L 1040 730" stroke="#e0ab3c" stroke-width="1.6" stroke-dasharray="5 5" fill="none"/>
-    <path class="phase cross" d="M 820 690 C 900 610, 900 560, 830 530" stroke="#e0ab3c" stroke-width="1.6" stroke-dasharray="5 5" fill="none"/>
-    <text class="phase cross" x="835" y="600" fill="#a99a7d" font-size="10">escribe fila &middot; POST</text>
+    <path class="phase p3" d="M 340 794 L 340 874" stroke="#e0ab3c" stroke-width="1.6" stroke-dasharray="5 5" fill="none"/>
+    <path class="phase p3" d="M 600 914 L 690 914" stroke="#e0ab3c" stroke-width="1.6" stroke-dasharray="5 5" fill="none"/>
+    <path class="phase p3" d="M 950 914 L 1040 914" stroke="#e0ab3c" stroke-width="1.6" stroke-dasharray="5 5" fill="none"/>
+    <path class="phase cross" d="M 820 874 C 900 800, 900 560, 830 530" stroke="#e0ab3c" stroke-width="1.6" stroke-dasharray="5 5" fill="none"/>
+    <text class="phase cross" x="835" y="784" fill="#a99a7d" font-size="10">escribe fila &middot; POST</text>
   </svg>
 
   <div class="row-label" style="top:66px;left:40px;">Origen de datos</div>
@@ -162,15 +169,43 @@
     </ul>
   </div>
 
-  <div class="row-label phase p3" style="top:666px;left:40px;">Fase 3 &middot; Propuesta &mdash; edici&oacute;n bidireccional</div>
-  <div class="card phase p3 future" style="top:690px;left:100px;">
+  <div class="row-label phase p2" style="top:630px;left:40px;">Fase 2 &middot; Automatizaci&oacute;n completa (opcional &mdash; sin clics, requiere admin M365)</div>
+  <div class="card phase p2 future" style="top:654px;left:100px;width:320px;">
+    <div class="card-head"><span class="dot dot-risk"></span> Azure AD &mdash; permiso de aplicaci&oacute;n</div>
+    <ul>
+      <li>"Usuario robot": sin login humano<span class="tag doubt">app-only</span></li>
+      <li>Client secret o certificado<span class="tag risk">credencial</span></li>
+      <li>Requiere aprobaci&oacute;n de admin M365<span class="tag risk">admin M365</span></li>
+      <li>&iquest;Qui&eacute;n aprueba esto? &mdash; ver con Jonel Aguado<span class="tag doubt">duda abierta</span></li>
+    </ul>
+  </div>
+  <div class="card phase p2 future" style="top:654px;left:460px;width:320px;">
+    <div class="card-head"><span class="dot dot-doubt"></span> GitHub Actions (cron)</div>
+    <ul>
+      <li>Corre solo, sin servidor propio<span class="tag doubt">scheduled</span></li>
+      <li>Lee Excel v&iacute;a Graph con la credencial<span class="tag doubt">read</span></li>
+      <li>Regenera finca.html y hace commit<span class="tag doubt">build+push</span></li>
+      <li>Frecuencia a definir (¿cada hora? ¿cada noche?)<span class="tag doubt">duda abierta</span></li>
+    </ul>
+  </div>
+  <div class="card phase p2 future" style="top:654px;left:820px;width:320px;">
+    <div class="card-head"><span class="dot dot-doubt"></span> Alternativa: Power Automate</div>
+    <ul>
+      <li>Automatizaci&oacute;n propia de Microsoft 365<span class="tag doubt">alternativa</span></li>
+      <li>Podr&iacute;a evitar registrar una app nueva<span class="tag good">menos friccion</span></li>
+      <li>Preguntar a Jonel Aguado si ya est&aacute; habilitada<span class="tag doubt">duda abierta</span></li>
+    </ul>
+  </div>
+
+  <div class="row-label phase p3" style="top:850px;left:40px;">Fase 3 &middot; Propuesta &mdash; edici&oacute;n bidireccional</div>
+  <div class="card phase p3 future" style="top:874px;left:100px;">
     <div class="card-head"><span class="dot dot-doubt"></span> Hojas &rarr; Tablas de Excel</div>
     <ul>
       <li>Convertir rangos sueltos en Tablas formales<span class="tag doubt">migracion</span></li>
       <li>Necesario para escribir filas sin romper formulas D1-D5<span class="tag risk">riesgo</span></li>
     </ul>
   </div>
-  <div class="card phase p3 future" style="top:690px;left:690px;">
+  <div class="card phase p3 future" style="top:874px;left:690px;">
     <div class="card-head"><span class="dot dot-doubt"></span> finca.html v3 &mdash; formularios</div>
     <ul>
       <li>Editar Cosecha / Gastos / Ventas desde la web<span class="tag doubt">feature</span></li>
@@ -178,7 +213,7 @@
       <li>Permiso: Files.ReadWrite<span class="tag risk">admin M365</span></li>
     </ul>
   </div>
-  <div class="card phase p3 future" style="top:690px;left:1040px;">
+  <div class="card phase p3 future" style="top:874px;left:1040px;">
     <div class="card-head"><span class="dot dot-doubt"></span> Control de conflictos</div>
     <ul>
       <li>&iquest;Bloqueo optimista o gana la ultima escritura?<span class="tag doubt">duda abierta</span></li>
